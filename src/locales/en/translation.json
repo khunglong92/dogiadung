@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About Us",
+    "contact": "Contact"
+  },
+  "hero": {
+    "badge": "High Quality • Best Price",
+    "title": "Household Items & Interior",
+    "titleHighlight": "Premium",
+    "description": "Discover our collection of premium wood and plastic items for your home. From tables and chairs to cabinets and household items, we have it all.",
+    "shopNow": "Shop Now",
+    "viewCollection": "View Collection",
+    "products": "Products",
+    "customers": "Customers",
+    "rating": "Rating"
+  },
+  "products": {
+    "title": "Featured Products",
+    "description": "Discover our diverse collection of quality interior and household items",
+    "all": "All",
+    "new": "New"
+  },
+  "footer": {
+    "company": {
+      "name": "Wood & Home",
+      "description": "Specializing in providing premium wood and plastic household items and furniture for your home."
+    },
+    "links": "Links",
+    "categories": "Categories",
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Subscribe to receive information about new products and special offers",
+      "placeholder": "Your email",
+      "button": "Subscribe"
+    },
+    "follow": "Follow us:",
+    "copyright": "© 2025 Wood & Home. All rights reserved."
+  },
+  "common": {
+    "addToCart": "Add to Cart",
+    "viewDetails": "View Details",
+    "phone": "0123 456 789",
+    "email": "contact@woodhome.vn",
+    "address": "123 ABC Street, District 1, Ho Chi Minh City"
+  }
+}

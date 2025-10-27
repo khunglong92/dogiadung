@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "about": "Về chúng tôi",
+    "contact": "Liên hệ"
+  },
+  "hero": {
+    "badge": "Chất lượng cao • Giá tốt nhất",
+    "title": "Đồ Gia Dụng & Nội Thất",
+    "titleHighlight": "Cao Cấp",
+    "description": "Khám phá bộ sưu tập đồ gỗ và nhựa cao cấp cho ngôi nhà của bạn. Từ bàn ghế, tủ kệ đến các đồ dùng gia đình, chúng tôi có tất cả.",
+    "shopNow": "Mua sắm ngay",
+    "viewCollection": "Xem bộ sưu tập",
+    "products": "Sản phẩm",
+    "customers": "Khách hàng",
+    "rating": "Đánh giá"
+  },
+  "products": {
+    "title": "Sản Phẩm Nổi Bật",
+    "description": "Khám phá bộ sưu tập đa dạng các sản phẩm nội thất và đồ gia dụng chất lượng cao",
+    "all": "Tất cả",
+    "new": "Mới"
+  },
+  "footer": {
+    "company": {
+      "name": "Wood & Home",
+      "description": "Chuyên cung cấp đồ gia dụng và nội thất gỗ, nhựa cao cấp cho ngôi nhà của bạn."
+    },
+    "links": "Liên Kết",
+    "categories": "Danh Mục",
+    "newsletter": {
+      "title": "Nhận Tin Mới",
+      "description": "Đăng ký để nhận thông tin về sản phẩm mới và ưu đãi đặc biệt",
+      "placeholder": "Email của bạn",
+      "button": "Đăng ký"
+    },
+    "follow": "Theo dõi chúng tôi:",
+    "copyright": "© 2025 Wood & Home. Tất cả quyền được bảo lưu."
+  },
+  "common": {
+    "addToCart": "Thêm vào giỏ",
+    "viewDetails": "Xem chi tiết",
+    "phone": "0123 456 789",
+    "email": "contact@woodhome.vn",
+    "address": "123 Đường ABC, Quận 1, TP.HCM"
+  }
+}
