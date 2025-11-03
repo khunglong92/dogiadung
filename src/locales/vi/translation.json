@@ -3,7 +3,11 @@
     "home": "Trang chủ",
     "products": "Sản phẩm",
     "about": "Về chúng tôi",
-    "contact": "Liên hệ"
+    "contact": "Liên hệ",
+    "introduction": "Giới thiệu",
+    "services": "Dịch vụ",
+    "quote": "Đề xuất",
+    "project": "Dự án"
   },
   "hero": {
     "badge": "Chất lượng cao • Giá tốt nhất",

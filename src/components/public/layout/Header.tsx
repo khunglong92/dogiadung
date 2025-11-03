@@ -1,19 +1,8 @@
-import {
-  Moon,
-  Sun,
-  ShoppingCart,
-  Menu,
-  X,
-  Languages,
-  LogOut,
-  User,
-} from "lucide-react";
+import { Moon, Sun, ShoppingCart, Menu, X, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "@tanstack/react-router";
-import { useAuthStore } from "@/stores/authStore";
 
 interface HeaderProps {
   theme: "light" | "dark";
@@ -24,20 +13,49 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
 
-  const handleLogout = () => {
-    // dispatch(logoutAction());
-  };
+  const [activeHash, setActiveHash] = useState("#home");
 
+  // Update active hash when URL changes
+  useEffect(() => {
+    const handleHashChange = () => {
+      setActiveHash(window.location.hash || "#home");
+    };
+
+    // Set initial hash
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  // Navigation items with hash-based links
   const navItems = [
-    { name: t("nav.home"), href: "#home" },
-    { name: t("nav.products"), href: "#products" },
-    { name: t("nav.about"), href: "#about" },
-    { name: t("nav.contact"), href: "#contact" },
-  ];
+    { name: t("nav.home"), href: "/" },
+    { name: t("nav.introduction"), href: "/introduction" },
+    { name: t("nav.products"), href: "/products" },
+    { name: t("nav.services"), href: "/services" },
+    { name: t("nav.quote"), href: "/quote" },
+    { name: t("nav.project"), href: "/project" },
+    { name: t("nav.contact"), href: "/contact" },
+  ] as const;
 
   const toggleLanguage = () => {
     const newLanguage = i18n.language === "vi" ? "en" : "vi";
     i18n.changeLanguage(newLanguage);
+  };
+
+  // Check if a nav item is active based on hash
+  const isNavItemActive = (href: string) => {
+    if (href.startsWith("/")) {
+      return window.location.pathname === href;
+    }
+    return (
+      activeHash === href ||
+      (activeHash === "#home" &&
+        href === "#home" &&
+        window.location.pathname === "/")
+    );
   };
 
   return (
@@ -45,7 +63,7 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+      className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm"
     >
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
@@ -54,27 +72,69 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
             whileHover={{ scale: 1.05 }}
             className="flex items-center gap-2"
           >
-            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-              <span className="text-white">🪵</span>
+            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex-shrink-0 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
             </div>
-            <span className="text-xl">Wood & Home</span>
+            <div className="flex flex-col leading-tight">
+              <span className="text-base font-semibold text-gray-900 dark:text-white">
+                THIÊN LỘC
+              </span>
+              <span className="text-xs text-gray-600 dark:text-gray-400">
+                SX & GIA CÔNG KIM LOẠI TẤM
+              </span>
+            </div>
           </motion.div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            {navItems.map((item, index) => (
-              <motion.a
-                key={item.name}
-                href={item.href}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className="transition-colors hover:text-amber-600"
-              >
-                {item.name}
-              </motion.a>
-            ))}
+          <nav className="hidden md:flex items-center gap-2">
+            {navItems.map((item, index) => {
+              const isActive = isNavItemActive(item.href);
+              return (
+                <motion.div
+                  key={item.name}
+                  className="relative"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.08 }}
+                >
+                  <a
+                    href={item.href}
+                    aria-current={isActive ? "page" : undefined}
+                    data-active={isActive}
+                    className={`inline-flex items-center justify-center rounded-full px-3 py-2 text-sm font-medium transition-all outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 ${
+                      isActive
+                        ? "bg-accent/60 text-foreground shadow-sm"
+                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                    }`}
+                  >
+                    <motion.span
+                      className="relative block"
+                      whileHover={{ y: -1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 14,
+                      }}
+                    >
+                      {item.name}
+                    </motion.span>
+                  </a>
+                </motion.div>
+              );
+            })}
           </nav>
 
           {/* Actions */}
@@ -157,43 +217,6 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
               </Button>
             </motion.div>
 
-            {/* Auth Buttons */}
-            {useAuthStore.getState().isAuthenticated ? (
-              <>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="hidden md:flex items-center gap-2"
-                >
-                  <User className="h-4 w-4" />
-                  <span className="text-sm">
-                    {useAuthStore.getState().user?.name}
-                  </span>
-                </motion.div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="hidden md:flex"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <div className="hidden md:flex gap-2">
-                <Link to="/login">
-                  <Button variant="ghost" size="sm">
-                    Login
-                  </Button>
-                </Link>
-                <Link to="/register">
-                  <Button size="sm" className="bg-amber-600 hover:bg-amber-700">
-                    Sign Up
-                  </Button>
-                </Link>
-              </div>
-            )}
-
             {/* Mobile menu button */}
             <Button
               variant="ghost"
@@ -216,17 +239,26 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
               className="md:hidden overflow-hidden"
             >
               <div className="flex flex-col gap-4 py-4">
-                {navItems.map((item) => (
-                  <motion.a
-                    key={item.name}
-                    href={item.href}
-                    whileHover={{ x: 10 }}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="transition-colors hover:text-amber-600"
-                  >
-                    {item.name}
-                  </motion.a>
-                ))}
+                {navItems.map((item) => {
+                  const isActive = isNavItemActive(item.href);
+                  return (
+                    <motion.a
+                      key={item.name}
+                      href={item.href}
+                      aria-current={isActive ? "page" : undefined}
+                      data-active={isActive}
+                      whileHover={{ x: 10 }}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`rounded-lg px-3 py-2 transition-colors ${
+                        isActive
+                          ? "bg-accent/60 text-foreground"
+                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                      }`}
+                    >
+                      {item.name}
+                    </motion.a>
+                  );
+                })}
               </div>
             </motion.nav>
           )}

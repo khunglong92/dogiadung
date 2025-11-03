@@ -3,7 +3,11 @@
     "home": "Home",
     "products": "Products",
     "about": "About Us",
-    "contact": "Contact"
+    "contact": "Contact",
+    "introduction": "Introduction",
+    "services": "Services",
+    "quote": "Quote",
+    "project": "Project"
   },
   "hero": {
     "badge": "High Quality • Best Price",

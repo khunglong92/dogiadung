@@ -12,6 +12,7 @@ export default defineConfig({
     extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@admin": path.resolve(__dirname, "./src/page/admin"),
     },
   },
   build: {

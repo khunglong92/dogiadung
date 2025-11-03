@@ -1,11 +1,9 @@
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
-import { useTranslation } from "react-i18next";
+import { ImageWithFallback } from "@/components/public/figma/ImageWithFallback";
 
 export function Hero() {
-  const { t } = useTranslation();
   return (
     <section id="home" className="relative overflow-hidden py-20 md:py-32">
       <div className="container mx-auto px-4">
@@ -23,7 +21,7 @@ export function Hero() {
               transition={{ delay: 0.2 }}
               className="inline-block px-4 py-2 bg-amber-100 dark:bg-amber-900/30 rounded-full text-amber-800 dark:text-amber-400"
             >
-              {t("hero.badge")}
+              Chất lượng cao • Giá tốt nhất
             </motion.div>
 
             <motion.h1
@@ -32,9 +30,9 @@ export function Hero() {
               transition={{ delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl"
             >
-              {t("hero.title")}{" "}
+              Đồ Gia Dụng & Nội Thất{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">
-                {t("hero.titleHighlight")}
+                Cao Cấp
               </span>
             </motion.h1>
 
@@ -44,7 +42,8 @@ export function Hero() {
               transition={{ delay: 0.4 }}
               className="text-lg text-muted-foreground"
             >
-              {t("hero.description")}
+              Khám phá bộ sưu tập đồ gỗ và nhựa cao cấp cho ngôi nhà của bạn. Từ
+              bàn ghế, tủ kệ đến các đồ dùng gia đình, chúng tôi có tất cả.
             </motion.p>
 
             <motion.div
@@ -57,11 +56,11 @@ export function Hero() {
                 size="lg"
                 className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
               >
-                {t("hero.shopNow")}
+                Mua sắm ngay
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <Button size="lg" variant="outline">
-                {t("hero.viewCollection")}
+                Xem bộ sưu tập
               </Button>
             </motion.div>
 
@@ -74,21 +73,15 @@ export function Hero() {
             >
               <div>
                 <div className="text-3xl text-amber-600">500+</div>
-                <div className="text-sm text-muted-foreground">
-                  {t("hero.products")}
-                </div>
+                <div className="text-sm text-muted-foreground">Sản phẩm</div>
               </div>
               <div>
                 <div className="text-3xl text-amber-600">1000+</div>
-                <div className="text-sm text-muted-foreground">
-                  {t("hero.customers")}
-                </div>
+                <div className="text-sm text-muted-foreground">Khách hàng</div>
               </div>
               <div>
                 <div className="text-3xl text-amber-600">5★</div>
-                <div className="text-sm text-muted-foreground">
-                  {t("hero.rating")}
-                </div>
+                <div className="text-sm text-muted-foreground">Đánh giá</div>
               </div>
             </motion.div>
           </motion.div>

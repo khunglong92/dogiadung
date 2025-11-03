@@ -32,10 +32,10 @@ export function Footer() {
   ];
 
   const quickLinks = [
-    { name: 'Về chúng tôi', href: '#about' },
+    { name: 'Giới thiệu', href: '/introduction' },
     { name: 'Sản phẩm', href: '#products' },
     { name: 'Dịch vụ', href: '#services' },
-    { name: 'Blog', href: '#blog' },
+    { name: 'Dự án', href: '#project' },
     { name: 'Liên hệ', href: '#contact' },
   ];
 

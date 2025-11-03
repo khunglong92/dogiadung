@@ -1,9 +1,9 @@
-import { motion } from 'motion/react';
-import { ShoppingCart, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ImageWithFallback } from '@/components/figma/ImageWithFallback';
-import { useState } from 'react';
+import { motion } from "motion/react";
+import { ShoppingCart, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ImageWithFallback } from "@/components/public/figma/ImageWithFallback";
+import { useState } from "react";
 
 interface ProductCardProps {
   id: number;
@@ -29,9 +29,9 @@ export function ProductCard({
   const [isHovered, setIsHovered] = useState(false);
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND',
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
     }).format(price);
   };
 
@@ -100,7 +100,7 @@ export function ProductCard({
         >
           <Heart
             className={`h-5 w-5 transition-colors ${
-              isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'
+              isLiked ? "fill-red-500 text-red-500" : "text-gray-600"
             }`}
           />
         </motion.button>

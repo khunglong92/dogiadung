@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { productsService } from '../api/productsService';
+import { QUERY_KEYS } from '@/lib/api/queryKeys';
 
 export const useProducts = () => {
   return useQuery({
-    queryKey: ['products'],
+    queryKey: [QUERY_KEYS.products.root],
     queryFn: () => productsService.getAll(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -11,7 +12,7 @@ export const useProducts = () => {
 
 export const useProduct = (id: number) => {
   return useQuery({
-    queryKey: ['product', id],
+    queryKey: QUERY_KEYS.products.byId(id),
     queryFn: () => productsService.getById(id),
     enabled: !!id,
   });
@@ -19,7 +20,7 @@ export const useProduct = (id: number) => {
 
 export const useProductsByCategory = (category: string) => {
   return useQuery({
-    queryKey: ['products', 'category', category],
+    queryKey: QUERY_KEYS.products.byCategory(category),
     queryFn: () => productsService.getByCategory(category),
     enabled: !!category,
   });

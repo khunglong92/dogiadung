@@ -1,4 +1,4 @@
-import { ProductCard } from "@/components/home/ProductCard";
+import { ProductCard } from "@/components/public/home/ProductCard";
 import { motion } from "motion/react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useTranslation } from "react-i18next";
