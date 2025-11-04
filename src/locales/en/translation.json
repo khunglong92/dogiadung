@@ -75,6 +75,7 @@
     "sidebar": {
       "dashboard": "Dashboard",
       "products": "Products",
+      "categories": "Categories",
       "services": "Services",
       "projects": "Projects",
       "users": "Users",
@@ -86,6 +87,26 @@
     }
   }
   ,
+  "categories": {
+    "title": "Manage Categories",
+    "subtitle": "Manage product categories",
+    "add": "Add Category",
+    "listTitle": "Category List",
+    "searchPlaceholder": "Search categories...",
+    "name": "Category name",
+    "description": "Description",
+    "createTitle": "Create new category",
+    "updateTitle": "Update category",
+    "save": "Save",
+    "update": "Update",
+    "cancel": "Cancel",
+    "toast": {
+      "createSuccess": "Category created successfully",
+      "updateSuccess": "Category updated successfully",
+      "deleteSuccess": "Category deleted successfully!",
+      "nameRequired": "Category name is required"
+    }
+  },
   "validation": {
     "required": "Required",
     "email": "Invalid email address",

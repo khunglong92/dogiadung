@@ -75,6 +75,7 @@
     "sidebar": {
       "dashboard": "Tổng quan",
       "products": "Quản lý sản phẩm",
+      "categories": "Danh mục",
       "services": "Quản lý dịch vụ",
       "projects": "Quản lý dự án",
       "users": "Quản lý người dùng",
@@ -86,6 +87,26 @@
     }
   }
   ,
+  "categories": {
+    "title": "Quản lý danh mục",
+    "subtitle": "Quản lý các danh mục sản phẩm",
+    "add": "Thêm danh mục",
+    "listTitle": "Danh sách danh mục",
+    "searchPlaceholder": "Tìm kiếm danh mục...",
+    "name": "Tên danh mục",
+    "description": "Mô tả",
+    "createTitle": "Thêm danh mục mới",
+    "updateTitle": "Cập nhật danh mục",
+    "save": "Lưu",
+    "update": "Cập nhật",
+    "cancel": "Hủy",
+    "toast": {
+      "createSuccess": "Đã thêm danh mục thành công",
+      "updateSuccess": "Cập nhật danh mục thành công",
+      "deleteSuccess": "Đã xóa danh mục thành công!",
+      "nameRequired": "Tên danh mục là bắt buộc"
+    }
+  },
   "validation": {
     "required": "Bắt buộc",
     "email": "Email không hợp lệ",

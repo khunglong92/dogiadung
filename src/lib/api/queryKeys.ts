@@ -7,6 +7,10 @@ export const QUERY_KEYS = {
     byId: (id: number | string) => ["product", id] as const,
     byCategory: (category: string) => ["products", "category", category] as const,
   },
+  categories: {
+    root: "categories" as const,
+    byId: (id: number | string) => ["category", id] as const,
+  },
   auth: {
     profile: ["auth", "profile"] as const,
   },

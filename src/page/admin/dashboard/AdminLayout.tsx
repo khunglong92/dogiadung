@@ -1,36 +1,40 @@
-import { useState } from 'react';
-import { AdminHeader } from './AdminHeader';
-import { AdminSidebar } from './AdminSidebar';
-import { AdminDashboard } from './AdminDashboard';
-import { AdminProducts } from './AdminProducts';
-import { AdminServices } from './AdminServices';
-import { AdminProjects } from './AdminProjects';
-import { AdminUsers } from './AdminUsers';
-import { AdminStatistics } from './AdminStatistics';
+import { useState } from "react";
+import { AdminHeader } from "./AdminHeader";
+import { AdminSidebar } from "../../../components/admin/layout/admin-sidebar";
+import { AdminDashboard } from "./AdminDashboard";
+import { AdminProducts } from "./AdminProducts";
+import { AdminServices } from "./AdminServices";
+import { AdminProjects } from "./AdminProjects";
+import { AdminUsers } from "./AdminUsers";
+import { AdminStatistics } from "./AdminStatistics";
 
 interface AdminLayoutProps {
-  theme: 'light' | 'dark';
+  theme: "light" | "dark";
   toggleTheme: () => void;
   onLogout: () => void;
 }
 
-export function AdminLayout({ theme, toggleTheme, onLogout }: AdminLayoutProps) {
-  const [currentPage, setCurrentPage] = useState('dashboard');
-  const [language, setLanguage] = useState<'vi' | 'en'>('vi');
+export function AdminLayout({
+  theme,
+  toggleTheme,
+  onLogout,
+}: AdminLayoutProps) {
+  const [currentPage, setCurrentPage] = useState("dashboard");
+  const [language, setLanguage] = useState<"vi" | "en">("vi");
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'dashboard':
+      case "dashboard":
         return <AdminDashboard />;
-      case 'products':
+      case "products":
         return <AdminProducts />;
-      case 'services':
+      case "services":
         return <AdminServices />;
-      case 'projects':
+      case "projects":
         return <AdminProjects />;
-      case 'users':
+      case "users":
         return <AdminUsers />;
-      case 'statistics':
+      case "statistics":
         return <AdminStatistics />;
       default:
         return <AdminDashboard />;
@@ -47,8 +51,13 @@ export function AdminLayout({ theme, toggleTheme, onLogout }: AdminLayoutProps) 
         onLogout={onLogout}
       />
       <div className="flex">
-        <AdminSidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-        <main className="flex-1 overflow-y-auto h-[calc(100vh-4rem)]">{renderPage()}</main>
+        <AdminSidebar
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+        <main className="flex-1 overflow-y-auto h-[calc(100vh-4rem)]">
+          {renderPage()}
+        </main>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useTheme } from "@/hooks/useTheme";
 import { useAuthStore } from "@/stores/authStore";
 import { AdminHeader } from "@/page/admin/dashboard/AdminHeader";
-import { AdminSidebar } from "@/page/admin/dashboard/AdminSidebar";
+import { AdminSidebar } from "@/components/admin/layout/admin-sidebar";
 
 export const Route = createFileRoute("/admin/_layout")({
   beforeLoad: ({ location }) => {

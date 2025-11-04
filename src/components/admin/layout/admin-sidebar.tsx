@@ -36,6 +36,13 @@ export function AdminSidebar() {
       color: "from-green-500 to-emerald-600",
     },
     {
+      id: "categories",
+      route: "/admin/categories",
+      name: t("admin.sidebar.categories"),
+      icon: Package,
+      color: "from-teal-500 to-emerald-600",
+    },
+    {
       id: "services",
       route: "/admin/services",
       name: t("admin.sidebar.services"),

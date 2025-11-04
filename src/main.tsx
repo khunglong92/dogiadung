@@ -6,8 +6,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "./index.css";
 import "./styles/globals.css";
 import "./lib/i18n/config";
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
 import { queryClient } from "./lib/api/queryClient";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, ColorSchemeScript, localStorageColorSchemeManager } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 
@@ -45,7 +47,11 @@ declare module "@tanstack/react-router" {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <MantineProvider defaultColorScheme="auto">
+      <ColorSchemeScript defaultColorScheme="light" />
+      <MantineProvider
+        defaultColorScheme="light"
+        colorSchemeManager={localStorageColorSchemeManager({ key: "theme" })}
+      >
         <ModalsProvider>
           <Notifications position="top-right" autoClose={3000} />
           <RouterProvider router={router} />
