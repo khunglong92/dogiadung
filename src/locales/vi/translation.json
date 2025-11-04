@@ -48,5 +48,54 @@
     "phone": "0123 456 789",
     "email": "contact@woodhome.vn",
     "address": "123 Đường ABC, Quận 1, TP.HCM"
+  },
+  "admin": {
+    "header": {
+      "title": "Thiên Lộc Admin",
+      "subtitle": "Hệ thống quản trị",
+      "logout": "Đăng xuất",
+      "language": "Ngôn ngữ / Language",
+      "vi": "🇻🇳 Tiếng Việt",
+      "en": "🇬🇧 English"
+    },
+    "login": {
+      "welcomeBack": "Chào mừng quay lại",
+      "signIn": "Đăng nhập quản trị",
+      "username": "Tên đăng nhập",
+      "password": "Mật khẩu",
+      "placeholderUser": "Nhập tên đăng nhập",
+      "placeholderPass": "Nhập mật khẩu",
+      "submit": "Đăng nhập",
+      "demo": "Demo: username",
+      "demoUser": "admin",
+      "demoPass": "admin123",
+      "success": "Đăng nhập thành công!",
+      "error": "Tên đăng nhập hoặc mật khẩu không đúng!"
+    },
+    "sidebar": {
+      "dashboard": "Tổng quan",
+      "products": "Quản lý sản phẩm",
+      "services": "Quản lý dịch vụ",
+      "projects": "Quản lý dự án",
+      "users": "Quản lý người dùng",
+      "statistics": "Thống kê"
+    },
+    "dashboard": {
+      "title": "Tổng quan",
+      "recentActivities": "Hoạt động gần đây"
+    }
+  }
+  ,
+  "validation": {
+    "required": "Bắt buộc",
+    "email": "Email không hợp lệ",
+    "min6": "Tối thiểu 6 ký tự",
+    "nameMin2": "Tên phải có ít nhất 2 ký tự",
+    "passwordsNotMatch": "Mật khẩu không khớp",
+    "emailRequired": "Email là bắt buộc",
+    "emailInvalid": "Email không hợp lệ",
+    "passwordRequired": "Mật khẩu là bắt buộc",
+    "passwordMin6": "Mật khẩu phải có ít nhất 6 ký tự",
+    "invalidCredentials": "Email hoặc mật khẩu không đúng"
   }
 }

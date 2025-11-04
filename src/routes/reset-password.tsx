@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { resetPasswordSchema, type ResetPasswordFormData } from '@/lib/validations/auth';
+import { getResetPasswordSchema, type ResetPasswordFormData } from '@/lib/validations/auth';
 import { authApi } from '@/lib/api/auth';
 import { motion } from 'motion/react';
 import { Mail } from 'lucide-react';
@@ -21,7 +21,7 @@ function ResetPassword() {
     handleSubmit,
     formState: { errors },
   } = useForm<ResetPasswordFormData>({
-    resolver: zodResolver(resetPasswordSchema),
+    resolver: zodResolver(getResetPasswordSchema()),
   });
 
   const resetMutation = useMutation({

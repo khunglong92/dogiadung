@@ -12,15 +12,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
+import { getLoginSchema, type LoginFormData } from "@/lib/validations/auth";
 import { useLogin } from "@/services/hooks/useAuth";
 
 import { motion } from "motion/react";
 import { LogIn } from "lucide-react";
+import { useAuthStore } from "@/stores/authStore";
 
 function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState<string>("");
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const login = useAuthStore((s) => s.login);
+
+  if (isAuthenticated) {
+    window.location.href = "/";
+    return null;
+  }
 
   const loginMutation = useLogin();
 
@@ -29,19 +37,19 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(getLoginSchema()),
   });
 
   const onSubmit = (data: LoginFormData) => {
     setError("");
     loginMutation.mutate(data, {
-      onSuccess: (response) => {
+      onSuccess: async (response) => {
         if (response.success && response.data) {
-          // useAuthStore.setState({
-          //   user: response.data.user,
-          //   token: response.data.token,
-          //   isAuthenticated: true,
-          // });
+          // Login sẽ tự động lưu token vào localStorage và gọi API profile
+          await login(
+            response.data.token,
+            response.data.refreshToken
+          );
           navigate({ to: "/" });
         } else {
           setError(response.message);
@@ -54,7 +62,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-50 dark:from-gray-900 dark:to-gray-800 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-amber-50 to-orange-50 dark:from-gray-900 dark:to-gray-800 p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

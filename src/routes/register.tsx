@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { registerSchema, type RegisterFormData } from '@/lib/validations/auth';
+import { getRegisterSchema, type RegisterFormData } from '@/lib/validations/auth';
 import { authApi } from '@/lib/api/auth';
 import { useAuthStore } from '@/stores/authStore';
 import { motion } from 'motion/react';
@@ -23,14 +23,15 @@ function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(getRegisterSchema()),
   });
 
   const registerMutation = useMutation({
     mutationFn: authApi.register,
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
       if (response.success && response.data) {
-        login(response.data.user, response.data.token);
+        // Login sẽ tự động lưu token và gọi API profile
+        await login(response.data.token, response.data.refreshToken);
         navigate({ to: '/' });
       } else {
         setError(response.message);

@@ -1,5 +1,5 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { Header } from "@/components/public/layout/Header";
 import { Footer } from "@/components/public/layout/Footer";
 import { useTheme } from "@/hooks/useTheme";

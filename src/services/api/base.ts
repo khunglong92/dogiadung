@@ -4,12 +4,23 @@
 
 import { useAuthStore } from "@/stores/authStore";
 
-export const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+// Normalize base URL from env: trim, strip quotes/semicolons, drop trailing slashes
+function normalizeBaseUrl(value: unknown): string {
+  const raw = String(value ?? "http://localhost:3000/api");
+  const cleaned = raw
+    .trim()
+    .replace(/%22/gi, "") // remove encoded quotes
+    .replace(/["']/g, "") // remove literal quotes
+    .replace(/[;]+$/g, ""); // remove trailing semicolons
+  return cleaned.replace(/\/+$/g, ""); // remove trailing slashes
+}
+
+export const API_BASE_URL = normalizeBaseUrl(import.meta.env.VITE_API_URL);
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
-export interface RequestOptions<TBody = unknown> extends RequestInit {
+export interface RequestOptions<TBody = unknown>
+  extends Omit<RequestInit, "body"> {
   body?: TBody;
   headers?: Record<string, string>;
 }
@@ -31,15 +42,20 @@ async function request<TResponse, TBody = unknown>(
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const response = await fetch(`${API_BASE_URL}${url}`, {
+  const fullUrl = `${API_BASE_URL}/${String(url).replace(/^\/+/, "")}`;
+  const response = await fetch(fullUrl, {
     method,
     ...options,
     headers,
     body: options.body ? JSON.stringify(options.body) : undefined,
   });
 
-  const isJson = response.headers.get("content-type")?.includes("application/json");
-  const data = isJson ? await response.json().catch(() => undefined) : undefined;
+  const isJson = response.headers
+    .get("content-type")
+    ?.includes("application/json");
+  const data = isJson
+    ? await response.json().catch(() => undefined)
+    : undefined;
 
   if (!response.ok) {
     const error: ApiError = new Error(

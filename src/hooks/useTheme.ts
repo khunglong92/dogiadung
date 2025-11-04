@@ -3,16 +3,10 @@ import { useState, useEffect } from 'react';
 export type Theme = 'light' | 'dark';
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>('light');
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
-    }
-  }, []);
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = (typeof window !== 'undefined' && localStorage.getItem('theme')) as Theme | null;
+    return saved ?? 'light';
+  });
 
   useEffect(() => {
     const root = document.documentElement;

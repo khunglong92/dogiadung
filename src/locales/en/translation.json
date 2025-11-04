@@ -48,5 +48,54 @@
     "phone": "0123 456 789",
     "email": "contact@woodhome.vn",
     "address": "123 ABC Street, District 1, Ho Chi Minh City"
+  },
+  "admin": {
+    "header": {
+      "title": "Thien Loc Admin",
+      "subtitle": "Administration system",
+      "logout": "Logout",
+      "language": "Language",
+      "vi": "🇻🇳 Vietnamese",
+      "en": "🇬🇧 English"
+    },
+    "login": {
+      "welcomeBack": "Welcome back",
+      "signIn": "Admin sign in",
+      "username": "Username",
+      "password": "Password",
+      "placeholderUser": "Enter username",
+      "placeholderPass": "Enter password",
+      "submit": "Sign in",
+      "demo": "Demo: username",
+      "demoUser": "admin",
+      "demoPass": "admin123",
+      "success": "Login successful!",
+      "error": "Incorrect username or password!"
+    },
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "services": "Services",
+      "projects": "Projects",
+      "users": "Users",
+      "statistics": "Statistics"
+    },
+    "dashboard": {
+      "title": "Overview",
+      "recentActivities": "Recent Activities"
+    }
+  }
+  ,
+  "validation": {
+    "required": "Required",
+    "email": "Invalid email address",
+    "min6": "At least 6 characters",
+    "nameMin2": "Name must be at least 2 characters",
+    "passwordsNotMatch": "Passwords do not match",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Invalid email address",
+    "passwordRequired": "Password is required",
+    "passwordMin6": "Password must be at least 6 characters",
+    "invalidCredentials": "Email or password is incorrect"
   }
 }
