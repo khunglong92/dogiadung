@@ -36,8 +36,11 @@ async function request<TResponse, TBody = unknown>(
   options: RequestOptions<TBody> = {}
 ): Promise<TResponse> {
   const token = useAuthStore.getState().token;
+  const isFormData =
+    typeof FormData !== "undefined" &&
+    (options.body as any) instanceof FormData;
   const headers: Record<string, string> = {
-    "Content-Type": "application/json",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(options.headers || {}),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
@@ -47,7 +50,11 @@ async function request<TResponse, TBody = unknown>(
     method,
     ...options,
     headers,
-    body: options.body ? JSON.stringify(options.body) : undefined,
+    body: options.body
+      ? isFormData
+        ? (options.body as any)
+        : JSON.stringify(options.body)
+      : undefined,
   });
 
   const isJson = response.headers

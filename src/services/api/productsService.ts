@@ -1,48 +1,59 @@
 import { apiClient } from './base';
 
+export interface ProductCategoryRef { 
+  id: number; 
+  name: string;
+}
+
 export interface Product {
   id: number;
   name: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  category: string;
-  isNew?: boolean;
-  description?: string;
-  inStock?: boolean;
+  description?: Record<string, unknown> | null;
+  technicalSpecs?: Record<string, unknown> | null;
+  price?: number | null;
+  warrantyPolicy?: string | null;
+  images?: string[] | null;
+  category: ProductCategoryRef;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CreateProductDto {
+  name: string;
+  description?: Record<string, unknown>;
+  technicalSpecs?: Record<string, unknown>;
+  price?: number;
+  warrantyPolicy?: string;
+  images?: string[];
+  categoryId: number;
+}
+
+export interface UpdateProductDto {
+  name?: string;
+  description?: Record<string, unknown> | null;
+  technicalSpecs?: Record<string, unknown> | null;
+  price?: number | null;
+  warrantyPolicy?: string | null;
+  images?: string[] | null;
+  categoryId?: number;
 }
 
 export const productsService = {
-  getAll: async (): Promise<Product[]> => {
-    // Mock implementation
-    return [
-      {
-        id: 1,
-        name: 'Bàn ăn gỗ hiện đại',
-        price: 8500000,
-        originalPrice: 12000000,
-        image: 'https://images.unsplash.com/photo-1722084059243-b0ec46398446',
-        category: 'Bàn',
-        isNew: false,
-      },
-      {
-        id: 2,
-        name: 'Ghế gỗ sang trọng',
-        price: 2500000,
-        image: 'https://images.unsplash.com/photo-1761052180945-9fcefc9a07d5',
-        category: 'Ghế',
-        isNew: true,
-      },
-    ];
+  getAll: async () => {
+    const res = await apiClient.get<{ data: Product[]; total: number; page: number; limit: number }>("/products");
+    return res.data;
   },
-
-  getById: async (id: number): Promise<Product | null> => {
-    const products = await productsService.getAll();
-    return products.find(p => p.id === id) || null;
+  getPaginated: (params: { page: number; limit: number; search?: string }) => {
+    const query = new URLSearchParams();
+    query.set("page", String(params.page));
+    query.set("limit", String(params.limit));
+    if (params.search && params.search.trim()) {
+      query.set("search", params.search.trim());
+    }
+    return apiClient.get<{ data: Product[]; total: number; page: number; limit: number }>(`/products?${query.toString()}`);
   },
-
-  getByCategory: async (category: string): Promise<Product[]> => {
-    const products = await productsService.getAll();
-    return products.filter(p => p.category === category);
-  },
+  getById: (id: number) => apiClient.get<Product>(`/products/${id}`),
+  create: (body: CreateProductDto) => apiClient.post<Product>("/products", body),
+  update: (id: number, body: UpdateProductDto) => apiClient.patch<Product>(`/products/${id}`, body),
+  remove: (id: number) => apiClient.delete<void>(`/products/${id}`),
 };

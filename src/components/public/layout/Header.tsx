@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import companyLogo from "@/components/public/lib/images/company-logo.png";
 
 interface HeaderProps {
   theme: "light" | "dark";
@@ -72,27 +73,19 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
             whileHover={{ scale: 1.05 }}
             className="flex items-center gap-2"
           >
-            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex-shrink-0 flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                />
-              </svg>
+            <div className="h-20 w-20 rounded-xl flex items-center justify-center">
+              <img
+                src={companyLogo}
+                alt="Company Logo"
+                width={80}
+                height={80}
+              />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="text-base font-semibold text-gray-900 dark:text-white">
+              <span className="text-base font-semibold text-foreground">
                 THIÊN LỘC
               </span>
-              <span className="text-xs text-gray-600 dark:text-gray-400">
+              <span className="text-xs text-muted-foreground">
                 SX & GIA CÔNG KIM LOẠI TẤM
               </span>
             </div>
@@ -114,10 +107,10 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
                     href={item.href}
                     aria-current={isActive ? "page" : undefined}
                     data-active={isActive}
-                    className={`inline-flex items-center justify-center rounded-full px-3 py-2 text-sm font-medium transition-all outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 ${
+                    className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 ${
                       isActive
-                        ? "bg-accent/60 text-foreground shadow-sm"
-                        : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                        ? "bg-primary text-primary-foreground font-semibold shadow-md dark:shadow-primary/20 border-2 border-primary/20 dark:border-primary/30 scale-105"
+                        : "text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground hover:scale-105"
                     }`}
                   >
                     <motion.span
@@ -249,10 +242,10 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
                       data-active={isActive}
                       whileHover={{ x: 10 }}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`rounded-lg px-3 py-2 transition-colors ${
+                      className={`rounded-lg px-4 py-3 transition-all font-medium ${
                         isActive
-                          ? "bg-accent/60 text-foreground"
-                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                          ? "bg-primary text-primary-foreground shadow-md dark:shadow-primary/20 border-l-4 border-primary font-semibold"
+                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground hover:translate-x-1"
                       }`}
                     >
                       {item.name}

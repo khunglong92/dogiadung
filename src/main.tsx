@@ -8,8 +8,13 @@ import "./styles/globals.css";
 import "./lib/i18n/config";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/core/styles.css";
 import { queryClient } from "./lib/api/queryClient";
-import { MantineProvider, ColorSchemeScript, localStorageColorSchemeManager } from "@mantine/core";
+import {
+  MantineProvider,
+  ColorSchemeScript,
+  localStorageColorSchemeManager,
+} from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 
@@ -44,12 +49,24 @@ declare module "@tanstack/react-router" {
   }
 }
 
+// Đảm bảo theme được áp dụng ngay khi app load để tránh FOUC
+const savedTheme =
+  (typeof window !== "undefined" && localStorage.getItem("theme")) || "light";
+if (typeof window !== "undefined") {
+  const root = document.documentElement;
+  if (savedTheme === "dark") {
+    root.classList.add("dark");
+  } else {
+    root.classList.remove("dark");
+  }
+}
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ColorSchemeScript defaultColorScheme="light" />
+      <ColorSchemeScript defaultColorScheme={savedTheme as "light" | "dark"} />
       <MantineProvider
-        defaultColorScheme="light"
+        defaultColorScheme={savedTheme as "light" | "dark"}
         colorSchemeManager={localStorageColorSchemeManager({ key: "theme" })}
       >
         <ModalsProvider>

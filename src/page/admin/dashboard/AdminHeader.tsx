@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useTranslation } from "react-i18next";
-
+import companyLogo from "@/components/public/lib/images/company-logo.png";
 interface AdminHeaderProps {
   theme: "light" | "dark";
   toggleTheme: () => void;
@@ -39,8 +39,13 @@ export function AdminHeader({
       <div className="flex h-16 items-center justify-between px-6">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary/10 backdrop-blur-md border border-border flex items-center justify-center">
-              <span className="text-primary text-sm">⚙️</span>
+            <div className="h-20 w-20 rounded-lg bg-primary/10 backdrop-blur-md border border-border flex items-center justify-center">
+              <img
+                src={companyLogo}
+                alt="Company Logo"
+                width={80}
+                height={80}
+              />
             </div>
             <div>
               <h2 className="text-lg font-semibold text-foreground">

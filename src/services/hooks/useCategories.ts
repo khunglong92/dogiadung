@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   categoriesService,
-  type Category,
   type CreateCategoryDto,
   type UpdateCategoryDto,
 } from "../api/categoriesService";
@@ -31,7 +30,9 @@ export const useUpdateCategory = () => {
       categoriesService.update(id, body),
     onSuccess: (_res, variables) => {
       qc.invalidateQueries({ queryKey: [QUERY_KEYS.categories.root] });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.categories.byId(variables.id) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.categories.byId(variables.id),
+      });
     },
   });
 };
@@ -53,5 +54,3 @@ export const useCategory = (id: number) => {
     enabled: !!id,
   });
 };
-
-

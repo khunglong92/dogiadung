@@ -3,16 +3,11 @@ import { useTranslation } from "react-i18next";
 import { LogOut, Languages, ShieldAlert } from "lucide-react";
 import { motion } from "motion/react";
 import { useLogout } from "@/services/hooks/useAuth";
-import {
-  useAuthStore,
-  selectIsAuthenticated,
-  selectUser,
-} from "@/stores/authStore";
+import { useAuthStore, selectIsAuthenticated } from "@/stores/authStore";
 
 export function AdminHeader() {
   const { t, i18n } = useTranslation();
   const isAuthenticated = useAuthStore(selectIsAuthenticated);
-  const user = useAuthStore(selectUser);
   const doLogout = useAuthStore((s) => s.logout);
   const logoutMutation = useLogout();
 
