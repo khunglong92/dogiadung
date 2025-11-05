@@ -11,6 +11,11 @@ export const QUERY_KEYS = {
     root: "categories" as const,
     byId: (id: number | string) => ["category", id] as const,
   },
+  services: {
+    root: "services" as const,
+    byId: (id: number | string) => ["service", id] as const,
+    byParent: (parentId: string | null) => ["services", "parent", parentId ?? "null"] as const,
+  },
   auth: {
     profile: ["auth", "profile"] as const,
   },

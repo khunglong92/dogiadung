@@ -3,7 +3,7 @@ import { AdminHeader } from "./AdminHeader";
 import { AdminSidebar } from "../../../components/admin/layout/admin-sidebar";
 import { AdminDashboard } from "./AdminDashboard";
 import { AdminProducts } from "./AdminProducts";
-import { AdminServices } from "./AdminServices";
+import { AdminServices } from "./services";
 import { AdminProjects } from "./AdminProjects";
 import { AdminUsers } from "./AdminUsers";
 import { AdminStatistics } from "./AdminStatistics";

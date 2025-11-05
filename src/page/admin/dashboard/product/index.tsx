@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { useProductCrud } from "@/components/admin/product/hooks/use-product-crud";
+import { useProductCrud } from "@/components/admin/products/hooks/use-product-crud";
 
-import { ProductTable } from "@/components/admin/product/components/product-table";
+import { ProductTable } from "@/components/admin/products/components/product-table";
 import { useEffect, useState } from "react";
-import ProductForm from "@/components/admin/product/components/product-form";
+import ProductForm from "@/components/admin/products/components/product-form";
 
 export default function AdminProductPage() {
   const crud = useProductCrud();

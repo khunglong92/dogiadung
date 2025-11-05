@@ -107,6 +107,35 @@
       "nameRequired": "Tên danh mục là bắt buộc"
     }
   },
+  "services": {
+    "title": "Quản lý dịch vụ",
+    "subtitle": "Quản lý các dịch vụ cung cấp",
+    "add": "Thêm dịch vụ",
+    "listTitle": "Danh sách dịch vụ",
+    "searchPlaceholder": "Tìm kiếm dịch vụ...",
+    "name": "Tên dịch vụ",
+    "slug": "Slug",
+    "description": "Mô tả",
+    "content": "Nội dung",
+    "image": "Ảnh đại diện",
+    "imagePlaceholder": "URL ảnh...",
+    "order": "Thứ tự",
+    "active": "Kích hoạt",
+    "activeOn": "Hoạt động",
+    "activeOff": "Tạm dừng",
+    "createTitle": "Thêm dịch vụ mới",
+    "updateTitle": "Cập nhật dịch vụ",
+    "save": "Lưu",
+    "update": "Cập nhật",
+    "cancel": "Hủy",
+    "toast": {
+      "createSuccess": "Đã thêm dịch vụ thành công",
+      "updateSuccess": "Cập nhật dịch vụ thành công",
+      "deleteSuccess": "Đã xóa dịch vụ thành công!",
+      "nameRequired": "Tên dịch vụ là bắt buộc",
+      "slugRequired": "Slug là bắt buộc"
+    }
+  },
   "validation": {
     "required": "Bắt buộc",
     "email": "Email không hợp lệ",

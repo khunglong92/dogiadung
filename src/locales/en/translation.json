@@ -107,6 +107,35 @@
       "nameRequired": "Category name is required"
     }
   },
+  "services": {
+    "title": "Manage Services",
+    "subtitle": "Manage company services",
+    "add": "Add Service",
+    "listTitle": "Service List",
+    "searchPlaceholder": "Search services...",
+    "name": "Service name",
+    "slug": "Slug",
+    "description": "Description",
+    "content": "Content",
+    "image": "Image",
+    "imagePlaceholder": "Image URL...",
+    "order": "Order",
+    "active": "Active",
+    "activeOn": "Active",
+    "activeOff": "Inactive",
+    "createTitle": "Create new service",
+    "updateTitle": "Update service",
+    "save": "Save",
+    "update": "Update",
+    "cancel": "Cancel",
+    "toast": {
+      "createSuccess": "Service created successfully",
+      "updateSuccess": "Service updated successfully",
+      "deleteSuccess": "Service deleted successfully!",
+      "nameRequired": "Service name is required",
+      "slugRequired": "Slug is required"
+    }
+  },
   "validation": {
     "required": "Required",
     "email": "Invalid email address",
