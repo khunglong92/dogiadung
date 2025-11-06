@@ -36,6 +36,7 @@ export interface ProductFormData {
   price: number | null;
   warrantyPolicy: string;
   images: string[];
+  isFeatured: boolean;
 }
 
 export interface UseProductFormParams {
@@ -48,6 +49,7 @@ export interface UseProductFormParams {
     warrantyPolicy: string;
     images: string;
     categoryId: number | null;
+    isFeatured?: boolean;
   };
   setForm: (next: any) => void;
   onSubmit: (finalForm: {
@@ -58,6 +60,7 @@ export interface UseProductFormParams {
     warrantyPolicy: string;
     images: string;
     categoryId: number | null;
+    isFeatured?: boolean;
   }) => Promise<void>;
 }
 
@@ -197,6 +200,7 @@ export function useProductForm(
       price: form.price ? Number(form.price) : null,
       warrantyPolicy: form.warrantyPolicy || "",
       images: [],
+      isFeatured: form.isFeatured ?? true,
     },
   });
 
@@ -366,6 +370,7 @@ export function useProductForm(
         warrantyPolicy: data.warrantyPolicy || "",
         images: JSON.stringify(allImageUrls),
         categoryId: data.categoryId,
+        isFeatured: data.isFeatured,
       };
 
       // Đồng bộ state bên ngoài (tùy chọn)

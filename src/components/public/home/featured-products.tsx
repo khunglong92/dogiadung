@@ -1,70 +1,109 @@
 import { motion } from "motion/react";
-import { Star, ShoppingCart, Heart } from "lucide-react";
+import {
+  Heart,
+  ChevronLeft,
+  ChevronRight,
+  Info,
+  ArrowRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ImageWithFallback } from "@/components/public/figma/ImageWithFallback";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useFeaturedProducts } from "@/services/hooks/useProducts";
+import type { FeaturedProductsResponse } from "@/services/api/productsService";
+import { Link } from "@tanstack/react-router";
 
 export function FeaturedProducts() {
+  const { t } = useTranslation();
   const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useFeaturedProducts(10);
 
-  const featuredProducts = [
-    {
-      id: 1,
-      name: "Bàn Ăn Gỗ Sồi Hiện Đại",
-      price: 12500000,
-      originalPrice: 15000000,
-      image:
-        "https://images.unsplash.com/photo-1695687349399-452a14c409be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b29kZW4lMjBmdXJuaXR1cmUlMjBpbnRlcmlvcnxlbnwxfHx8fDE3NjIwODAxMTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      rating: 4.8,
-      reviews: 124,
-      badge: "Bán chạy",
-      category: "Bàn ăn",
-    },
-    {
-      id: 2,
-      name: "Ghế Sofa Gỗ Tự Nhiên",
-      price: 18900000,
-      originalPrice: 22000000,
-      image:
-        "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob21lJTIwaW50ZXJpb3J8ZW58MXx8fHwxNzYyMDAxNDY0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      rating: 4.9,
-      reviews: 98,
-      badge: "Mới",
-      category: "Ghế sofa",
-    },
-    {
-      id: 3,
-      name: "Tủ Quần Áo Gỗ Cao Cấp",
-      price: 25000000,
-      originalPrice: 28000000,
-      image:
-        "https://images.unsplash.com/photo-1759753976401-4b41b1acdaaa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBmdXJuaXR1cmUlMjBzaG93cm9vbXxlbnwxfHx8fDE3NjIwNDQyODZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      rating: 5.0,
-      reviews: 76,
-      badge: "Giảm giá",
-      category: "Tủ",
-    },
-    {
-      id: 4,
-      name: "Kệ Sách Gỗ Đa Năng",
-      price: 5500000,
-      originalPrice: 7000000,
-      image:
-        "https://images.unsplash.com/photo-1695687349399-452a14c409be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b29kZW4lMjBmdXJuaXR1cmUlMjBpbnRlcmlvcnxlbnwxfHx8fDE3NjIwODAxMTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      rating: 4.7,
-      reviews: 152,
-      badge: "Bán chạy",
-      category: "Kệ",
-    },
-  ];
+  // Flatten all products from pages (explicitly cast pages for TS)
+  const pages = (data?.pages as FeaturedProductsResponse[] | undefined) ?? [];
+  const allProducts = pages.flatMap((page) => page.data);
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: number | null | undefined) => {
+    if (!price) return "Liên hệ";
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
     }).format(price);
   };
+
+  const parseDescription = (
+    desc: string | Record<string, unknown> | null | undefined
+  ) => {
+    if (!desc)
+      return { overview: "", features: [], applications: [], materials: [] };
+    if (typeof desc === "string") {
+      try {
+        return JSON.parse(desc);
+      } catch {
+        return {
+          overview: desc,
+          features: [],
+          applications: [],
+          materials: [],
+        };
+      }
+    }
+    return desc as {
+      overview?: string;
+      features?: string[];
+      applications?: string[];
+      materials?: string[];
+    };
+  };
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: -400,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: 400,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Load more when scrolling near the end
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container || !hasNextPage || isFetchingNextPage) return;
+
+    const handleScroll = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = container;
+      const scrollPercentage = (scrollLeft + clientWidth) / scrollWidth;
+
+      if (scrollPercentage > 0.8 && hasNextPage) {
+        fetchNextPage();
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  if (isLoading) {
+    return (
+      <section id="featured" className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center">Đang tải...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="featured" className="py-16 md:py-24">
@@ -76,116 +115,218 @@ export function FeaturedProducts() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="mb-4">Sản Phẩm Nổi Bật</h2>
+          <h2 className="mb-4">{t("products.title")}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Khám phá bộ sưu tập những sản phẩm đồ gỗ và nội thất được yêu thích
-            nhất, kết hợp giữa thiết kế tinh tế và chất lượng hoàn hảo
+            {t("products.description")}
           </p>
         </motion.div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.map((product, index) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              onHoverStart={() => setHoveredProduct(product.id)}
-              onHoverEnd={() => setHoveredProduct(null)}
-              className="group"
-            >
-              <div className="bg-card rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border">
-                {/* Image Container */}
-                <div className="relative overflow-hidden aspect-square">
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.4 }}
-                  >
+        {/* Scroll Container */}
+        <div className="relative">
+          {/* Scroll Buttons */}
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={scrollLeft}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm shadow-lg rounded-full h-10 w-10"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={scrollRight}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm shadow-lg rounded-full h-10 w-10"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+
+          {/* Products Horizontal Scroll */}
+          <div
+            ref={scrollContainerRef}
+            className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 scroll-smooth"
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            {allProducts.map((product, index) => {
+              const description = parseDescription(product.description);
+              const overview = description.overview || "";
+              const features = description.features || [];
+              const hasInfo =
+                overview || features.length > 0 || product.warrantyPolicy;
+
+              return (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05, duration: 0.5 }}
+                  onHoverStart={() => setHoveredProduct(product.id)}
+                  onHoverEnd={() => setHoveredProduct(null)}
+                  className="group shrink-0 w-[280px] sm:w-[320px]"
+                >
+                  <div className="relative rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-[420px]">
+                    {/* Full Image Background */}
                     <ImageWithFallback
-                      src={product.image}
+                      src={
+                        product.images && product.images.length > 0
+                          ? product.images[0]
+                          : "https://via.placeholder.com/400"
+                      }
                       alt={product.name}
                       className="w-full h-full object-cover"
                     />
-                  </motion.div>
 
-                  {/* Badge */}
-                  <div className="absolute top-3 left-3">
-                    <Badge className="bg-amber-600 hover:bg-amber-700 text-white">
-                      {product.badge}
-                    </Badge>
-                  </div>
+                    {/* Gradient Overlay */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.2 }}
+                      className="absolute inset-0 bg-linear-to-t from-black/80 via-black/50 to-black/30"
+                    />
 
-                  {/* Quick Actions */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{
-                      opacity: hoveredProduct === product.id ? 1 : 0,
-                      y: hoveredProduct === product.id ? 0 : 20,
-                    }}
-                    className="absolute top-3 right-3 flex flex-col gap-2"
-                  >
-                    <Button
-                      size="icon"
-                      variant="secondary"
-                      className="rounded-full w-10 h-10 bg-white/90 hover:bg-white"
-                    >
-                      <Heart className="h-5 w-5" />
-                    </Button>
-                  </motion.div>
+                    {/* Content Overlay */}
+                    <div className="absolute inset-0 flex flex-col justify-between p-3">
+                      {/* Top Section - Badge & Actions */}
+                      <div className="flex items-start justify-between">
+                        {product.category && (
+                          <Badge className="bg-amber-600/90 hover:bg-amber-700 text-white backdrop-blur-sm text-xs px-2 py-0.5">
+                            {product.category.name}
+                          </Badge>
+                        )}
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{
+                            opacity: hoveredProduct === product.id ? 1 : 0,
+                            scale: hoveredProduct === product.id ? 1 : 0.8,
+                          }}
+                          className="flex gap-2"
+                        >
+                          <Button
+                            size="icon"
+                            variant="secondary"
+                            className="rounded-full w-8 h-8 bg-white/90 hover:bg-white backdrop-blur-sm"
+                          >
+                            <Heart className="h-3.5 w-3.5" />
+                          </Button>
+                        </motion.div>
+                      </div>
 
-                  {/* Overlay */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: hoveredProduct === product.id ? 1 : 0,
-                    }}
-                    className="absolute inset-0 bg-black/20"
-                  />
-                </div>
+                      {/* Bottom Section - Product Info */}
+                      <div className="space-y-2">
+                        {/* Product Name & Price */}
+                        <div>
+                          <h3 className="text-white font-bold text-base mb-1.5 line-clamp-2 drop-shadow-lg leading-tight">
+                            {product.name}
+                          </h3>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-amber-400 font-bold text-lg drop-shadow-lg">
+                              {formatPrice(product.price)}
+                            </span>
+                          </div>
+                        </div>
 
-                {/* Product Info */}
-                <div className="p-4 space-y-3">
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">
-                      {product.category}
-                    </p>
-                    <h3 className="line-clamp-2 group-hover:text-amber-600 transition-colors">
-                      {product.name}
-                    </h3>
-                  </div>
+                        {/* Compact Info */}
+                        {hasInfo && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{
+                              opacity: hoveredProduct === product.id ? 1 : 0.7,
+                              y: hoveredProduct === product.id ? 0 : 10,
+                            }}
+                            className="bg-white/10 backdrop-blur-md rounded-lg p-2 border border-white/20 space-y-1.5"
+                          >
+                            {overview && (
+                              <p className="text-white/90 text-[10px] leading-tight line-clamp-2">
+                                {overview}
+                              </p>
+                            )}
+                            {features.length > 0 && (
+                              <div className="flex flex-wrap gap-1">
+                                {features
+                                  .slice(0, 2)
+                                  .map((feature: string, idx: number) => (
+                                    <span
+                                      key={idx}
+                                      className="text-[10px] bg-amber-500/30 text-white px-1.5 py-0.5 rounded-full border border-amber-400/50"
+                                    >
+                                      {feature}
+                                    </span>
+                                  ))}
+                                {features.length > 2 && (
+                                  <span className="text-[10px] text-white/70">
+                                    +{features.length - 2}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                            {product.warrantyPolicy && (
+                              <div className="flex items-center gap-1 text-[10px] text-white/80">
+                                <Info className="h-2.5 w-2.5" />
+                                <span>BH: {product.warrantyPolicy}</span>
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
 
-                  {/* Rating */}
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm">{product.rating}</span>
+                        {/* Action Button */}
+                        <Button
+                          size="default"
+                          variant="outline"
+                          className="group relative overflow-hidden rounded-lg w-full bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white/20 hover:text-white transition-all duration-300 text-sm py-2"
+                        >
+                          {/* Glow for outline button - contained */}
+                          <motion.span
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 rounded-lg bg-white/15 blur-lg z-0"
+                            animate={{ opacity: [0.2, 0.4, 0.2] }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                            }}
+                          />
+                          {/* Subtle sweeping shine */}
+                          <motion.span
+                            aria-hidden
+                            className="pointer-events-none absolute inset-0 z-0 bg-linear-to-r from-transparent via-white/25 to-transparent opacity-50 mix-blend-screen"
+                            initial={{ x: "-120%" }}
+                            animate={{ x: ["-120%", "120%"] }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                            }}
+                          />
+                          <Link
+                            to="/product"
+                            search={{ id: product.id }}
+                            className="relative z-10 inline-flex items-center font-semibold w-full justify-center text-sm"
+                          >
+                            Xem chi tiết
+                            <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                          </Link>
+                        </Button>
+                      </div>
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      ({product.reviews} đánh giá)
-                    </span>
                   </div>
+                </motion.div>
+              );
+            })}
 
-                  {/* Price */}
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-amber-600">
-                      {formatPrice(product.price)}
-                    </span>
-                    <span className="text-sm text-muted-foreground line-through">
-                      {formatPrice(product.originalPrice)}
-                    </span>
-                  </div>
-
-                  {/* Add to Cart Button */}
-                  <Button className="w-full bg-amber-600 hover:bg-amber-700 group">
-                    <ShoppingCart className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
-                    Thêm vào giỏ
-                  </Button>
+            {/* Loading indicator */}
+            {isFetchingNextPage && (
+              <div className="shrink-0 w-[280px] sm:w-[320px] flex items-center justify-center">
+                <div className="text-muted-foreground text-sm">
+                  Đang tải thêm...
                 </div>
               </div>
-            </motion.div>
-          ))}
+            )}
+          </div>
         </div>
 
         {/* View All Button */}
@@ -198,13 +339,60 @@ export function FeaturedProducts() {
         >
           <Button
             size="lg"
-            variant="outline"
-            className="border-amber-600 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950"
+            className="group relative overflow-hidden rounded-lg bg-linear-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white shadow-lg hover:shadow-amber-500/50 transition-all duration-300"
           >
-            Xem tất cả sản phẩm
+            {/* Enhanced outer glow - contained */}
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-lg bg-amber-400/25 blur-xl z-0"
+              animate={{ opacity: [0.35, 0.7, 0.35] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-lg bg-orange-400/20 blur-lg z-0"
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{
+                duration: 2.3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            {/* Enhanced sweeping shine */}
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-0 bg-linear-to-r from-transparent via-white/50 to-transparent opacity-80 mix-blend-screen"
+              initial={{ x: "-120%" }}
+              animate={{ x: ["-120%", "120%"] }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            {/* Inner pulse glow */}
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-lg bg-white/10 z-0"
+              animate={{ opacity: [0.15, 0.3, 0.15] }}
+              transition={{
+                duration: 1.6,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            <Link
+              to="/product"
+              className="relative z-10 inline-flex items-center"
+            >
+              {t("products.viewAll")}
+              <ChevronRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
         </motion.div>
       </div>
+
+      {/* Note: Native scrollbar hidden via vendor styles set on container style prop above */}
     </section>
   );
 }

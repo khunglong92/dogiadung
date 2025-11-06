@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import companyLogo from "@/components/public/lib/images/company-logo.png";
+import { useLocation } from "@tanstack/react-router";
 
 interface HeaderProps {
   theme: "light" | "dark";
@@ -13,6 +14,7 @@ interface HeaderProps {
 export function Header({ theme, toggleTheme }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
+  const location = useLocation();
 
   const [activeHash, setActiveHash] = useState("#home");
 
@@ -34,7 +36,7 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
   const navItems = [
     { name: t("nav.home"), href: "/" },
     { name: t("nav.introduction"), href: "/introduction" },
-    { name: t("nav.products"), href: "/products" },
+    { name: t("nav.products"), href: "/product" },
     { name: t("nav.services"), href: "/services" },
     { name: t("nav.quote"), href: "/quote" },
     { name: t("nav.project"), href: "/project" },
@@ -49,13 +51,11 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
   // Check if a nav item is active based on hash
   const isNavItemActive = (href: string) => {
     if (href.startsWith("/")) {
-      return window.location.pathname === href;
+      return location.pathname === href;
     }
     return (
       activeHash === href ||
-      (activeHash === "#home" &&
-        href === "#home" &&
-        window.location.pathname === "/")
+      (activeHash === "#home" && href === "#home" && location.pathname === "/")
     );
   };
 
@@ -64,7 +64,7 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm"
+      className={`sticky top-0 z-50 w-full border-b backdrop-blur shadow-sm ${theme === "light" ? "bg-white/70" : "bg-black/50"}`}
     >
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">

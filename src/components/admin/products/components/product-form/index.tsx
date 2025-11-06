@@ -23,6 +23,7 @@ interface ProductFormProps {
     warrantyPolicy: string;
     images: string;
     categoryId: number | null;
+    isFeatured?: boolean;
   };
   setForm: (next: any) => void;
   onSubmit: (finalForm: {
@@ -33,6 +34,7 @@ interface ProductFormProps {
     warrantyPolicy: string;
     images: string;
     categoryId: number | null;
+    isFeatured?: boolean;
   }) => Promise<void>;
   onCancel?: () => void;
   isSaving: boolean;

@@ -26,6 +26,7 @@ export interface CreateProductDto {
   warrantyPolicy?: string;
   images?: string[];
   categoryId: number;
+  isFeatured?: boolean;
 }
 
 export interface UpdateProductDto {
@@ -36,6 +37,16 @@ export interface UpdateProductDto {
   warrantyPolicy?: string | null;
   images?: string[] | null;
   categoryId?: number;
+  isFeatured?: boolean;
+}
+
+export interface FeaturedProductsResponse {
+  pagination: {
+    total: number;
+    page: number;
+    perpage: number;
+  };
+  data: Product[];
 }
 
 export const productsService = {
@@ -53,6 +64,12 @@ export const productsService = {
     return apiClient.get<{ data: Product[]; total: number; page: number; limit: number }>(`/products?${query.toString()}`);
   },
   getById: (id: number) => apiClient.get<Product>(`/products/${id}`),
+  getFeatured: (params: { page: number; perpage: number }) => {
+    const query = new URLSearchParams();
+    query.set("page", String(params.page));
+    query.set("perpage", String(params.perpage));
+    return apiClient.get<FeaturedProductsResponse>(`/products/featured?${query.toString()}`);
+  },
   create: (body: CreateProductDto) => apiClient.post<Product>("/products", body),
   update: (id: number, body: UpdateProductDto) => apiClient.patch<Product>(`/products/${id}`, body),
   remove: (id: number) => apiClient.delete<void>(`/products/${id}`),

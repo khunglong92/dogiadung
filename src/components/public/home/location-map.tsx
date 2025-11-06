@@ -1,30 +1,36 @@
 import { motion } from "motion/react";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
 
 export function LocationMap() {
+  const { t } = useTranslation();
+  const companyPhone = import.meta.env.VITE_COMPANY_PHONE || "0967853383";
+  const companyEmail = "kimloaitamthienloc@gmail.com";
+
   const contactInfo = [
     {
       icon: MapPin,
-      title: "Địa chỉ",
-      content: "123 Đường Lê Lợi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
+      titleKey: "location.address",
+      contentKey: "location.addressValue",
       color: "from-red-500 to-pink-600",
     },
     {
       icon: Phone,
-      title: "Điện thoại",
-      content: "0123 456 789",
+      titleKey: "location.phone",
+      contentKey: "location.phoneValue",
       color: "from-blue-500 to-cyan-500",
     },
     {
       icon: Mail,
-      title: "Email",
-      content: "contact@woodhome.vn",
+      titleKey: "location.email",
+      contentKey: "location.emailValue",
       color: "from-amber-500 to-orange-600",
     },
     {
       icon: Clock,
-      title: "Giờ làm việc",
-      content: "Thứ 2 - Chủ nhật: 8:00 - 20:00",
+      titleKey: "location.workingHours",
+      contentKey: "location.workingHoursValue",
       color: "from-green-500 to-emerald-600",
     },
   ];
@@ -39,14 +45,15 @@ export function LocationMap() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="mb-4">Vị Trí Cửa Hàng</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Ghé thăm showroom của chúng tôi để trải nghiệm trực tiếp các sản
-            phẩm nội thất chất lượng cao
+          <h2 className="mb-4 text-3xl md:text-4xl font-bold">
+            {t("location.title")}
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
+            {t("location.description")}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -56,29 +63,35 @@ export function LocationMap() {
             className="space-y-6"
           >
             <div className="bg-card rounded-2xl p-8 shadow-lg border">
-              <h3 className="mb-6">Thông Tin Liên Hệ</h3>
+              <h3 className="mb-6 text-2xl font-bold">
+                {t("location.contactInfo")}
+              </h3>
               <div className="space-y-4">
                 {contactInfo.map((info, index) => {
                   const Icon = info.icon;
                   return (
                     <motion.div
-                      key={info.title}
+                      key={info.titleKey}
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1 }}
-                      whileHover={{ x: 10 }}
-                      className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                      whileHover={{ scale: 1.02, x: 5 }}
+                      className="flex items-start gap-4 p-4 rounded-xl hover:bg-muted/50 transition-all duration-300 cursor-pointer border border-transparent hover:border-border"
                     >
-                      <div
-                        className={`p-3 rounded-lg bg-gradient-to-br ${info.color} flex-shrink-0`}
+                      <motion.div
+                        className={`p-3 rounded-lg bg-linear-to-br ${info.color} shrink-0 shadow-md`}
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 300 }}
                       >
                         <Icon className="h-5 w-5 text-white" />
-                      </div>
+                      </motion.div>
                       <div className="flex-1">
-                        <h4 className="text-sm mb-1">{info.title}</h4>
+                        <h4 className="text-sm font-semibold mb-1">
+                          {t(info.titleKey)}
+                        </h4>
                         <p className="text-muted-foreground text-sm">
-                          {info.content}
+                          {t(info.contentKey)}
                         </p>
                       </div>
                     </motion.div>
@@ -87,34 +100,46 @@ export function LocationMap() {
               </div>
             </div>
 
-            {/* Additional Info */}
+            {/* Consultation Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-8 text-white shadow-lg"
+              className="bg-linear-to-br from-amber-500 to-orange-600 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden"
             >
-              <h3 className="mb-4 text-white">Đặt lịch tư vấn miễn phí</h3>
-              <p className="mb-6 text-white/90">
-                Để được tư vấn chi tiết về sản phẩm và nhận ưu đãi đặc biệt, hãy
-                liên hệ với chúng tôi ngay hôm nay!
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a
-                  href="tel:0123456789"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-white text-amber-600 rounded-lg hover:bg-white/90 transition-colors"
-                >
-                  <Phone className="h-5 w-5 mr-2" />
-                  Gọi ngay
-                </a>
-                <a
-                  href="mailto:contact@woodhome.vn"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-white/10 text-white border-2 border-white rounded-lg hover:bg-white/20 transition-colors"
-                >
-                  <Mail className="h-5 w-5 mr-2" />
-                  Gửi email
-                </a>
+              {/* Decorative gradient overlay */}
+              <div className="absolute inset-0 bg-linear-to-br from-amber-600/50 to-orange-700/50 opacity-50" />
+              <div className="relative z-10">
+                <h3 className="mb-4 text-2xl font-bold text-white">
+                  {t("location.consultationTitle")}
+                </h3>
+                <p className="mb-6 text-white/90 leading-relaxed">
+                  {t("location.consultationDescription")}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-white text-amber-600 hover:bg-white/90 font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    <a href={`tel:${companyPhone}`}>
+                      <Phone className="h-5 w-5 mr-2" />
+                      {t("location.callNow")}
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="bg-white/10 backdrop-blur-md border-2 border-white text-white hover:bg-white/20 font-semibold transition-all duration-300"
+                  >
+                    <a href={`mailto:${companyEmail}`}>
+                      <Mail className="h-5 w-5 mr-2" />
+                      {t("location.sendEmail")}
+                    </a>
+                  </Button>
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -137,7 +162,7 @@ export function LocationMap() {
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 className="w-full h-full min-h-[500px]"
-                title="Wood & Home Location"
+                title="Thiên Lộc Location"
               />
             </div>
 
@@ -147,7 +172,7 @@ export function LocationMap() {
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, type: "spring" }}
-              className="absolute -top-6 -left-6 w-32 h-32 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full opacity-20 blur-2xl pointer-events-none"
+              className="absolute -top-6 -left-6 w-32 h-32 bg-linear-to-br from-blue-500 to-cyan-500 rounded-full opacity-20 blur-2xl pointer-events-none"
             />
           </motion.div>
         </div>

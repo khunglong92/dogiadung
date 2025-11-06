@@ -22,9 +22,10 @@
   },
   "products": {
     "title": "Sản Phẩm Nổi Bật",
-    "description": "Khám phá bộ sưu tập đa dạng các sản phẩm nội thất và đồ gia dụng chất lượng cao",
+    "description": "Khám phá những công trình tiêu biểu mang dấu ấn Thiên Lộc – nơi kỹ thuật chính xác, chất lượng bền vững và thẩm mỹ tinh tế cùng hội tụ.",
     "all": "Tất cả",
-    "new": "Mới"
+    "new": "Mới",
+    "viewAll": "Xem tất cả sản phẩm"
   },
   "footer": {
     "company": {
@@ -147,5 +148,41 @@
     "passwordRequired": "Mật khẩu là bắt buộc",
     "passwordMin6": "Mật khẩu phải có ít nhất 6 ký tự",
     "invalidCredentials": "Email hoặc mật khẩu không đúng"
+  },
+  "about": {
+    "title": "Gia Công Kim Loại Tấm Chất Lượng Cao",
+    "description": "Khám phá giải pháp sản xuất và gia công kim loại tấm chuyên nghiệp tại Thiên Lộc.",
+    "content": "Từ cắt – dập – chấn – hàn – sơn tĩnh điện đến lắp ráp hoàn thiện, chúng tôi mang đến sản phẩm chính xác, bền đẹp và theo yêu cầu cho mọi ngành công nghiệp.",
+    "viewProducts": "Xem Sản Phẩm",
+    "viewServices": "Xem Dịch Vụ",
+    "services": "Dịch Vụ",
+    "sectionTitle": "Về Thiên Lộc",
+    "paragraph1": "CÔNG TY TNHH SẢN XUẤT VÀ GIA CÔNG KIM LOẠI TẤM THIÊN LỘC là đơn vị hàng đầu trong lĩnh vực sản xuất và gia công kim loại tấm tại Việt Nam.",
+    "paragraph2": "Với hơn 10 năm kinh nghiệm cùng đội ngũ kỹ thuật viên tay nghề cao, chúng tôi cam kết mang đến sản phẩm chất lượng, chính xác và bền vững, đáp ứng tiêu chuẩn khắt khe của các ngành công nghiệp.",
+    "paragraph3": "Từ cắt, dập, chấn, hàn, sơn tĩnh điện cho đến lắp ráp hoàn thiện, mỗi sản phẩm của Thiên Lộc đều được gia công tỉ mỉ trên dây chuyền hiện đại, đảm bảo độ chính xác cao và tính thẩm mỹ vượt trội.",
+    "paragraph4": "Chúng tôi không ngừng đổi mới công nghệ, nâng cao chất lượng dịch vụ nhằm mang lại giải pháp tối ưu và hiệu quả nhất cho mọi khách hàng và đối tác.",
+    "stats": {
+      "products": "Sản phẩm",
+      "customers": "Khách hàng",
+      "rating": "Đánh giá",
+      "experience": "Năm kinh nghiệm"
+    }
+  },
+  "location": {
+    "title": "Vị Trí & Liên Hệ",
+    "description": "Liên hệ với chúng tôi để được tư vấn và hỗ trợ tốt nhất",
+    "contactInfo": "Thông Tin Liên Hệ",
+    "address": "Địa chỉ",
+    "phone": "Điện thoại",
+    "email": "Email",
+    "workingHours": "Giờ làm việc",
+    "addressValue": "Võng La, Thiên Lộc, Hà Nội",
+    "phoneValue": "0967853383",
+    "emailValue": "kimloaitamthienloc@gmail.com",
+    "workingHoursValue": "Thứ 2 - Chủ nhật: 7:00 - 17:00",
+    "consultationTitle": "Đặt lịch tư vấn miễn phí",
+    "consultationDescription": "Để được tư vấn chi tiết về sản phẩm và nhận ưu đãi đặc biệt, hãy liên hệ với chúng tôi ngay hôm nay!",
+    "callNow": "Gọi ngay",
+    "sendEmail": "Gửi email"
   }
 }

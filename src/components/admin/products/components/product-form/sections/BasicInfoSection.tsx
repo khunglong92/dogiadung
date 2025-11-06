@@ -4,6 +4,7 @@ import {
   NumberInput,
   Textarea as MantineTextarea,
   Select as MantineSelect,
+  Switch as MantineSwitch,
 } from "@mantine/core";
 import { AlertCircle } from "lucide-react";
 import type { Control, UseFormRegister } from "react-hook-form";
@@ -129,6 +130,16 @@ export function BasicInfoSection({
             {errors.description.overview.message}
           </p>
         )}
+      </div>
+
+      {/* Featured Toggle */}
+      <div className="space-y-2">
+        <MantineSwitch
+          label="Sản phẩm tiêu biểu"
+          description="Hiển thị trong danh sách tiêu biểu ngoài trang chủ"
+          defaultChecked
+          {...register("isFeatured")}
+        />
       </div>
     </div>
   );

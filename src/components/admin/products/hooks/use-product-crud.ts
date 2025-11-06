@@ -23,6 +23,7 @@ export function useProductCrud() {
     images: string;
     files?: File[];
     categoryId: number | null;
+    isFeatured?: boolean;
   }>({
     name: "",
     description: "",
@@ -32,6 +33,7 @@ export function useProductCrud() {
     images: "",
     files: [],
     categoryId: null,
+    isFeatured: true,
   });
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -61,6 +63,7 @@ export function useProductCrud() {
       images: "",
       files: [],
       categoryId: null,
+      isFeatured: true,
     });
     setIsDialogOpen(true);
   };
@@ -107,6 +110,7 @@ export function useProductCrud() {
       images: imagesStr,
       files: [],
       categoryId: p.category?.id ?? null,
+      isFeatured: (p as any).isFeatured ?? false,
     });
     setIsDialogOpen(true);
   };
@@ -119,6 +123,7 @@ export function useProductCrud() {
     warrantyPolicy: string;
     images: string;
     categoryId: number | null;
+    isFeatured?: boolean;
   }) => {
     const source = overrideForm ?? form;
     if (!source.name.trim()) {
@@ -188,9 +193,11 @@ export function useProductCrud() {
       warrantyPolicy?: string;
       images?: string[];
       categoryId: number;
+      isFeatured?: boolean;
     } = {
       name: source.name.trim(),
       categoryId: source.categoryId!,
+      isFeatured: source.isFeatured ?? true,
     };
 
     // Chỉ thêm các field optional nếu có giá trị

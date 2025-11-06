@@ -16,9 +16,57 @@ export default defineConfig({
   build: {
     target: "esnext",
     outDir: "build",
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          // Vendor chunks
+          if (id.includes("node_modules")) {
+            // React and React DOM
+            if (id.includes("react") || id.includes("react-dom")) {
+              return "react-vendor";
+            }
+            // TanStack Router
+            if (id.includes("@tanstack/react-router")) {
+              return "tanstack-router-vendor";
+            }
+            // TanStack Query
+            if (id.includes("@tanstack/react-query")) {
+              return "tanstack-query-vendor";
+            }
+            // Mantine UI
+            if (id.includes("@mantine")) {
+              return "mantine-vendor";
+            }
+            // Motion/Framer Motion
+            if (id.includes("motion") || id.includes("framer-motion")) {
+              return "motion-vendor";
+            }
+            // Lucide icons
+            if (id.includes("lucide-react")) {
+              return "icons-vendor";
+            }
+            // i18next
+            if (id.includes("i18next") || id.includes("react-i18next")) {
+              return "i18n-vendor";
+            }
+            // Other large libraries
+            if (
+              id.includes("sonner") ||
+              id.includes("zod") ||
+              id.includes("react-hook-form")
+            ) {
+              return "utils-vendor";
+            }
+            // Other node_modules
+            return "vendor";
+          }
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
   },
   server: {
-    port: 7000,
+    port: 4000,
     open: true,
   },
 });

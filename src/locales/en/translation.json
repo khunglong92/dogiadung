@@ -147,5 +147,41 @@
     "passwordRequired": "Password is required",
     "passwordMin6": "Password must be at least 6 characters",
     "invalidCredentials": "Email or password is incorrect"
+  },
+  "about": {
+    "title": "High Quality Metal Sheet Processing",
+    "description": "Discover professional metal sheet manufacturing and processing solutions at Thien Loc.",
+    "content": "From cutting – stamping – bending – welding – electrostatic painting to final assembly, we deliver precise, durable and custom products for all industries.",
+    "viewProducts": "View Products",
+    "viewServices": "View Services",
+    "services": "Services",
+    "sectionTitle": "About Thien Loc",
+    "paragraph1": "THIEN LOC METAL SHEET MANUFACTURING AND PROCESSING CO., LTD. is a leading unit in the field of metal sheet production and processing in Vietnam.",
+    "paragraph2": "With over 10 years of experience and a team of highly skilled technicians, we are committed to delivering quality, precise and sustainable products that meet the strict standards of various industries.",
+    "paragraph3": "From cutting, stamping, bending, welding, electrostatic painting to final assembly, every Thien Loc product is meticulously processed on modern production lines, ensuring high precision and outstanding aesthetics.",
+    "paragraph4": "We continuously innovate technology and improve service quality to provide the most optimal and effective solutions for all customers and partners.",
+    "stats": {
+      "products": "Products",
+      "customers": "Customers",
+      "rating": "Rating",
+      "experience": "Years of Experience"
+    }
+  },
+  "location": {
+    "title": "Location & Contact",
+    "description": "Contact us for the best consultation and support",
+    "contactInfo": "Contact Information",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "workingHours": "Working Hours",
+    "addressValue": "Vong La, Thien Loc, Hanoi",
+    "phoneValue": "0967853383",
+    "emailValue": "kimloaitamthienloc@gmail.com",
+    "workingHoursValue": "Monday - Sunday: 7:00 AM - 5:00 PM",
+    "consultationTitle": "Book Free Consultation",
+    "consultationDescription": "For detailed product consultation and special offers, contact us today!",
+    "callNow": "Call Now",
+    "sendEmail": "Send Email"
   }
 }

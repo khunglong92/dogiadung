@@ -1,9 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import {
   productsService,
   type CreateProductDto,
   type UpdateProductDto,
   type Product,
+  type FeaturedProductsResponse,
 } from "../api/productsService";
 import { QUERY_KEYS } from "@/lib/api/queryKeys";
 
@@ -72,5 +73,19 @@ export const useDeleteProduct = () => {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: [QUERY_KEYS.products.root] });
     },
+  });
+};
+
+export const useFeaturedProducts = (perpage: number = 10) => {
+  return useInfiniteQuery<FeaturedProductsResponse>({
+    queryKey: [QUERY_KEYS.products.root, "featured"],
+    queryFn: ({ pageParam = 1 }) =>
+      productsService.getFeatured({ page: pageParam as number, perpage }),
+    getNextPageParam: (lastPage) => {
+      const { page, perpage, total } = lastPage.pagination;
+      const totalPages = Math.ceil(total / perpage);
+      return page < totalPages ? page + 1 : undefined;
+    },
+    staleTime: 5 * 60 * 1000,
   });
 };
