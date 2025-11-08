@@ -1,0 +1,88 @@
+import { Menu, Group, Text, Avatar, rem, UnstyledButton } from "@mantine/core";
+import { IconSettings, IconLogout } from "@tabler/icons-react";
+import { useAuthStore } from "@/stores/authStore";
+import { useNavigate } from "@tanstack/react-router";
+import AppButton from "../atoms/app-button";
+import { useTheme } from "@/hooks/useTheme";
+import { useTranslation } from "react-i18next";
+import { UserRole } from "@/stores/types";
+
+export default function UserSetting() {
+  const { t } = useTranslation();
+  const { user, logout } = useAuthStore();
+  const { theme } = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate({ to: "/", replace: true });
+  };
+
+  // Function to get initials from the user's name for the avatar
+  const getInitials = (name: string) => {
+    const names = name.split(" ");
+    if (names.length > 1) {
+      return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+  };
+
+  return (
+    <>
+      {!user && (
+        <AppButton
+          name={t("admin.login.login")}
+          size="sm"
+          variant={theme === "dark" ? "outline" : "default"}
+          onClick={() => navigate({ to: "/auth/login" })}
+        />
+      )}
+
+      {user && (
+        <Menu shadow="md" width={200} position="bottom-end">
+          <Menu.Target>
+            <UnstyledButton>
+              <Group>
+                <Avatar src={user?.avtUrl} color="blue" radius="xl">
+                  {getInitials(user?.name)}
+                </Avatar>
+
+                <div style={{ flex: 1 }}>
+                  <Text size="sm" fw={500}>
+                    {user.name}
+                  </Text>
+                  <Text c="dimmed" size="xs">
+                    {user.role}
+                  </Text>
+                </div>
+              </Group>
+            </UnstyledButton>
+          </Menu.Target>
+
+          <Menu.Dropdown>
+            <Menu.Label>Account</Menu.Label>
+            {user.role === UserRole.ADMIN && (
+              <Menu.Item
+                leftSection={
+                  <IconSettings style={{ width: rem(14), height: rem(14) }} />
+                }
+                onClick={() => navigate({ to: "/admin/dashboard" })} // Assuming you have a /settings route
+              >
+                Settings
+              </Menu.Item>
+            )}
+            <Menu.Item
+              color="red"
+              leftSection={
+                <IconLogout style={{ width: rem(14), height: rem(14) }} />
+              }
+              onClick={handleLogout}
+            >
+              Logout
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+      )}
+    </>
+  );
+}

@@ -59,6 +59,7 @@
       "en": "🇬🇧 English"
     },
     "login": {
+      "login": "SignIn",
       "welcomeBack": "Welcome back",
       "signIn": "Admin sign in",
       "username": "Username",
@@ -85,8 +86,7 @@
       "title": "Overview",
       "recentActivities": "Recent Activities"
     }
-  }
-  ,
+  },
   "categories": {
     "title": "Manage Categories",
     "subtitle": "Manage product categories",
@@ -136,17 +136,65 @@
       "slugRequired": "Slug is required"
     }
   },
+  "serviceForm": {
+    "createTitle": "Add New Service",
+    "editTitle": "Edit Service",
+    "tabs": {
+      "general": "General",
+      "content": "Content",
+      "config": "Configuration",
+      "seo": "SEO"
+    },
+    "title": "Title",
+    "slug": "Slug",
+    "subtitle": "Subtitle",
+    "icon": "Icon (e.g., Lucide icon name)",
+    "shortDescription": "Short Description",
+    "images": "Images",
+    "uploadImages": "Upload Images (max 5)",
+    "alt_text": "Image Alt Text",
+    "content": "Main Content",
+    "features": "Key Features",
+    "technologies": "Technologies Used",
+    "benefits": "Benefits",
+    "status": "Status",
+    "theme_variant": "Theme Variant",
+    "order": "Order Index",
+    "featured": "Is Featured?",
+    "customers": "Target Customers",
+    "cta_label": "CTA Button Label",
+    "cta_link": "CTA Button Link",
+    "tags": "Tags",
+    "tagsPlaceholder": "Add tags and press Enter",
+    "seo_title": "SEO Title",
+    "seo_description": "SEO Description",
+    "uploading": "Uploading image...",
+    "uploadSuccess": "Image uploaded successfully!",
+    "uploadError": "An error occurred while uploading the image",
+    "cancel": "Cancel",
+    "save": "Save",
+    "statusOptions": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "themeVariantOptions": {
+      "light": "Light",
+      "dark": "Dark",
+      "auto": "Auto"
+    }
+  },
   "validation": {
-    "required": "Required",
-    "email": "Invalid email address",
-    "min6": "At least 6 characters",
-    "nameMin2": "Name must be at least 2 characters",
-    "passwordsNotMatch": "Passwords do not match",
-    "emailRequired": "Email is required",
-    "emailInvalid": "Invalid email address",
-    "passwordRequired": "Password is required",
-    "passwordMin6": "Password must be at least 6 characters",
-    "invalidCredentials": "Email or password is incorrect"
+    "error": "Invalid Data",
+    "slugRequired": "Slug is required",
+    "titleRequired": "Title is required",
+    "shortDescriptionRequired": "Short description is required",
+    "imageUrlRequired": "Featured image is required",
+    "ctaLabelRequired": "CTA button label is required",
+    "ctaLinkRequired": "CTA button link is required",
+    "ctaLinkInvalid": "CTA button link is not a valid URL",
+    "imageTooLarge": "Image exceeds the 20MB limit. Please select a smaller image.",
+    "imageUrlsRequired": "At least one image is required."
   },
   "about": {
     "title": "High Quality Metal Sheet Processing",

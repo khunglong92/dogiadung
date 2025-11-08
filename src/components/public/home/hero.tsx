@@ -104,7 +104,7 @@ export function Hero() {
                   }}
                 />
                 <Link
-                  to="/product"
+                  to="/products"
                   className="relative z-10 inline-flex items-center font-bold"
                 >
                   {t("about.viewProducts")}

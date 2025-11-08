@@ -1,51 +1,63 @@
-import { motion } from 'motion/react';
-import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Twitter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { motion } from "motion/react";
+import {
+  Facebook,
+  Instagram,
+  Youtube,
+  Mail,
+  Phone,
+  MapPin,
+  Twitter,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useLocation } from "@tanstack/react-router";
 
 export function Footer() {
+  const location = useLocation();
   const socialLinks = [
     {
-      name: 'Facebook',
+      name: "Facebook",
       icon: Facebook,
-      url: 'https://facebook.com',
-      color: 'hover:text-blue-600',
+      url: "https://facebook.com",
+      color: "hover:text-blue-600",
     },
     {
-      name: 'Instagram',
+      name: "Instagram",
       icon: Instagram,
-      url: 'https://instagram.com',
-      color: 'hover:text-pink-600',
+      url: "https://instagram.com",
+      color: "hover:text-pink-600",
     },
     {
-      name: 'Twitter',
+      name: "Twitter",
       icon: Twitter,
-      url: 'https://twitter.com',
-      color: 'hover:text-blue-400',
+      url: "https://twitter.com",
+      color: "hover:text-blue-400",
     },
     {
-      name: 'Youtube',
+      name: "Youtube",
       icon: Youtube,
-      url: 'https://youtube.com',
-      color: 'hover:text-red-600',
+      url: "https://youtube.com",
+      color: "hover:text-red-600",
     },
   ];
 
   const quickLinks = [
-    { name: 'Giới thiệu', href: '/introduction' },
-    { name: 'Sản phẩm', href: '#products' },
-    { name: 'Dịch vụ', href: '#services' },
-    { name: 'Dự án', href: '#project' },
-    { name: 'Liên hệ', href: '#contact' },
+    { name: "Giới thiệu", href: "/introduction" },
+    { name: "Sản phẩm", href: "#products" },
+    { name: "Dịch vụ", href: "#services" },
+    { name: "Dự án", href: "#project" },
+    { name: "Liên hệ", href: "#contact" },
   ];
 
   const categories = [
-    { name: 'Bàn ăn', href: '#' },
-    { name: 'Ghế sofa', href: '#' },
-    { name: 'Tủ quần áo', href: '#' },
-    { name: 'Kệ sách', href: '#' },
-    { name: 'Đồ trang trí', href: '#' },
+    { name: "Bàn ăn", href: "#" },
+    { name: "Ghế sofa", href: "#" },
+    { name: "Tủ quần áo", href: "#" },
+    { name: "Kệ sách", href: "#" },
+    { name: "Đồ trang trí", href: "#" },
   ];
+
+  if (location.pathname.includes("/admin")) return null;
 
   return (
     <footer id="contact" className="bg-card border-t">
@@ -65,7 +77,8 @@ export function Footer() {
               <span className="text-xl">Wood & Home</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Chuyên cung cấp đồ gia dụng và nội thất gỗ, nhựa cao cấp cho ngôi nhà của bạn.
+              Chuyên cung cấp đồ gia dụng và nội thất gỗ, nhựa cao cấp cho ngôi
+              nhà của bạn.
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm">
@@ -163,9 +176,11 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               © 2025 Wood & Home. Tất cả quyền được bảo lưu.
             </p>
-            
+
             <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">Theo dõi chúng tôi:</span>
+              <span className="text-sm text-muted-foreground">
+                Theo dõi chúng tôi:
+              </span>
               <div className="flex gap-2">
                 {socialLinks.map((social) => {
                   const Icon = social.icon;

@@ -57,7 +57,7 @@ export function CategoryTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {(items || []).map((category, index) => (
+            {(items || [])?.map((category, index) => (
               <motion.tr
                 key={category.id}
                 initial={{ opacity: 0, y: 10 }}

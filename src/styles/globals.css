@@ -120,6 +120,29 @@
 }
 
 @layer base {
+  .tiptap ol {
+    list-style-type: decimal;
+    padding-left: 2rem;
+  }
+  .tiptap ul {
+    list-style-type: disc;
+    padding-left: 2rem;
+  }
+  .tiptap pre {
+    background: #0d0d0d;
+    color: #fff;
+    font-family: "JetBrains Mono", monospace;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+  }
+
+  .tiptap pre code {
+    color: inherit;
+    padding: 0;
+    background: none;
+    font-size: 0.8rem;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
@@ -186,4 +209,75 @@
 
 html {
   font-size: var(--font-size);
+}
+
+@layer utilities {
+  @keyframes pulse-strong {
+    0%,
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+    }
+    50% {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px 15px rgba(0, 0, 0, 0);
+    }
+  }
+
+  .animate-pulse-strong {
+    animation: pulse-strong 2s infinite;
+  }
+}
+
+.tab {
+  position: relative;
+  border: 1px solid
+    light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+  background-color: light-dark(
+    var(--mantine-color-white),
+    var(--mantine-color-dark-6)
+  );
+
+  &:first-of-type {
+    border-radius: 4px 0 0 4px;
+
+    @mixin rtl {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  &:last-of-type {
+    border-radius: 0 4px 4px 0;
+
+    @mixin rtl {
+      border-radius: 4px 0 0 4px;
+    }
+  }
+
+  & + & {
+    border-left-width: 0;
+
+    @mixin rtl {
+      border-right-width: 0;
+      border-left-width: 1px;
+    }
+  }
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-5)
+    );
+  }
+
+  &[data-active] {
+    z-index: 1;
+    background-color: var(--mantine-color-blue-filled);
+    border-color: var(--mantine-color-blue-filled);
+    color: var(--mantine-color-white);
+
+    @mixin hover {
+      background-color: var(--mantine-color-blue-filled-hover);
+    }
+  }
 }

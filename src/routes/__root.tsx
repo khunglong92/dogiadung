@@ -1,25 +1,54 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  Outlet,
+  useRouterState,
+  useNavigate,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { Header } from "@/components/public/layout/Header";
-import { Footer } from "@/components/public/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { FloatingContactButtons } from "@/components/public/common/floating-contact-buttons";
 import { useTheme } from "@/hooks/useTheme";
+import { useAuthStore } from "@/stores/authStore";
+import { UserRole } from "@/stores/types";
+import { useEffect } from "react";
 
 export const Route = createRootRoute({
-  component: () => {
-    const { theme, toggleTheme } = useTheme();
-    const isAdmin =
-      typeof window !== "undefined" &&
-      window.location.pathname.startsWith("/admin");
-
-    return (
-      <>
-        {!isAdmin && <Header theme={theme} toggleTheme={toggleTheme} />}
-        <main className="min-h-screen">
-          <Outlet />
-        </main>
-        {!isAdmin && <Footer />}
-        {process.env.NODE_ENV !== "production" && <TanStackRouterDevtools />}
-      </>
-    );
-  },
+  component: RootLayout,
 });
+
+function RootLayout() {
+  const { theme, toggleTheme } = useTheme();
+  const { user } = useAuthStore.getState();
+  const isAdmin = user?.role === UserRole.ADMIN;
+
+  const navigate = useNavigate();
+  const routerState = useRouterState(); // lấy trạng thái router
+  const pathname = routerState.location.pathname;
+
+  useEffect(() => {
+    // Nếu là đường dẫn admin nhưng user không phải admin => quay lại "/"
+    if (pathname.startsWith("/admin") && !isAdmin) {
+      console.log("force ridirect to home");
+      navigate({ to: "/", replace: true });
+    }
+  }, [pathname, isAdmin, navigate]);
+
+  return (
+    <>
+      {/* Header và Footer hiển thị cho tất cả */}
+      <Header theme={theme} toggleTheme={toggleTheme} />
+
+      <main className="min-h-screen">
+        <Outlet />
+      </main>
+
+      <Footer />
+
+      {/* Ẩn FloatingContactButtons nếu là admin */}
+      {!isAdmin && <FloatingContactButtons />}
+
+      {process.env.NODE_ENV !== "production" && <TanStackRouterDevtools />}
+    </>
+  );
+}

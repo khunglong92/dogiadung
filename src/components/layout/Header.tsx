@@ -1,21 +1,25 @@
-import { Moon, Sun, ShoppingCart, Menu, X, Languages } from "lucide-react";
+import { Moon, Sun, Menu, X, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import companyLogo from "@/components/public/lib/images/company-logo.png";
-import { useLocation } from "@tanstack/react-router";
+import companyLogo from "@/images/common/company-logo.png";
 
-interface HeaderProps {
+import { useLocation, useNavigate } from "@tanstack/react-router";
+import { AppThumbnailImage } from "@/components/public/common/app-thumbnail-image";
+import UserSetting from "./user-setting";
+
+export function Header({
+  theme,
+  toggleTheme,
+}: {
   theme: "light" | "dark";
   toggleTheme: () => void;
-}
-
-export function Header({ theme, toggleTheme }: HeaderProps) {
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const location = useLocation();
-
+  const navigate = useNavigate();
   const [activeHash, setActiveHash] = useState("#home");
 
   // Update active hash when URL changes
@@ -36,10 +40,10 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
   const navItems = [
     { name: t("nav.home"), href: "/" },
     { name: t("nav.introduction"), href: "/introduction" },
-    { name: t("nav.products"), href: "/product" },
+    { name: t("nav.products"), href: "/products" },
     { name: t("nav.services"), href: "/services" },
     { name: t("nav.quote"), href: "/quote" },
-    { name: t("nav.project"), href: "/project" },
+    { name: t("nav.project"), href: "/projects" },
     { name: t("nav.contact"), href: "/contact" },
   ] as const;
 
@@ -71,10 +75,11 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
           {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigate({ to: "/" })}
           >
             <div className="h-20 w-20 rounded-xl flex items-center justify-center">
-              <img
+              <AppThumbnailImage
                 src={companyLogo}
                 alt="Company Logo"
                 width={80}
@@ -197,19 +202,6 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
               </Button>
             </motion.div>
 
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full relative"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 bg-amber-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                  0
-                </span>
-              </Button>
-            </motion.div>
-
             {/* Mobile menu button */}
             <Button
               variant="ghost"
@@ -220,6 +212,8 @@ export function Header({ theme, toggleTheme }: HeaderProps) {
               {mobileMenuOpen ? <X /> : <Menu />}
             </Button>
           </div>
+
+          <UserSetting />
         </div>
 
         {/* Mobile Navigation */}

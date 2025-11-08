@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AdminHeader } from "./AdminHeader";
-import { AdminSidebar } from "../../../components/admin/layout/admin-sidebar";
+import { AdminSidebar } from "../../../components/layout/sidebar-manager";
 import { AdminDashboard } from "./AdminDashboard";
 import { AdminProducts } from "./AdminProducts";
 import { AdminServices } from "./services";

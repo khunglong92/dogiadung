@@ -1,5 +1,11 @@
 import { motion } from "motion/react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -10,36 +16,64 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Search, Trash2 } from "lucide-react";
-import type { CompanyService } from "@/services/api/servicesService";
+import { Edit, Search, Trash2, CheckCircle, XCircle } from "lucide-react";
+import type {
+  PaginatedServicesResponse,
+  CompanyService,
+  ServiceStatus,
+} from "@/services/api/servicesService";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationLink,
+} from "@/components/ui/pagination";
 
-interface ServiceTableProps {
-  items: CompanyService[];
-  searchQuery: string;
-  setSearchQuery: (v: string) => void;
-  onEdit: (s: CompanyService) => void;
-  onDelete: (id: string) => void;
-}
+const statusVariant: Record<
+  ServiceStatus,
+  "default" | "secondary" | "destructive"
+> = {
+  published: "default",
+  draft: "secondary",
+  archived: "destructive",
+};
 
 export function ServiceTable({
-  items,
+  data,
   searchQuery,
   setSearchQuery,
   onEdit,
   onDelete,
-}: ServiceTableProps) {
+  onPageChange,
+  page,
+}: {
+  data: PaginatedServicesResponse | undefined;
+  searchQuery: string;
+  setSearchQuery: (v: string) => void;
+  onEdit: (s: CompanyService) => void;
+  onDelete: (id: string) => void;
+  onPageChange: (page: number) => void;
+  page: number;
+}) {
   const { t } = useTranslation();
+  const services = data?.data || [];
+  const totalPages = data?.pagination
+    ? Math.ceil(data.pagination.total / data.pagination.perpage)
+    : 1;
+
   return (
-    <Card>
+    <div>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>{t("services.listTitle")}</CardTitle>
+          <CardTitle>{t("services.admin.listTitle")}</CardTitle>
           <div className="relative w-72">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder={t("services.searchPlaceholder")}
+              placeholder={t("services.admin.searchPlaceholder")}
               className="pl-10"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -51,17 +85,16 @@ export function ServiceTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>{t("services.name")}</TableHead>
-              <TableHead>{t("services.slug")}</TableHead>
-              <TableHead>{t("services.description")}</TableHead>
-              <TableHead>{t("services.order")}</TableHead>
-              <TableHead>{t("services.active")}</TableHead>
+              <TableHead>No</TableHead>
+              <TableHead>Tiêu đề</TableHead>
+              <TableHead>Trạng thái</TableHead>
+              <TableHead>Nổi bật</TableHead>
+              <TableHead>Thứ tự</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {(items || []).map((service, index) => (
+          <TableBody className="">
+            {services?.map((service, index) => (
               <motion.tr
                 key={service.id}
                 initial={{ opacity: 0, y: 10 }}
@@ -69,24 +102,37 @@ export function ServiceTable({
                 transition={{ delay: index * 0.05 }}
                 className="group"
               >
-                <TableCell className="max-w-[140px] truncate">{service.id}</TableCell>
-                <TableCell>{service.name}</TableCell>
-                <TableCell>{service.slug}</TableCell>
-                <TableCell className="max-w-[420px] truncate">
-                  {service.description}
+                <TableCell className="max-w-[100px] truncate font-mono text-xs">
+                  {index + 1}
                 </TableCell>
-                <TableCell>{service.order ?? 0}</TableCell>
+                <TableCell>{service.title}</TableCell>
                 <TableCell>
-                  <Badge variant={service.isActive ? "default" : "outline"}>
-                    {service.isActive ? t("services.activeOn") : t("services.activeOff")}
+                  <Badge variant={statusVariant[service.status]}>
+                    {service.status}
                   </Badge>
                 </TableCell>
+                <TableCell>
+                  {service.is_featured ? (
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  ) : (
+                    <XCircle className="h-5 w-5 text-muted-foreground" />
+                  )}
+                </TableCell>
+                <TableCell>{service.order_index ?? 0}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
-                    <Button variant="ghost" size="icon" onClick={() => onEdit(service)}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onEdit(service)}
+                    >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => onDelete(service.id)}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onDelete(service.id)}
+                    >
                       <Trash2 className="h-4 w-4 text-red-600" />
                     </Button>
                   </div>
@@ -95,9 +141,41 @@ export function ServiceTable({
             ))}
           </TableBody>
         </Table>
+        {services.length === 0 && (
+          <div className="text-center py-10 text-muted-foreground">
+            Không tìm thấy dịch vụ nào.
+          </div>
+        )}
       </CardContent>
-    </Card>
+      {totalPages > 1 && (
+        <CardFooter className="flex justify-end border-t pt-4">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (page > 1) onPageChange(page - 1);
+                  }}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink isActive>{page}</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (page < totalPages) onPageChange(page + 1);
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </CardFooter>
+      )}
+    </div>
   );
 }
-
-

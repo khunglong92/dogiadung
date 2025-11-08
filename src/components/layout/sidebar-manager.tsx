@@ -6,15 +6,20 @@ import {
   FolderKanban,
   Users,
   BarChart3,
+  ChevronLeft,
 } from "lucide-react";
 import { cn } from "@/components/ui/utils";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { useTheme } from "@/hooks/useTheme";
+import { useState } from "react";
 
 export function AdminSidebar() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const routerState = useRouterState();
+  const { theme } = useTheme();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Xác định trang hiện tại từ route path
   const currentPath = routerState.location.pathname;
@@ -77,8 +82,26 @@ export function AdminSidebar() {
   };
 
   return (
-    <aside className="w-64 border-r bg-card h-[calc(100vh-4rem)] overflow-y-auto">
-      <nav className="p-4 space-y-2">
+    <aside
+      className={cn(
+        "relative flex flex-col border-r bg-card min-h-screen transition-all duration-300 ease-in-out",
+        isCollapsed ? "w-20" : "w-64",
+        theme === "dark" ? "bg-white" : "bg-black"
+      )}
+    >
+      <button
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="absolute rounded-full bg-white/10 backdrop-blur-sm hover:bg-opacity-50 cursor-pointer top-2 -right-12 shadow-2xl duration-1000 transition-all shadow-indigo-300 z-10 h-10 w-10 bg-card text-card-foreground flex items-center justify-center hover:bg-accent transition-colors"
+      >
+        <ChevronLeft
+          className={cn(
+            "h-6 w-6 transition-discrete text-white duration-300 ease-in-out",
+            isCollapsed && "rotate-180"
+          )}
+        />
+      </button>
+
+      <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
         {menuItems.map((item, index) => {
           const Icon = item.icon;
           const isActive = currentPage === item.id;
@@ -86,6 +109,7 @@ export function AdminSidebar() {
           return (
             <motion.button
               key={item.id}
+              title={isCollapsed ? item.name : ""}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05 }}
@@ -94,11 +118,16 @@ export function AdminSidebar() {
                 "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
                 isActive
                   ? "bg-gradient-to-r " + item.color + " text-white shadow-lg"
-                  : "hover:bg-accent"
+                  : "hover:bg-accent",
+                isCollapsed && "justify-center"
               )}
             >
-              <Icon className="h-5 w-5 flex-shrink-0" />
-              <span className="text-sm">{item.name}</span>
+              <Icon className="h-5 w-5 flex-shrink-0 text-black/50" />
+              {!isCollapsed && (
+                <span className="text-sm text-black/60 !font-bold">
+                  {item.name}
+                </span>
+              )}
             </motion.button>
           );
         })}

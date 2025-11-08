@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   useCreateService,
   useDeleteService,
@@ -7,190 +7,55 @@ import {
   type CompanyService,
 } from "@/services/hooks/useServices";
 import { toast } from "sonner";
-import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
+import { ServiceFormData } from "../components/service-form/hooks/use-service-form";
 
-export function useServiceCrud(parentId?: string) {
+export function useServiceCrud() {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editing, setEditing] = useState<CompanyService | null>(null);
-  const [form, setForm] = useState<{
-    name: string;
-    slug: string;
-    description: string;
-    content: string;
-    image: string;
-    order: number;
-    isActive: boolean;
-    parentId: string | null;
-  }>({
-    name: "",
-    slug: "",
-    description: "",
-    content: "",
-    image: "",
-    order: 0,
-    isActive: true,
-    parentId: parentId ?? null,
+  const [mode, setMode] = useState<"list" | "create" | "edit">("list");
+  const [editingService, setEditingService] = useState<Partial<CompanyService> | null>(null);
+
+  const [page, setPage] = useState(1);
+
+  const { data, isFetching } = useServices({
+    page,
+    search: searchQuery,
+    perpage: 10,
   });
 
-  const { data, isFetching } = useServices(parentId);
   const createMutation = useCreateService();
   const updateMutation = useUpdateService();
   const deleteMutation = useDeleteService();
 
-  const items = useMemo(() => {
-    const list = data ?? [];
-    if (!searchQuery.trim()) return list;
-    const q = searchQuery.toLowerCase();
-    return list.filter(
-      (s) =>
-        s.name.toLowerCase().includes(q) ||
-        (s.slug || "").toLowerCase().includes(q) ||
-        (s.description || "").toLowerCase().includes(q)
-    );
-  }, [data, searchQuery]);
-
   const openCreate = () => {
-    setEditing(null);
-    setForm({
-      name: "",
-      slug: "",
-      description: "",
-      content: "",
-      image: "",
-      order: 0,
-      isActive: true,
-      parentId: parentId ?? null,
-    });
-    setIsDialogOpen(true);
+    setEditingService({});
+    setMode("create");
   };
 
-  const openEdit = (s: CompanyService) => {
-    setEditing(s);
-    setForm({
-      name: s.name,
-      slug: s.slug,
-      description: s.description || "",
-      content: s.content || "",
-      image: s.image || "",
-      order: s.order ?? 0,
-      isActive: s.isActive,
-      parentId: s.parent?.id ?? null,
-    });
-    setIsDialogOpen(true);
+  const openEdit = (service: CompanyService) => {
+    setEditingService(service);
+    setMode("edit");
   };
 
-  const submit = async () => {
-    if (!form.name.trim()) {
-      notifications.show({
-        color: "red",
-        message: t("services.toast.nameRequired"),
-      });
-      return;
-    }
-    if (!form.slug.trim()) {
-      notifications.show({
-        color: "red",
-        message: t("services.toast.slugRequired"),
-      });
-      return;
-    }
+  const closeForm = () => {
+    setEditingService(null);
+    setMode("list");
+  }
+
+  const onSubmit = async (formData: ServiceFormData) => {
     try {
-      toast.loading("Đang lưu...", { id: "service-saving" });
-      if (editing) {
-        await updateMutation.mutateAsync({
-          id: editing.id,
-          body: {
-            name: form.name.trim(),
-            slug: form.slug.trim(),
-            description: form.description || null,
-            content: form.content || null,
-            image: form.image || null,
-            order: form.order,
-            isActive: !!form.isActive,
-            parentId: form.parentId || null,
-          },
-        });
+      if (editingService?.id) {
+        await updateMutation.mutateAsync({ id: editingService.id, body: formData });
         toast.success(t("services.toast.updateSuccess"));
       } else {
-        await createMutation.mutateAsync({
-          name: form.name.trim(),
-          slug: form.slug.trim(),
-          description: form.description || null,
-          content: form.content || null,
-          image: form.image || null,
-          order: form.order,
-          isActive: !!form.isActive,
-          parentId: form.parentId || null,
-        });
+        await createMutation.mutateAsync(formData as any);
         toast.success(t("services.toast.createSuccess"));
       }
-      setIsDialogOpen(false);
+      closeForm();
     } catch (e: any) {
-      notifications.show({ color: "red", message: e?.message || "Error" });
-    }
-  };
-
-  const submitWithData = async (payload: {
-    name: string;
-    slug: string;
-    description: string;
-    content: string;
-    image: string;
-    order: number;
-    isActive: boolean;
-    parentId: string | null;
-  }) => {
-    if (!payload.name.trim()) {
-      notifications.show({
-        color: "red",
-        message: t("services.toast.nameRequired"),
-      });
-      return;
-    }
-    if (!payload.slug.trim()) {
-      notifications.show({
-        color: "red",
-        message: t("services.toast.slugRequired"),
-      });
-      return;
-    }
-    try {
-      if (editing) {
-        await updateMutation.mutateAsync({
-          id: editing.id,
-          body: {
-            name: payload.name.trim(),
-            slug: payload.slug.trim(),
-            description: payload.description || null,
-            content: payload.content || null,
-            image: payload.image || null,
-            order: payload.order,
-            isActive: !!payload.isActive,
-            parentId: payload.parentId || null,
-          },
-        });
-        toast.success(t("services.toast.updateSuccess"));
-      } else {
-        await createMutation.mutateAsync({
-          name: payload.name.trim(),
-          slug: payload.slug.trim(),
-          description: payload.description || null,
-          content: payload.content || null,
-          image: payload.image || null,
-          order: payload.order,
-          isActive: !!payload.isActive,
-          parentId: payload.parentId || null,
-        });
-        toast.success(t("services.toast.createSuccess"));
-      }
-    } catch (e: any) {
-      notifications.show({ color: "red", message: e?.message || "Error" });
+      toast.error(e?.message || "Error");
       throw e;
-    } finally {
-      toast.dismiss("service-saving");
     }
   };
 
@@ -204,19 +69,18 @@ export function useServiceCrud(parentId?: string) {
   };
 
   return {
-    items,
+    data,
     isFetching,
     searchQuery,
     setSearchQuery,
-    isDialogOpen,
-    setIsDialogOpen,
-    editing,
-    form,
-    setForm,
+    page,
+    setPage,
+    mode,
+    editingService,
     openCreate,
     openEdit,
-    submit,
-    submitWithData,
+    closeForm,
+    onSubmit,
     remove,
     isSaving: createMutation.isPending || updateMutation.isPending,
   };

@@ -1,8 +1,9 @@
 import { motion } from "motion/react";
 import { Users, Package, Star, Award } from "lucide-react";
-import { ImageWithFallback } from "../figma/ImageWithFallback";
-import introAbout from "../lib/images/intro-about.jpg";
+import { AppThumbnailImage } from "@/components/public/common/app-thumbnail-image";
+
 import { useTranslation } from "react-i18next";
+import introAboutImage from "@/images/common/intro-about.jpg";
 
 export function AboutSection() {
   const { t } = useTranslation();
@@ -47,8 +48,8 @@ export function AboutSection() {
             className="relative"
           >
             <div className="relative overflow-hidden rounded-2xl shadow-2xl">
-              <ImageWithFallback
-                src={introAbout}
+              <AppThumbnailImage
+                src={introAboutImage}
                 alt="Thiên Lộc - Gia công kim loại tấm"
                 className="w-full h-[400px] md:h-[500px] object-cover"
               />

@@ -1,24 +1,81 @@
+import { Save, Upload, X } from "lucide-react";
+import { useServiceForm, type ServiceFormData } from "./hooks/use-service-form";
+import { AppThumbnailImage } from "@/components/public/common/app-thumbnail-image";
+import {
+  CompanyService,
+  ServiceStatus,
+  ThemeVariant,
+} from "@/services/api/servicesService";
 import {
   Button,
-  Card as MantineCard,
-  Tabs as MantineTabs,
+  Card,
+  Switch,
+  Select,
+  TextInput,
+  Group,
   Title,
+  FileButton,
+  SimpleGrid,
+  ActionIcon,
+  Indicator,
   Text,
+  Tabs,
+  Textarea,
+  TagsInput,
+  NumberInput,
 } from "@mantine/core";
-import { Save } from "lucide-react";
-import { useServiceForm, type ServiceFormData } from "./hooks/use-service-form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
+import { RichTextEditor, Link } from "@mantine/tiptap";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { useTranslation } from "react-i18next";
+import { useEffect, useRef } from "react";
 
-interface ServiceFormProps {
-  isEditing: boolean;
-  form: ServiceFormData;
-  onSubmit: (finalForm: ServiceFormData) => Promise<void>;
-  onCancel?: () => void;
-  isSaving: boolean;
-}
+// Helper to create a simple list-only editor
+const useListEditor = (content: string, onChange: (html: string) => void) => {
+  const isUpdatingRef = useRef(false);
+  const onChangeRef = useRef(onChange);
+
+  // Keep onChange ref updated
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  const editor = useEditor({
+    extensions: [StarterKit, Link],
+    content,
+    onUpdate: ({ editor }) => {
+      if (!isUpdatingRef.current) {
+        const html = editor.getHTML();
+        console.log("Editor onUpdate triggered:", html);
+        onChangeRef.current(html);
+      }
+    },
+  });
+
+  // Update editor content when the content prop changes
+  useEffect(() => {
+    if (editor && content !== undefined) {
+      const currentContent = editor.getHTML();
+      // Only update if content is different and not empty initial state
+      if (
+        content !== currentContent &&
+        !(content === "" && currentContent === "<p></p>")
+      ) {
+        console.log(
+          "Updating editor content from:",
+          currentContent,
+          "to:",
+          content
+        );
+        isUpdatingRef.current = true;
+        editor.commands.setContent(content || "");
+        isUpdatingRef.current = false;
+      }
+    }
+  }, [content, editor]);
+
+  return editor;
+};
 
 export default function ServiceForm({
   isEditing,
@@ -26,210 +83,325 @@ export default function ServiceForm({
   onSubmit,
   onCancel,
   isSaving,
-}: ServiceFormProps) {
+}: {
+  isEditing: boolean;
+  form: Partial<CompanyService>;
+  onSubmit: (finalForm: any) => Promise<void>;
+  onCancel?: () => void;
+  isSaving: boolean;
+}) {
+  const { t } = useTranslation();
+
   const {
     register,
-    handleSubmit,
     setValue,
     watch,
-    formState,
-    image,
+    formState: { errors, isValid },
     handleImageSelect,
-    removeImage,
+    handleRemoveImage,
+    previewUrls,
+    pendingFiles,
     onSubmitForm,
-    onSubmitError,
   } = useServiceForm({
     isEditing,
     form,
     onSubmit,
   });
 
-  const isActiveValue = watch("isActive");
-  const { errors } = formState;
+  const watchAll = watch();
+
+  // Debug: Log watched values
+  useEffect(() => {
+    console.log("Watched form values:", {
+      features: watchAll.features,
+      technologies: watchAll.technologies,
+      benefits: watchAll.benefits,
+    });
+  }, [watchAll.features, watchAll.technologies, watchAll.benefits]);
+
+  // Editors
+  const shortDescriptionEditor = useListEditor(
+    watchAll.short_description || "",
+    (html) => {
+      console.log("Short description updated:", html);
+      setValue("short_description", html, { shouldValidate: true });
+    }
+  );
+  const contentEditor = useListEditor(watchAll.content || "", (html) => {
+    console.log("Content updated:", html);
+    setValue("content", html, { shouldValidate: true });
+  });
+  const featuresEditor = useListEditor(watchAll.features || "", (html) => {
+    console.log("Features updated:", html);
+    setValue("features", html, { shouldValidate: true });
+  });
+  const technologiesEditor = useListEditor(
+    watchAll.technologies || "",
+    (html) => {
+      console.log("Technologies updated:", html);
+      setValue("technologies", html, { shouldValidate: true });
+    }
+  );
+  const benefitsEditor = useListEditor(watchAll.benefits || "", (html) => {
+    console.log("Benefits updated:", html);
+    setValue("benefits", html, { shouldValidate: true });
+  });
+
+  const renderInput = (
+    id: keyof ServiceFormData,
+    label: string,
+    required?: boolean
+  ) => (
+    <TextInput
+      id={id as string}
+      label={label}
+      {...register(id as any)}
+      error={errors[id]?.message as string}
+      withAsterisk={required}
+    />
+  );
+
+  const renderRichTextEditor = (
+    editor: any,
+    label: string,
+    required?: boolean
+  ) => {
+    if (!editor) {
+      return (
+        <div className="col-span-2 space-y-1">
+          <label className="mantine-Input-label">
+            {label}
+            {required && (
+              <span className="mantine-Input-asterisk text-red-500"> *</span>
+            )}
+          </label>
+          <div className="mantine-RichTextEditor-root">Loading editor...</div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="col-span-2 space-y-1">
+        <label className="mantine-Input-label">
+          {label}
+          {required && (
+            <span className="mantine-Input-asterisk text-red-500"> *</span>
+          )}
+        </label>
+        <RichTextEditor editor={editor}>
+          <RichTextEditor.Toolbar sticky stickyOffset={60}>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.Italic />
+              <RichTextEditor.Underline />
+              <RichTextEditor.Strikethrough />
+            </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.BulletList />
+              <RichTextEditor.OrderedList />
+            </RichTextEditor.ControlsGroup>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Link />
+              <RichTextEditor.Unlink />
+            </RichTextEditor.ControlsGroup>
+          </RichTextEditor.Toolbar>
+          <RichTextEditor.Content />
+        </RichTextEditor>
+      </div>
+    );
+  };
 
   return (
-    <div className="w-full">
-      {isSaving && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white px-4 py-3 rounded shadow text-sm">
-            Đang xử lý...
-          </div>
-        </div>
-      )}
-      <div className="bg-background rounded-lg shadow-lg w-full overflow-hidden">
-        <div className="p-6 border-b">
-          <div>
-            <h2 className="text-2xl">
-              {isEditing ? "Chỉnh sửa dịch vụ" : "Thêm dịch vụ mới"}
-            </h2>
-            <p className="text-sm text-muted-foreground mt-1">
-              {isEditing
-                ? "Cập nhật thông tin dịch vụ"
-                : "Điền đầy đủ thông tin dịch vụ"}
-            </p>
-          </div>
-        </div>
+    <Card withBorder shadow="sm" radius="md">
+      <Card.Section withBorder inheritPadding py="xs">
+        <Title order={4}>
+          {isEditing
+            ? t("serviceForm.editTitle")
+            : t("serviceForm.createTitle")}
+        </Title>
+      </Card.Section>
 
-        <form onSubmit={handleSubmit(onSubmitForm, onSubmitError)}>
-          <div className="p-6">
-            <MantineTabs
-              value={"basic"}
-              onChange={() => {}}
-              variant="pills"
-              radius="md"
-              keepMounted={false}
-            >
-              <MantineTabs.List grow>
-                <MantineTabs.Tab value="basic">
-                  Thông tin cơ bản
-                </MantineTabs.Tab>
-              </MantineTabs.List>
+      <form onSubmit={onSubmitForm}>
+        <Tabs defaultValue="general">
+          <Tabs.List>
+            <Tabs.Tab value="general">{t("serviceForm.tabs.general")}</Tabs.Tab>
+            <Tabs.Tab value="content">{t("serviceForm.tabs.content")}</Tabs.Tab>
+            <Tabs.Tab value="config">{t("serviceForm.tabs.config")}</Tabs.Tab>
+            <Tabs.Tab value="seo">{t("serviceForm.tabs.seo")}</Tabs.Tab>
+          </Tabs.List>
 
-              <MantineTabs.Panel value="basic">
-                <MantineCard
-                  withBorder
-                  shadow="sm"
-                  radius="md"
-                  className="mt-4"
+          {/* General Info Tab */}
+          <Tabs.Panel value="general" pt="md">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {renderInput("title", t("serviceForm.title"), true)}
+              {renderInput("slug", t("serviceForm.slug"), true)}
+              {renderInput("subtitle", t("serviceForm.subtitle"))}
+              {renderInput("icon", t("serviceForm.icon"))}
+              <div className="col-span-2">
+                {renderRichTextEditor(
+                  shortDescriptionEditor,
+                  t("serviceForm.shortDescription"),
+                  true
+                )}
+              </div>
+              <div className="col-span-2 space-y-2">
+                <Text size="sm" fw={500}>
+                  {t("serviceForm.images")}{" "}
+                  <span className="text-red-500">*</span>
+                </Text>
+                <FileButton
+                  onChange={handleImageSelect}
+                  accept="image/*"
+                  multiple
                 >
-                  <div className="grid gap-4 p-4">
-                    <Title order={4}>Thông tin cơ bản</Title>
-                    <Text size="sm" c="dimmed">
-                      Nhập thông tin cơ bản của dịch vụ
-                    </Text>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Tên dịch vụ</Label>
-                        <Input
-                          id="name"
-                          {...register("name", {
-                            required: "Tên dịch vụ là bắt buộc",
-                          })}
-                          placeholder="Tên dịch vụ"
+                  {(props) => (
+                    <Button
+                      {...props}
+                      variant="outline"
+                      leftSection={<Upload size={14} />}
+                    >
+                      {t("serviceForm.uploadImages")}
+                    </Button>
+                  )}
+                </FileButton>
+                {pendingFiles.length > 0 && (
+                  <Text size="sm" c="dimmed">
+                    {t("serviceForm.pendingImages", {
+                      count: pendingFiles.length,
+                    })}
+                  </Text>
+                )}
+                {previewUrls && previewUrls.length > 0 && (
+                  <SimpleGrid cols={5} mt="sm">
+                    {previewUrls.map((url, index) => (
+                      <Indicator
+                        key={index}
+                        inline
+                        size={20}
+                        offset={7}
+                        position="top-end"
+                        color="red"
+                        withBorder
+                        label={
+                          <ActionIcon
+                            size="xs"
+                            color="white"
+                            variant="transparent"
+                            onClick={() => handleRemoveImage(index)}
+                          >
+                            <X size={12} />
+                          </ActionIcon>
+                        }
+                      >
+                        <AppThumbnailImage
+                          src={url}
+                          className="h-32 w-full object-contain rounded border"
                         />
-                        {errors.name && (
-                          <p className="text-sm text-red-500">
-                            {errors.name.message}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="slug">Slug</Label>
-                        <Input
-                          id="slug"
-                          {...register("slug", {
-                            required: "Slug là bắt buộc",
-                          })}
-                          placeholder="slug-dich-vu"
-                        />
-                        {errors.slug && (
-                          <p className="text-sm text-red-500">
-                            {errors.slug.message}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="description">Mô tả</Label>
-                      <Textarea
-                        id="description"
-                        rows={3}
-                        {...register("description")}
-                        placeholder="Mô tả ngắn"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="content">Nội dung</Label>
-                      <Textarea
-                        id="content"
-                        rows={6}
-                        {...register("content")}
-                        placeholder="Nội dung chi tiết"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="order">Thứ tự</Label>
-                        <Input
-                          id="order"
-                          type="number"
-                          {...register("order", {
-                            setValueAs: (v) =>
-                              v === "" || v === null ? 0 : Number(v),
-                          })}
-                        />
-                      </div>
-                      <div className="flex items-center gap-3 mt-8">
-                        <Switch
-                          checked={isActiveValue}
-                          onCheckedChange={(checked) => {
-                            setValue("isActive", checked);
-                          }}
-                        />
-                        <span className="text-sm text-muted-foreground">
-                          Kích hoạt
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Ảnh đại diện</Label>
-                      <div className="flex items-center gap-4">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageSelect}
-                        />
-                        {image?.preview && (
-                          <div className="flex items-center gap-2">
-                            <img
-                              src={image.preview}
-                              className="h-16 w-16 object-cover rounded"
-                            />
-                            <Button
-                              type="button"
-                              variant="outline"
-                              onClick={removeImage}
-                            >
-                              Xóa ảnh
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </MantineCard>
-              </MantineTabs.Panel>
-            </MantineTabs>
-          </div>
-
-          <div className="flex items-center justify-between p-6 border-t bg-muted/30">
-            <div />
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onCancel}
-                disabled={isSaving}
-              >
-                Hủy
-              </Button>
-              <Button type="submit" variant="filled" disabled={isSaving}>
-                <Save className="mr-2 h-4 w-4" />
-                {isSaving
-                  ? "Đang lưu..."
-                  : isEditing
-                    ? "Cập nhật"
-                    : "Lưu dịch vụ"}
-              </Button>
+                      </Indicator>
+                    ))}
+                  </SimpleGrid>
+                )}
+              </div>
+              {renderInput("alt_text", t("serviceForm.alt_text"))}
             </div>
-          </div>
-        </form>
-      </div>
-    </div>
+          </Tabs.Panel>
+
+          {/* Content Tab */}
+          <Tabs.Panel value="content" pt="md">
+            <div className="grid grid-cols-1 gap-6">
+              {renderRichTextEditor(contentEditor, t("serviceForm.content"))}
+              {renderRichTextEditor(featuresEditor, t("serviceForm.features"))}
+              {renderRichTextEditor(
+                technologiesEditor,
+                t("serviceForm.technologies")
+              )}
+              {renderRichTextEditor(benefitsEditor, t("serviceForm.benefits"))}
+            </div>
+          </Tabs.Panel>
+
+          {/* Config Tab */}
+          <Tabs.Panel value="config" pt="md">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Select
+                label={t("serviceForm.status")}
+                value={watchAll.status}
+                onChange={(value) => setValue("status", value as ServiceStatus)}
+                data={Object.values(ServiceStatus).map((s) => ({
+                  label: t(`serviceForm.statusOptions.${s.toLowerCase()}`),
+                  value: s,
+                }))}
+                withAsterisk
+              />
+              <Select
+                label={t("serviceForm.theme_variant")}
+                value={watchAll.theme_variant}
+                onChange={(value) =>
+                  setValue("theme_variant", value as ThemeVariant)
+                }
+                data={Object.values(ThemeVariant).map((v) => ({
+                  label: t(
+                    `serviceForm.themeVariantOptions.${v.toLowerCase()}`
+                  ),
+                  value: v,
+                }))}
+                withAsterisk
+              />
+              <NumberInput
+                label={t("serviceForm.order")}
+                value={watchAll.order_index}
+                onChange={(value) => setValue("order_index", Number(value))}
+                min={0}
+              />
+              <Switch
+                label={t("serviceForm.featured")}
+                checked={watchAll.is_featured}
+                onChange={(event) =>
+                  setValue("is_featured", event.currentTarget.checked)
+                }
+              />
+              {renderInput("customers", t("serviceForm.customers"))}
+              {renderInput("cta_label", t("serviceForm.cta_label"), true)}
+              {renderInput("cta_link", t("serviceForm.cta_link"), true)}
+              <div className="col-span-2">
+                <TagsInput
+                  label={t("serviceForm.tags")}
+                  value={watchAll.tags}
+                  onChange={(tags) => setValue("tags", tags)}
+                  placeholder={t("serviceForm.tagsPlaceholder")}
+                />
+              </div>
+            </div>
+          </Tabs.Panel>
+
+          {/* SEO Tab */}
+          <Tabs.Panel value="seo" pt="md">
+            <div className="grid grid-cols-1 gap-6">
+              {renderInput("seo_title", t("serviceForm.seo_title"))}
+              <Textarea
+                label={t("serviceForm.seo_description")}
+                {...register("seo_description")}
+                rows={4}
+              />
+            </div>
+          </Tabs.Panel>
+        </Tabs>
+
+        <Card.Section withBorder inheritPadding py="sm" mt="md">
+          <Group justify="flex-end">
+            <Button variant="default" onClick={onCancel} disabled={isSaving}>
+              {t("serviceForm.cancel")}
+            </Button>
+            <Button
+              type="submit"
+              loading={isSaving}
+              disabled={!isValid || isSaving}
+              leftSection={<Save size={16} />}
+            >
+              {t("serviceForm.save")}
+            </Button>
+          </Group>
+        </Card.Section>
+      </form>
+    </Card>
   );
 }

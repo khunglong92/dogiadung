@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useTranslation } from "react-i18next";
-import companyLogo from "@/components/public/lib/images/company-logo.png";
+import { AppThumbnailImage } from "@/components/public/common/app-thumbnail-image";
+import companyLogo from "@/images/common/company-logo.png";
 interface AdminHeaderProps {
   theme: "light" | "dark";
   toggleTheme: () => void;
@@ -40,7 +41,7 @@ export function AdminHeader({
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <div className="h-20 w-20 rounded-lg bg-primary/10 backdrop-blur-md border border-border flex items-center justify-center">
-              <img
+              <AppThumbnailImage
                 src={companyLogo}
                 alt="Company Logo"
                 width={80}

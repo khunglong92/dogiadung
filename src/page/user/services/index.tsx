@@ -1,120 +1,48 @@
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { ImageWithFallback } from "@/components/public/figma/ImageWithFallback";
 import {
-  Hammer,
-  Scissors,
-  Zap,
-  Box,
-  Home,
-  CheckCircle2,
   ArrowRight,
+  CheckCircle2,
   Settings,
-  Package,
   Sparkles,
+  Zap,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import {
+  servicesService,
+  CompanyService,
+} from "@/services/api/servicesService";
+import { ServiceList } from "@/components/public/service/components/service-list";
+import { toast } from "sonner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function ServicesPage() {
-  const mainServices = [
-    {
-      id: "metal-fabrication",
-      title: "Gia Công Kim Loại Tấm",
-      icon: Package,
-      description:
-        "Chuyên gia công các loại kim loại tấm với độ chính xác cao, đáp ứng mọi yêu cầu kỹ thuật khắt khe nhất",
-      image:
-        "https://images.unsplash.com/photo-1758873263528-6dbd0422cf84?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZXRhbCUyMGZhYnJpY2F0aW9uJTIwcHJvY2Vzc3xlbnwxfHx8fDE3NjIwOTUwMzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      color: "from-blue-500 to-cyan-500",
-      features: [
-        "Gia công chính xác theo bản vẽ kỹ thuật",
-        "Xử lý nhiều loại kim loại: Inox, thép, nhôm",
-        "Đảm bảo độ phẳng và độ bóng bề mặt",
-        "Sản phẩm đạt tiêu chuẩn quốc tế",
-      ],
-    },
-    {
-      id: "metal-stamping",
-      title: "Đột Dập Kim Loại",
-      icon: Hammer,
-      description:
-        "Dịch vụ đột dập kim loại với công nghệ hiện đại, tạo ra các sản phẩm có độ chính xác và độ bền cao",
-      image:
-        "https://images.unsplash.com/photo-1759159091728-e2c87b9d9315?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZXRhbCUyMHN0YW1waW5nJTIwbWFudWZhY3R1cmluZ3xlbnwxfHx8fDE3NjIxNzk4MDl8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      color: "from-purple-500 to-pink-500",
-      features: [
-        "Đột dập các chi tiết phức tạp",
-        "Độ chính xác cao tới 0.01mm",
-        "Năng suất cao, giá thành cạnh tranh",
-        "Hỗ trợ thiết kế khuôn mẫu",
-      ],
-    },
-    {
-      id: "metal-bending",
-      title: "Chấn Gấp Kim Loại",
-      icon: Settings,
-      description:
-        "Chấn gấp kim loại với độ chính xác cao, tạo ra các sản phẩm có hình dạng phức tạp theo yêu cầu",
-      image:
-        "https://images.unsplash.com/photo-1738162837330-9257f938463c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZXRhbCUyMGJlbmRpbmclMjBtYWNoaW5lfGVufDF8fHx8MTc2MjE3OTgxMHww&ixlib=rb-4.1.0&q=80&w=1080",
-      color: "from-orange-500 to-red-500",
-      features: [
-        "Chấn gấp nhiều góc độ khác nhau",
-        "Xử lý tấm kim loại dày tới 10mm",
-        "Đảm bảo độ vuông góc chính xác",
-        "Không gây biến dạng bề mặt",
-      ],
-    },
-    {
-      id: "grooving",
-      title: "Soi Rãnh Kim Loại",
-      icon: Scissors,
-      description:
-        "Dịch vụ soi rãnh kim loại chuyên nghiệp, tạo đường rãnh chính xác phục vụ cho việc gấp nếp",
-      image:
-        "https://images.unsplash.com/photo-1699791913444-87cc77afd432?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmR1c3RyaWFsJTIwc2VydmljZXN8ZW58MXx8fHwxNzYyMTc5ODExfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      color: "from-green-500 to-emerald-500",
-      features: [
-        "Soi rãnh với độ sâu và độ rộng chính xác",
-        "Phù hợp cho các loại kim loại khác nhau",
-        "Tạo điều kiện gấp nếp dễ dàng",
-        "Không làm ảnh hưởng cấu trúc kim loại",
-      ],
-    },
-    {
-      id: "laser-cutting",
-      title: "Cắt Laser Kim Loại Tấm Hộp Định Hình",
-      icon: Zap,
-      description:
-        "Công nghệ cắt laser CNC hiện đại, tạo ra các sản phẩm với độ chính xác tuyệt đối và bề mặt cắt hoàn hảo",
-      image:
-        "https://images.unsplash.com/photo-1738162837330-9257f938463c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsYXNlciUyMGN1dHRpbmclMjBtZXRhbHxlbnwxfHx8fDE3NjIxNjI1MjZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      color: "from-yellow-500 to-amber-600",
-      features: [
-        "Cắt laser CNC với độ chính xác cao",
-        "Xử lý nhiều loại hình dạng phức tạp",
-        "Bề mặt cắt mịn, không cần xử lý thêm",
-        "Tốc độ cắt nhanh, năng suất cao",
-      ],
-    },
-    {
-      id: "ceiling-construction",
-      title: "Thiết Kế, Thi Công Trần Thạch Cao, Trần Nhựa",
-      icon: Home,
-      description:
-        "Thiết kế và thi công trần thạch cao, trần nhựa chuyên nghiệp, thẩm mỹ và bền vững",
-      image:
-        "https://images.unsplash.com/photo-1655103878427-dc3ecbb792c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjZWlsaW5nJTIwY29uc3RydWN0aW9ufGVufDF8fHx8MTc2MjE3OTgxMHww&ixlib=rb-4.1.0&q=80&w=1080",
-      color: "from-indigo-500 to-purple-500",
-      features: [
-        "Thiết kế đa dạng kiểu dáng hiện đại",
-        "Thi công nhanh chóng, chuyên nghiệp",
-        "Vật liệu chất lượng cao, an toàn",
-        "Bảo hành dài hạn, hỗ trợ 24/7",
-      ],
-    },
-  ];
+  const [services, setServices] = useState<CompanyService[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        setLoading(true);
+        const response = await servicesService.findAll({
+          page: 1,
+          perpage: 10,
+        });
+        if (response.data) {
+          setServices(response.data);
+        }
+      } catch (error) {
+        toast.error("Không thể tải danh sách dịch vụ.");
+        console.error("Failed to fetch services:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
 
   const whyChooseUs = [
     {
@@ -190,111 +118,15 @@ export function ServicesPage() {
             </p>
           </motion.div>
 
-          <div className="space-y-16">
-            {mainServices.map((service, index) => {
-              const Icon = service.icon;
-              const isEven = index % 2 === 0;
-
-              return (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  id={service.id}
-                >
-                  <Card className="overflow-hidden border-2 hover:shadow-2xl transition-all duration-300">
-                    <div
-                      className={`grid grid-cols-1 lg:grid-cols-2 gap-0 ${
-                        isEven ? "" : "lg:grid-flow-dense"
-                      }`}
-                    >
-                      {/* Image */}
-                      <div
-                        className={`relative h-[300px] lg:h-auto ${isEven ? "" : "lg:col-start-2"}`}
-                      >
-                        <ImageWithFallback
-                          src={service.image}
-                          alt={service.title}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-
-                        {/* Floating Icon */}
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          whileInView={{ scale: 1 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.3, type: "spring" }}
-                          className={`absolute top-6 ${isEven ? "right-6" : "left-6"}`}
-                        >
-                          <div
-                            className={`p-4 rounded-2xl bg-gradient-to-br ${service.color} shadow-2xl`}
-                          >
-                            <Icon className="h-8 w-8 text-white" />
-                          </div>
-                        </motion.div>
-                      </div>
-
-                      {/* Content */}
-                      <CardContent className="p-8 lg:p-12 flex flex-col justify-center">
-                        <motion.div
-                          initial={{ opacity: 0, x: isEven ? -30 : 30 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.2 }}
-                        >
-                          <Badge
-                            className={`mb-4 bg-gradient-to-r ${service.color} text-white border-0`}
-                          >
-                            Dịch vụ #{index + 1}
-                          </Badge>
-                          <h3 className="mb-4 text-2xl md:text-3xl">
-                            {service.title}
-                          </h3>
-                          <p className="text-muted-foreground mb-6 leading-relaxed">
-                            {service.description}
-                          </p>
-
-                          {/* Features List */}
-                          <div className="space-y-3 mb-6">
-                            {service.features.map((feature, idx) => (
-                              <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.3 + idx * 0.1 }}
-                                className="flex items-start gap-3"
-                              >
-                                <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
-                                <span className="text-sm text-muted-foreground">
-                                  {feature}
-                                </span>
-                              </motion.div>
-                            ))}
-                          </div>
-
-                          <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <Button
-                              className={`bg-gradient-to-r ${service.color} text-white border-0 hover:opacity-90`}
-                            >
-                              Liên hệ tư vấn
-                              <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
-                          </motion.div>
-                        </motion.div>
-                      </CardContent>
-                    </div>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
+          {loading ? (
+            <div className="space-y-16">
+              {[...Array(3)].map((_, i) => (
+                <Skeleton key={i} className="h-[400px] w-full rounded-2xl" />
+              ))}
+            </div>
+          ) : (
+            <ServiceList services={services} />
+          )}
         </div>
       </section>
 
