@@ -3,7 +3,11 @@
     "home": "Home",
     "products": "Products",
     "about": "About Us",
-    "contact": "Contact"
+    "contact": "Contact",
+    "introduction": "Introduction",
+    "services": "Services",
+    "quote": "Quote",
+    "project": "Project"
   },
   "hero": {
     "badge": "High Quality • Best Price",
@@ -20,7 +24,46 @@
     "title": "Featured Products",
     "description": "Discover our diverse collection of quality interior and household items",
     "all": "All",
-    "new": "New"
+    "new": "New",
+    "viewAll": "View all products",
+    "hero": {
+      "badge": "Professional",
+      "tagline": "Metal Processing",
+      "title1": "Precise",
+      "title2": "Professional",
+      "title3": "Perfect",
+      "description": "Comprehensive metal processing solutions with precision",
+      "description2": "meeting all industrial needs from simple to the most complex.",
+      "cta": {
+        "quote": "Request Quote",
+        "contact": "Contact Now"
+      }
+    },
+    "features": {
+      "title": "Why Choose Us",
+      "subtitle": "Committed to excellence in quality and service"
+    },
+    "categories": {
+      "empty": "No product categories available"
+    },
+    "card": {
+      "badge": "Product",
+      "status": "Status",
+      "available": "In stock",
+      "unavailable": "Out of stock",
+      "priceLabel": "Price",
+      "noPrice": "Contact"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Ready to support you with the best solutions",
+      "hotlineLabel": "Hotline",
+      "emailLabel": "Email",
+      "addressLabel": "Address",
+      "addressFallback": "Ho Chi Minh City",
+      "cta": "Call Now",
+      "footer": "© 2024 All rights reserved"
+    }
   },
   "footer": {
     "company": {
@@ -44,5 +87,459 @@
     "phone": "0123 456 789",
     "email": "contact@woodhome.vn",
     "address": "123 ABC Street, District 1, Ho Chi Minh City"
+  },
+  "admin": {
+    "header": {
+      "title": "Thien Loc Admin",
+      "subtitle": "Administration system",
+      "logout": "Logout",
+      "language": "Language",
+      "vi": "🇻🇳 Vietnamese",
+      "en": "🇬🇧 English"
+    },
+    "login": {
+      "login": "SignIn",
+      "welcomeBack": "Welcome back",
+      "signIn": "Admin sign in",
+      "username": "Username",
+      "password": "Password",
+      "placeholderUser": "Enter username",
+      "placeholderPass": "Enter password",
+      "submit": "Sign in",
+      "demo": "Demo: username",
+      "demoUser": "admin",
+      "demoPass": "admin123",
+      "success": "Login successful!",
+      "error": "Incorrect username or password!"
+    },
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "products": "Products",
+      "categories": "Categories",
+      "services": "Services",
+      "projects": "Projects",
+      "contact": "Contacts",
+      "users": "Users",
+      "statistics": "Statistics"
+    },
+    "dashboard": {
+      "title": "Overview",
+      "recentActivities": "Recent Activities"
+    }
+  },
+  "categories": {
+    "title": "Manage Categories",
+    "subtitle": "Manage product categories",
+    "add": "Add Category",
+    "listTitle": "Category List",
+    "searchPlaceholder": "Search categories...",
+    "name": "Category name",
+    "description": "Description",
+    "createTitle": "Create new category",
+    "updateTitle": "Update category",
+    "save": "Save",
+    "update": "Update",
+    "cancel": "Cancel",
+    "toast": {
+      "createSuccess": "Category created successfully",
+      "updateSuccess": "Category updated successfully",
+      "deleteSuccess": "Category deleted successfully!",
+      "nameRequired": "Category name is required"
+    }
+  },
+  "services": {
+    "title": "Manage Services",
+    "subtitle": "Manage company services",
+    "add": "Add Service",
+    "listTitle": "Service List",
+    "searchPlaceholder": "Search services...",
+    "name": "Service name",
+    "slug": "Slug",
+    "description": "Description",
+    "content": "Content",
+    "image": "Image",
+    "imagePlaceholder": "Image URL...",
+    "order": "Order",
+    "active": "Active",
+    "activeOn": "Active",
+    "activeOff": "Inactive",
+    "createTitle": "Create new service",
+    "updateTitle": "Update service",
+    "save": "Save",
+    "update": "Update",
+    "cancel": "Cancel",
+    "toast": {
+      "createSuccess": "Service created successfully",
+      "updateSuccess": "Service updated successfully",
+      "deleteSuccess": "Service deleted successfully!",
+      "nameRequired": "Service name is required",
+      "slugRequired": "Slug is required"
+    }
+  },
+  "serviceForm": {
+    "createTitle": "Add New Service",
+    "editTitle": "Edit Service",
+    "tabs": {
+      "general": "General",
+      "content": "Content",
+      "config": "Configuration",
+      "seo": "SEO"
+    },
+    "title": "Title",
+    "slug": "Slug",
+    "subtitle": "Subtitle",
+    "icon": "Icon (e.g., Lucide icon name)",
+    "shortDescription": "Short Description",
+    "images": "Images",
+    "uploadImages": "Upload Images (max 20)",
+    "alt_text": "Image Alt Text",
+    "content": "Main Content",
+    "features": "Key Features",
+    "technologies": "Technologies Used",
+    "benefits": "Benefits",
+    "status": "Status",
+    "theme_variant": "Theme Variant",
+    "order": "Order Index",
+    "featured": "Is Featured?",
+    "customers": "Target Customers",
+    "cta_label": "CTA Button Label",
+    "cta_link": "CTA Button Link",
+    "tags": "Tags",
+    "tagsPlaceholder": "Add tags and press Enter",
+    "seo_title": "SEO Title",
+    "seo_description": "SEO Description",
+    "uploading": "Uploading image...",
+    "uploadSuccess": "Image uploaded successfully!",
+    "uploadError": "An error occurred while uploading the image",
+    "cancel": "Cancel",
+    "save": "Save",
+    "statusOptions": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "themeVariantOptions": {
+      "light": "Light",
+      "dark": "Dark",
+      "auto": "Auto"
+    }
+  },
+  "validation": {
+    "error": "Invalid Data",
+    "slugRequired": "Slug is required",
+    "titleRequired": "Title is required",
+    "shortDescriptionRequired": "Short description is required",
+    "imageUrlRequired": "Featured image is required",
+    "ctaLabelRequired": "CTA button label is required",
+    "ctaLinkRequired": "CTA button link is required",
+    "ctaLinkInvalid": "CTA button link is not a valid URL",
+    "imageTooLarge": "Image exceeds the 20MB limit. Please select a smaller image.",
+    "imageUrlsRequired": "At least one image is required."
+  },
+  "contacts": {
+    "title": "Contact Management",
+    "subtitle": "Manage customer feedback and inquiries",
+    "listTitle": "Contact List",
+    "totalContacts": "Total: {{count}} contacts",
+    "name": "Name",
+    "title": "Subject",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "content": "Message",
+    "status": "Status",
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "createdAt": "Created At",
+    "actions": "Actions",
+    "viewDetail": "View Details",
+    "confirmContact": "Confirm",
+    "deleteContact": "Delete",
+    "detailTitle": "Contact Details",
+    "noData": "No contacts yet",
+    "toast": {
+      "confirmSuccess": "Contact confirmed successfully",
+      "deleteSuccess": "Contact deleted successfully"
+    }
+  },
+  "contact": {
+    "title": "CONTACT US",
+    "subtitle": "Contact us for the best consultation and support",
+    "rating": "(39 reviews)",
+    "info": {
+      "title": "Address:",
+      "hanoi": {
+        "label": "🏢 Hanoi Office",
+        "address": "No. 08,09 - NV 27, Lideco Urban Area, Hoai Duc, Hanoi.",
+        "hotline": "Hanoi Hotline"
+      },
+      "hcm": {
+        "label": "🏢 Ho Chi Minh City Branch",
+        "address": "No. 15, Street 27, Van Phuc Urban Area, Thu Duc City, Ho Chi Minh City.",
+        "hotline": "HCMC Hotline"
+      },
+      "factory1": {
+        "label": "🏭 Factory 1",
+        "address": "Lot 3, Plot 5, Lai Xa Industrial Cluster, Hoai Duc, Hanoi."
+      },
+      "factory2": {
+        "label": "🏭 Factory 2",
+        "address": "CN 04 - 02, Dong Soc Industrial Cluster, Vinh Tuong, Phu Tho."
+      }
+    },
+    "form": {
+      "title": "Send us a message",
+      "description": "Please fill out the form below and leave a message to help us serve you better.",
+      "name": "Full Name",
+      "namePlaceholder": "Enter your full name",
+      "title": "Subject",
+      "titlePlaceholder": "Enter subject",
+      "phone": "Phone",
+      "phonePlaceholder": "+(84-24) 3566.8888",
+      "email": "Email",
+      "emailPlaceholder": "example@email.com",
+      "address": "Address",
+      "addressPlaceholder": "Enter your address",
+      "content": "Message",
+      "contentPlaceholder": "Enter your message...",
+      "submit": "SEND",
+      "sending": "Sending...",
+      "requiredFields": "Please fill in all required fields",
+      "successMessage": "Message sent successfully! We will contact you soon.",
+      "errorMessage": "An error occurred. Please try again later."
+    }
+  },
+  "common": {
+    "addToCart": "Add to Cart",
+    "viewDetails": "View Details",
+    "phone": "0123 456 789",
+    "email": "contact@woodhome.vn",
+    "address": "123 ABC Street, District 1, Ho Chi Minh City",
+    "close": "Close"
+  },
+  "about": {
+    "title": "High Quality Metal Sheet Processing",
+    "description": "Discover professional metal sheet manufacturing and processing solutions at Thien Loc.",
+    "content": "From cutting – stamping – bending – welding – electrostatic painting to final assembly, we deliver precise, durable and custom products for all industries.",
+    "viewProducts": "View Products",
+    "viewServices": "View Services",
+    "services": "Services",
+    "sectionTitle": "About Thien Loc",
+    "paragraph1": "THIEN LOC METAL SHEET MANUFACTURING AND PROCESSING CO., LTD. is a leading unit in the field of metal sheet production and processing in Vietnam.",
+    "paragraph2": "With over 10 years of experience and a team of highly skilled technicians, we are committed to delivering quality, precise and sustainable products that meet the strict standards of various industries.",
+    "paragraph3": "From cutting, stamping, bending, welding, electrostatic painting to final assembly, every Thien Loc product is meticulously processed on modern production lines, ensuring high precision and outstanding aesthetics.",
+    "paragraph4": "We continuously innovate technology and improve service quality to provide the most optimal and effective solutions for all customers and partners.",
+    "stats": {
+      "products": "Products",
+      "customers": "Customers",
+      "rating": "Rating",
+      "experience": "Years of Experience"
+    }
+  },
+  "location": {
+    "title": "Location & Contact",
+    "description": "Contact us for the best consultation and support",
+    "contactInfo": "Contact Information",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "workingHours": "Working Hours",
+    "addressValue": "Vong La, Thien Loc, Hanoi",
+    "phoneValue": "0967853383",
+    "emailValue": "kimloaitamthienloc@gmail.com",
+    "workingHoursValue": "Monday - Sunday: 7:00 AM - 5:00 PM",
+    "consultationTitle": "Book Free Consultation",
+    "consultationDescription": "For detailed product consultation and special offers, contact us today!",
+    "callNow": "Call Now",
+    "sendEmail": "Send Email"
+  },
+  "servicesPage": {
+    "hero": {
+      "badge": "Our Services",
+      "title": "Comprehensive Metal Fabrication Solutions",
+      "subtitle": "Providing a wide range of high-quality metal fabrication services with modern technology and a professional team."
+    },
+    "main": {
+      "title": "Main Services",
+      "subtitle": "Thien Loc offers a full range of sheet metal fabrication and professional ceiling installation services."
+    },
+    "whyChooseUs": {
+      "title": "Why Choose Thien Loc?",
+      "subtitle": "We are committed to delivering the best service with outstanding quality.",
+      "quality": {
+        "title": "Guaranteed Quality",
+        "description": "Our products meet international quality standards, ensuring durability and precision."
+      },
+      "technology": {
+        "title": "Modern Technology",
+        "description": "Equipped with advanced machinery and cutting-edge technology in our production process."
+      },
+      "experience": {
+        "title": "Experienced Team",
+        "description": "Highly skilled engineers and craftsmen with extensive experience and dedication."
+      },
+      "support": {
+        "title": "Dedicated Support",
+        "description": "Always ready to consult and support customers 24/7 to provide the best solutions."
+      }
+    },
+    "cta": {
+      "title": "Need a Service Consultation?",
+      "subtitle": "Our team of experts is always ready to assist and advise on the best solution for your project.",
+      "contactButton": "Contact Us Now",
+      "quoteButton": "Get a Quote"
+    }
+  },
+  "serviceListItems": {
+    "noServices": "No services to display.",
+    "featuredBadge": "Featured Service",
+    "viewDetails": "View Details"
+  },
+  "serviceDetail": {
+    "toast": {
+      "loadError": "Could not load service details."
+    },
+    "notFound": {
+      "title": "Service Not Found",
+      "description": "The service you are looking for does not exist or has been removed.",
+      "backButton": "Back to Services List"
+    },
+    "sidebar": {
+      "benefits": "Benefits",
+      "technologies": "Technologies",
+      "customers": "Partners & Customers"
+    },
+    "features": {
+      "title": "Outstanding Features"
+    },
+    "gallery": {
+      "title": "Project Gallery"
+    },
+    "cta": {
+      "defaultTitle": "Start Your Project",
+      "description": "Contact us now for the best-optimized solution.",
+      "contactButton": "Contact Us Now"
+    }
+  },
+  "userMenu": {
+    "account": "Account",
+    "settings": "Admin",
+    "logout": "Logout"
+  },
+  "productsPage": {
+    "hero": {
+      "badge": "High Quality • Best Price",
+      "title": "High Quality Products",
+      "subtitle": "Discover our collection of high-quality products for your home."
+    },
+    "cta": {
+      "title": "Need a Product Consultation?",
+      "subtitle": "Our team of experts is always ready to assist and advise on the best solution for your project.",
+      "contactButton": "Contact Us Now",
+      "quoteButton": "Get a Quote"
+    },
+    "admin": {
+      "title": "Product Management",
+      "subtitle": "Add/edit/delete products, assign categories",
+      "addProduct": "Add Product",
+      "createTitle": "Add Product",
+      "editTitle": "Edit Product",
+      "createSubtitle": "Enter product information",
+      "editSubtitle": "Update product information",
+      "backToList": "Back to list",
+      "table": {
+        "title": "Product List",
+        "searchPlaceholder": "Search...",
+        "columns": {
+          "id": "ID",
+          "name": "Name",
+          "category": "Category",
+          "price": "Price",
+          "images": "Images",
+          "description": "Description",
+          "specs": "Specs",
+          "warranty": "Warranty",
+          "createdAt": "Created At",
+          "updatedAt": "Updated At",
+          "actions": "Actions"
+        },
+        "noProducts": "No products found.",
+        "total": "Total",
+        "items": "items",
+        "page": "Page",
+        "display": "Display"
+      }
+    }
+  },
+  "productDetail": {
+    "header": {
+      "title": "Product Details",
+      "backButton": "Go Back"
+    },
+    "loading": {
+      "message": "Loading..."
+    },
+    "error": {
+      "loadError": "Error loading product: {{message}}",
+      "notFound": "Product not found."
+    },
+    "badge": {
+      "featured": "Featured Product"
+    },
+    "category": {
+      "label": "Category:"
+    },
+    "price": {
+      "label": "Product Price",
+      "contact": "Contact"
+    },
+    "specs": {
+      "title": "Key Specifications",
+      "dimensions": "Dimensions",
+      "weight": "Weight",
+      "loadCapacity": "Load Capacity",
+      "material": "Material",
+      "weldingType": "Welding Type",
+      "surfaceFinish": "Surface Finish"
+    },
+    "customizable": {
+      "message": "This product can be customized according to customer requirements",
+      "yes": "Customizable",
+      "no": "Not Customizable",
+      "label": "Customization"
+    },
+    "actions": {
+      "contact": "Contact now",
+      "favorite": "Add to Favorites",
+      "share": "Share"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "features": "Features",
+      "materials": "Materials",
+      "specs": "Technical Specifications"
+    },
+    "overview": {
+      "title": "Product Description",
+      "noInfo": "No information available.",
+      "applications": "Applications"
+    },
+    "features": {
+      "title": "Key Features",
+      "noInfo": "No information available."
+    },
+    "materials": {
+      "title": "Manufacturing Materials",
+      "noInfo": "No information available."
+    },
+    "technicalSpecs": {
+      "title": "Detailed Technical Specifications"
+    },
+    "warranty": {
+      "message": "Please contact us for more information about warranty policy."
+    },
+    "footer": {
+      "createdAt": "Product created on:"
+    }
   }
 }

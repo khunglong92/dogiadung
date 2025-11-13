@@ -1,3 +1,4 @@
+import { apiClient } from "./base";
 // Types
 export interface LoginRequest {
   email: string;
@@ -19,6 +20,7 @@ export interface AuthResponse {
   message: string;
   data?: {
     token: string;
+    refreshToken?: string;
     user: {
       id: string;
       email: string;
@@ -32,38 +34,23 @@ export interface ApiResponse {
   message: string;
 }
 
-// Mock implementation - replace with real API calls
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 export const authService = {
   login: async (data: LoginRequest): Promise<AuthResponse> => {
-    await delay(1000);
+    // Call real API endpoint
+    // Expected backend response shape: { success, message, data: { token, user } }
+    // If backend returns a different shape, adjust mapping below accordingly.
+    const res = await apiClient.post<AuthResponse, LoginRequest>(
+      "/auth/login",
+      data
+    );
+    return res;
+  },
 
-    // Mock validation
-    if (data.email === "demo@example.com" && data.password === "password123") {
-      return {
-        success: true,
-        message: "Login successful",
-        data: {
-          token: "mock-jwt-token-12345",
-          user: {
-            id: "1",
-            email: data.email,
-            name: "Demo User",
-          },
-        },
-      };
-    }
-
-    return {
-      success: false,
-      message: "Invalid email or password",
-    };
+  getProfile: async (): Promise<import("@/stores/authStore").User> => {
+    return apiClient.get("/users/profile");
   },
 
   register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    await delay(1000);
-
     return {
       success: true,
       message: "Registration successful. Please login.",
@@ -79,8 +66,6 @@ export const authService = {
   },
 
   resetPassword: async (data: ResetPasswordRequest): Promise<ApiResponse> => {
-    await delay(1000);
-
     return {
       success: true,
       message: "Password reset email sent successfully",
@@ -88,8 +73,6 @@ export const authService = {
   },
 
   logout: async (): Promise<ApiResponse> => {
-    await delay(500);
-
     return {
       success: true,
       message: "Logged out successfully",

@@ -1,19 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useMantineColorScheme } from '@mantine/core';
 
 export type Theme = 'light' | 'dark';
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>('light');
+  const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const theme = (colorScheme || 'light') as Theme;
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setTheme('dark');
-    }
-  }, []);
-
+  // Đồng bộ class 'dark' với Mantine colorScheme để Tailwind dark mode hoạt động
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
@@ -21,11 +15,10 @@ export function useTheme() {
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    setColorScheme(theme === 'light' ? 'dark' : 'light');
   };
 
   return { theme, toggleTheme };
