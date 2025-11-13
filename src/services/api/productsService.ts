@@ -1,21 +1,26 @@
-import { apiClient } from './base';
+import { apiClient } from "./base";
 
-export interface ProductCategoryRef { 
-  id: number; 
+export interface ProductCategoryRef {
+  id: number;
   name: string;
 }
 
 export interface Product {
   id: number;
   name: string;
-  description?: Record<string, unknown> | null;
-  technicalSpecs?: Record<string, unknown> | null;
+  description?: ProductDescription;
+  technicalSpecs?: string;
   price?: number | null;
   warrantyPolicy?: string | null;
   images?: string[] | null;
   category: ProductCategoryRef;
   createdAt?: string;
   updatedAt?: string;
+  isFeatured?: boolean;
+}
+export interface ProductDescription {
+  overview?: string;
+  details?: string;
 }
 
 export interface CreateProductDto {
@@ -31,8 +36,8 @@ export interface CreateProductDto {
 
 export interface UpdateProductDto {
   name?: string;
-  description?: Record<string, unknown> | null;
-  technicalSpecs?: Record<string, unknown> | null;
+  description?: string;
+  technicalSpecs?: string;
   price?: number | null;
   warrantyPolicy?: string | null;
   images?: string[] | null;
@@ -50,27 +55,38 @@ export interface FeaturedProductsResponse {
 }
 
 export const productsService = {
-  getAll: async () => {
-    const res = await apiClient.get<{ data: Product[]; total: number; page: number; limit: number }>("/products");
-    return res.data;
-  },
-  getPaginated: (params: { page: number; limit: number; search?: string }) => {
+  findAll: (params: {
+    page?: number;
+    limit?: number;
+    categoryId?: number;
+    search?: string;
+  }) => {
     const query = new URLSearchParams();
-    query.set("page", String(params.page));
-    query.set("limit", String(params.limit));
+    if (params.page) query.set("page", String(params.page));
+    if (params.limit) query.set("limit", String(params.limit));
+    if (params.categoryId) query.set("categoryId", String(params.categoryId));
     if (params.search && params.search.trim()) {
       query.set("search", params.search.trim());
     }
-    return apiClient.get<{ data: Product[]; total: number; page: number; limit: number }>(`/products?${query.toString()}`);
+    return apiClient.get<{
+      data: Product[];
+      total: number;
+      page: number;
+      limit: number;
+    }>(`/products?${query.toString()}`);
   },
   getById: (id: number) => apiClient.get<Product>(`/products/${id}`),
   getFeatured: (params: { page: number; perpage: number }) => {
     const query = new URLSearchParams();
     query.set("page", String(params.page));
     query.set("perpage", String(params.perpage));
-    return apiClient.get<FeaturedProductsResponse>(`/products/featured?${query.toString()}`);
+    return apiClient.get<FeaturedProductsResponse>(
+      `/products/featured?${query.toString()}`
+    );
   },
-  create: (body: CreateProductDto) => apiClient.post<Product>("/products", body),
-  update: (id: number, body: UpdateProductDto) => apiClient.patch<Product>(`/products/${id}`, body),
+  create: (body: CreateProductDto) =>
+    apiClient.post<Product>("/products", body),
+  update: (id: number, body: UpdateProductDto) =>
+    apiClient.patch<Product>(`/products/${id}`, body),
   remove: (id: number) => apiClient.delete<void>(`/products/${id}`),
 };

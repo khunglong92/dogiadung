@@ -21,7 +21,6 @@ export function ServiceCard({
 }: ServiceCardProps) {
   const { title, subtitle, image_urls, slug, id } = service || {};
   const [isHovered, setIsHovered] = useState(false);
-  console.log("id", id);
   const cardVariants = {
     initial: { opacity: 0, y: 50, scale: 0.95 },
     inView: { opacity: 1, y: 0, scale: 1 },

@@ -1,17 +1,26 @@
 import {
-  Button,
-  Badge as MantineBadge,
-  Card as MantineCard,
+  Card,
   Title,
   Text,
+  Stack,
+  Group,
+  ActionIcon,
+  Badge,
+  SimpleGrid,
+  AspectRatio,
+  Overlay,
+  Box,
+  Center,
+  rem,
 } from "@mantine/core";
-import { Upload, X } from "lucide-react";
+import { IconUpload, IconX, IconPhoto } from "@tabler/icons-react";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import type { ImageItem } from "../hooks/use-product-form";
 import { AppThumbnailImage } from "@/components/public/common/app-thumbnail-image";
 
 interface Props {
   imageFiles: ImageItem[];
-  handleImageSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleImageSelect: (files: File[]) => void;
   removeImageFile: (index: number) => void;
 }
 
@@ -21,106 +30,128 @@ export function ImagesSection({
   removeImageFile,
 }: Props) {
   return (
-    <MantineCard withBorder shadow="sm" radius="md" className="mt-4">
-      <div className="p-4">
-        <Title order={4}>Hình ảnh sản phẩm</Title>
-        <Text size="sm" c="dimmed">
-          Chọn hình ảnh từ máy tính của bạn. Hình ảnh sẽ được upload khi bạn lưu
-          sản phẩm.
-        </Text>
-      </div>
-      <div className="p-4 space-y-4">
-        <div className="border-2 border-dashed rounded-lg p-8 text-center">
-          <input
-            type="file"
-            id="image-upload"
-            accept="image/*"
-            multiple
-            onChange={handleImageSelect}
-            className="hidden"
-          />
-          <label htmlFor="image-upload" className="cursor-pointer">
-            <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <p className="text-sm font-medium mb-2">
-              Chọn hình ảnh từ máy tính
-            </p>
-            <p className="text-xs text-muted-foreground mb-4">
-              Hỗ trợ: JPG, PNG, GIF (tối đa 10MB mỗi file, tối đa 10 ảnh)
-            </p>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => document.getElementById("image-upload")?.click()}
-              disabled={imageFiles.length >= 10}
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              Chọn hình ảnh
-            </Button>
-          </label>
-          <div className="mt-3 text-xs text-muted-foreground">
-            {imageFiles.length}/10 hình ảnh đã chọn
-          </div>
-        </div>
+    <Card withBorder shadow="sm" radius="md">
+      <Stack p="md">
+        <Box>
+          <Title order={4}>Hình ảnh sản phẩm</Title>
+          <Text size="sm" c="dimmed">
+            Tải lên hoặc kéo thả hình ảnh. Tối đa 10 ảnh, mỗi ảnh không quá
+            10MB.
+          </Text>
+        </Box>
+
+        <Dropzone
+          onDrop={handleImageSelect}
+          onReject={(files: any) => console.log("rejected files", files)}
+          maxSize={10 * 1024 ** 2}
+          accept={IMAGE_MIME_TYPE}
+          disabled={imageFiles.length >= 10}
+          radius="md"
+        >
+          <Group
+            justify="center"
+            gap="xl"
+            mih={220}
+            style={{ pointerEvents: "none" }}
+          >
+            <Dropzone.Accept>
+              <IconUpload
+                style={{
+                  width: rem(52),
+                  height: rem(52),
+                  color: "var(--mantine-color-blue-6)",
+                }}
+                stroke={1.5}
+              />
+            </Dropzone.Accept>
+            <Dropzone.Reject>
+              <IconX
+                style={{
+                  width: rem(52),
+                  height: rem(52),
+                  color: "var(--mantine-color-red-6)",
+                }}
+                stroke={1.5}
+              />
+            </Dropzone.Reject>
+            <Dropzone.Idle>
+              <IconPhoto
+                style={{
+                  width: rem(52),
+                  height: rem(52),
+                  color: "var(--mantine-color-dimmed)",
+                }}
+                stroke={1.5}
+              />
+            </Dropzone.Idle>
+
+            <div>
+              <Text size="xl" inline>
+                Kéo thả hoặc nhấn để chọn file
+              </Text>
+              <Text size="sm" c="dimmed" inline mt={7}>
+                Hỗ trợ JPG, PNG, GIF. Đã chọn {imageFiles.length}/10.
+              </Text>
+            </div>
+          </Group>
+        </Dropzone>
 
         {imageFiles.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <SimpleGrid cols={{ base: 2, sm: 3, lg: 4 }} mt="md">
             {imageFiles.map((item, index) => (
-              <div
-                key={index}
-                className="relative group border rounded-lg overflow-hidden bg-muted/50"
-              >
-                <div className="aspect-square relative">
+              <Card key={index} withBorder padding={0} radius="md">
+                <AspectRatio ratio={1 / 1}>
                   <AppThumbnailImage
                     src={item.preview || item.url}
                     alt={`Preview ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src =
-                        "https://via.placeholder.com/400x300?text=Invalid+Image";
-                    }}
                   />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <Button
-                      type="button"
+                  <Overlay
+                    opacity={0}
+                    component="div"
+                    className="hover-overlay"
+                  >
+                    <ActionIcon
                       color="red"
+                      variant="filled"
+                      size="lg"
+                      radius="xl"
                       onClick={() => removeImageFile(index)}
-                      className="h-8 w-8"
                     >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
+                      <IconX size={24} />
+                    </ActionIcon>
+                  </Overlay>
                   {item.file && (
-                    <div className="absolute top-2 left-2">
-                      <MantineBadge variant="light" size="xs">
-                        Mới
-                      </MantineBadge>
-                    </div>
+                    <Badge
+                      variant="filled"
+                      color="blue"
+                      size="sm"
+                      style={{ position: "absolute", top: 8, left: 8 }}
+                    >
+                      Mới
+                    </Badge>
                   )}
-                </div>
+                </AspectRatio>
                 {item.file && (
-                  <div className="p-2">
-                    <p className="text-xs text-muted-foreground truncate">
+                  <Box p="xs">
+                    <Text size="xs" truncate="end">
                       {item.file.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
+                    </Text>
+                    <Text size="xs" c="dimmed">
                       {(item.file.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
-                  </div>
+                    </Text>
+                  </Box>
                 )}
-              </div>
+              </Card>
             ))}
-          </div>
+          </SimpleGrid>
         )}
 
         {imageFiles.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">
-            <p>Chưa có hình ảnh nào được chọn</p>
-            <p className="text-sm mt-2">
-              Hãy chọn hình ảnh từ máy tính của bạn
-            </p>
-          </div>
+          <Center py="lg">
+            <Text c="dimmed">Chưa có hình ảnh nào được chọn</Text>
+          </Center>
         )}
-      </div>
-    </MantineCard>
+      </Stack>
+    </Card>
   );
 }

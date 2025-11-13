@@ -2,12 +2,80 @@ import {
   Button,
   Text,
   TextInput,
-  Card as MantineCard,
+  Card,
   Title,
+  Stack,
+  Group,
+  ActionIcon,
+  Box,
 } from "@mantine/core";
-import { Plus, Trash2 } from "lucide-react";
-import type { UseFormRegister, Control } from "react-hook-form";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
+import type { UseFormRegister } from "react-hook-form";
 import type { ProductFormData } from "../hooks/use-product-form";
+
+interface DynamicFieldArrayProps {
+  title: string;
+  description: string;
+  fields: { id: string }[];
+  register: UseFormRegister<ProductFormData>;
+  remove: (index: number) => void;
+  append: (value: string) => void;
+  placeholder: string;
+  namePrefix: `description.${'features' | 'applications' | 'materials'}`;
+}
+
+const DynamicFieldArray = ({
+  title,
+  description,
+  fields,
+  register,
+  remove,
+  append,
+  placeholder,
+  namePrefix,
+}: DynamicFieldArrayProps) => {
+  return (
+    <Card withBorder shadow="sm" radius="md">
+      <Stack p="md">
+        <Box>
+          <Title order={4}>{title}</Title>
+          <Text size="sm" c="dimmed">
+            {description}
+          </Text>
+        </Box>
+        <Stack>
+          {fields.map((field, index) => (
+            <Group key={field.id} grow align="flex-end">
+              <TextInput
+                label={`${title.slice(0, -1)} ${index + 1}`}
+                placeholder={placeholder}
+                {...register(`${namePrefix}.${index}` as const)}
+              />
+              {fields.length > 1 && (
+                <ActionIcon
+                  color="red"
+                  variant="subtle"
+                  onClick={() => remove(index)}
+                >
+                  <IconTrash size={16} />
+                </ActionIcon>
+              )}
+            </Group>
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => append("")}
+            fullWidth
+            leftSection={<IconPlus size={16} />}
+          >
+            Thêm {title.toLowerCase().slice(0, -1)}
+          </Button>
+        </Stack>
+      </Stack>
+    </Card>
+  );
+};
 
 interface Props {
   register: UseFormRegister<ProductFormData>;
@@ -23,151 +91,39 @@ interface Props {
 }
 
 export function DescriptionSection(props: Props) {
-  const {
-    register,
-    featureFields,
-    appendFeature,
-    removeFeature,
-    applicationFields,
-    appendApplication,
-    removeApplication,
-    materialFields,
-    appendMaterial,
-    removeMaterial,
-  } = props;
+  const { register } = props;
   return (
-    <>
-      <MantineCard withBorder shadow="sm" radius="md" className="mt-4">
-        <div className="p-4">
-          <Title order={4}>Đặc điểm nổi bật</Title>
-          <Text size="sm" c="dimmed">
-            Các tính năng và đặc điểm của sản phẩm
-          </Text>
-        </div>
-        <div className="p-4 space-y-4">
-          {featureFields.map((field, index) => (
-            <div key={field.id} className="flex gap-2">
-              <div className="flex-1 space-y-2">
-                <Text size="sm" fw={500}>
-                  Đặc điểm {index + 1}
-                </Text>
-                <div className="flex gap-2">
-                  <TextInput
-                    {...register(`description.features.${index}` as const)}
-                    placeholder="VD: Khung bàn làm từ thép không gỉ Inox 304"
-                  />
-                  {featureFields.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="light"
-                      onClick={() => removeFeature(index)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => appendFeature("")}
-            className="w-full"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Thêm đặc điểm
-          </Button>
-        </div>
-      </MantineCard>
-
-      <MantineCard withBorder shadow="sm" radius="md" className="mt-4">
-        <div className="p-4">
-          <Title order={4}>Ứng dụng</Title>
-          <Text size="sm" c="dimmed">
-            Các lĩnh vực và mục đích sử dụng
-          </Text>
-        </div>
-        <div className="p-4 space-y-4">
-          {applicationFields.map((field, index) => (
-            <div key={field.id} className="flex gap-2">
-              <div className="flex-1 space-y-2">
-                <Text size="sm" fw={500}>
-                  Ứng dụng {index + 1}
-                </Text>
-                <div className="flex gap-2">
-                  <TextInput
-                    {...register(`description.applications.${index}` as const)}
-                    placeholder="VD: Dùng trong xưởng cơ khí, phòng assembly"
-                  />
-                  {applicationFields.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="light"
-                      onClick={() => removeApplication(index)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => appendApplication("")}
-            className="w-full"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Thêm ứng dụng
-          </Button>
-        </div>
-      </MantineCard>
-
-      <MantineCard withBorder shadow="sm" radius="md" className="mt-4">
-        <div className="p-4">
-          <Title order={4}>Vật liệu</Title>
-          <Text size="sm" c="dimmed">
-            Các vật liệu chính sử dụng trong sản phẩm
-          </Text>
-        </div>
-        <div className="p-4 space-y-4">
-          {materialFields.map((field, index) => (
-            <div key={field.id} className="flex gap-2">
-              <div className="flex-1 space-y-2">
-                <Text size="sm" fw={500}>
-                  Vật liệu {index + 1}
-                </Text>
-                <div className="flex gap-2">
-                  <TextInput
-                    {...register(`description.materials.${index}` as const)}
-                    placeholder="VD: Khung: Inox 304"
-                  />
-                  {materialFields.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="light"
-                      onClick={() => removeMaterial(index)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => appendMaterial("")}
-            className="w-full"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Thêm vật liệu
-          </Button>
-        </div>
-      </MantineCard>
-    </>
+    <Stack>
+      <DynamicFieldArray
+        title="Đặc điểm nổi bật"
+        description="Các tính năng và đặc điểm của sản phẩm"
+        fields={props.featureFields}
+        register={register}
+        remove={props.removeFeature}
+        append={props.appendFeature}
+        placeholder="VD: Khung bàn làm từ thép không gỉ Inox 304"
+        namePrefix="description.features"
+      />
+      <DynamicFieldArray
+        title="Ứng dụng"
+        description="Các lĩnh vực và mục đích sử dụng"
+        fields={props.applicationFields}
+        register={register}
+        remove={props.removeApplication}
+        append={props.appendApplication}
+        placeholder="VD: Dùng trong xưởng cơ khí, phòng assembly"
+        namePrefix="description.applications"
+      />
+      <DynamicFieldArray
+        title="Vật liệu"
+        description="Các vật liệu chính sử dụng trong sản phẩm"
+        fields={props.materialFields}
+        register={register}
+        remove={props.removeMaterial}
+        append={props.appendMaterial}
+        placeholder="VD: Khung: Inox 304"
+        namePrefix="description.materials"
+      />
+    </Stack>
   );
 }

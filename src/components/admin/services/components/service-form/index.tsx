@@ -23,6 +23,7 @@ import {
   Textarea,
   TagsInput,
   NumberInput,
+  LoadingOverlay,
 } from "@mantine/core";
 import { RichTextEditor, Link } from "@mantine/tiptap";
 import { useEditor } from "@tiptap/react";
@@ -82,13 +83,12 @@ export default function ServiceForm({
   form,
   onSubmit,
   onCancel,
-  isSaving,
 }: {
   isEditing: boolean;
   form: Partial<CompanyService>;
   onSubmit: (finalForm: any) => Promise<void>;
   onCancel?: () => void;
-  isSaving: boolean;
+  isSaving?: boolean; // Kept for compatibility, but not used for overlay
 }) {
   const { t } = useTranslation();
 
@@ -102,6 +102,7 @@ export default function ServiceForm({
     previewUrls,
     pendingFiles,
     onSubmitForm,
+    isSubmitting,
   } = useServiceForm({
     isEditing,
     form,
@@ -212,7 +213,12 @@ export default function ServiceForm({
   };
 
   return (
-    <Card withBorder shadow="sm" radius="md">
+    <Card withBorder shadow="sm" radius="md" style={{ position: "relative" }}>
+      <LoadingOverlay
+        visible={isSubmitting}
+        zIndex={1000}
+        overlayProps={{ radius: "sm", blur: 2 }}
+      />
       <Card.Section withBorder inheritPadding py="xs">
         <Title order={4}>
           {isEditing
@@ -388,13 +394,17 @@ export default function ServiceForm({
 
         <Card.Section withBorder inheritPadding py="sm" mt="md">
           <Group justify="flex-end">
-            <Button variant="default" onClick={onCancel} disabled={isSaving}>
+            <Button
+              variant="default"
+              onClick={onCancel}
+              disabled={isSubmitting}
+            >
               {t("serviceForm.cancel")}
             </Button>
             <Button
               type="submit"
-              loading={isSaving}
-              disabled={!isValid || isSaving}
+              loading={isSubmitting}
+              disabled={!isValid || isSubmitting}
               leftSection={<Save size={16} />}
             >
               {t("serviceForm.save")}

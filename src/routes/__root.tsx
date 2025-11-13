@@ -4,7 +4,7 @@ import {
   useRouterState,
   useNavigate,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+// import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingContactButtons } from "@/components/public/common/floating-contact-buttons";
@@ -46,9 +46,9 @@ function RootLayout() {
       <Footer />
 
       {/* Ẩn FloatingContactButtons nếu là admin */}
-      {!isAdmin && <FloatingContactButtons />}
+      <FloatingContactButtons />
 
-      {process.env.NODE_ENV !== "production" && <TanStackRouterDevtools />}
+      {/* {process.env.NODE_ENV !== "production" && <TanStackRouterDevtools />} */}
     </>
   );
 }

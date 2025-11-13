@@ -9,13 +9,24 @@ export interface UploadImageResponse {
   format?: string;
 }
 
+export enum UploadFolder {
+  PRODUCTS = "products",
+  CATEGORIES = "categories",
+  GENERAL = "general",
+  SERVICES = "services",
+}
+
 export const uploadService = {
-  async uploadImage(file: File, folder?: string): Promise<UploadImageResponse> {
+  async uploadImage(
+    file: File,
+    folder: UploadFolder = UploadFolder.GENERAL
+  ): Promise<UploadImageResponse> {
     const form = new FormData();
     form.append("file", file);
-    if (folder) form.append("folder", folder);
-    return apiClient.post<UploadImageResponse, FormData>("/uploads/image", form);
+    form.append("folder", folder);
+    return apiClient.post<UploadImageResponse, FormData>(
+      "/uploads/image",
+      form
+    );
   },
 };
-
-

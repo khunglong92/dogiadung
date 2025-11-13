@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { notifications } from "@mantine/notifications";
 import { toast } from "sonner";
-import { uploadService } from "@/services/api/uploadService";
+import { UploadFolder, uploadService } from "@/services/api/uploadService";
 import {
   CompanyService,
   ServiceStatus,
@@ -43,17 +43,6 @@ const arrayToHtmlList = (data: string[] | string | undefined): string => {
   return "";
 };
 
-const htmlListToArray = (html: string | undefined) => {
-  if (!html || html.trim() === "" || html === "<p></p>") return [];
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, "text/html");
-  const items = Array.from(doc.querySelectorAll("li"))
-    .map((li) => li.textContent || "")
-    .filter(Boolean);
-  // Return empty array only if there are actual list items, otherwise return empty array
-  return items;
-};
-
 const createServiceFormSchema = (t: any) =>
   z.object({
     slug: z.string().min(1, t("validation.slugRequired")),
@@ -67,7 +56,7 @@ const createServiceFormSchema = (t: any) =>
     technologies: z.string().optional(),
     benefits: z.string().optional(),
     customers: z.string().optional(),
-    image_urls: z.array(z.string()).optional(), // Validation for presence is now handled in the submit function
+    image_urls: z.array(z.string()).optional(),
     icon: z.string().optional(),
     cta_label: z.string().optional(),
     cta_link: z
@@ -97,6 +86,7 @@ export function useServiceForm(params: {
   const { t } = useTranslation();
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const serviceFormSchema = createServiceFormSchema(t);
 
@@ -156,10 +146,10 @@ export function useServiceForm(params: {
 
     const totalCount =
       (watch("image_urls")?.length || 0) + pendingFiles.length + files.length;
-    if (totalCount > 5) {
+    if (totalCount > 10) {
       notifications.show({
         color: "red",
-        message: t("validation.maxImages", { count: 5 }),
+        message: t("validation.maxImages", { count: 10 }),
       });
       return;
     }
@@ -204,7 +194,6 @@ export function useServiceForm(params: {
   };
 
   const onSubmitError = (errors: any) => {
-    console.log("Form validation errors:", errors);
     const firstError = Object.values(errors)[0] as any;
     if (firstError?.message) {
       notifications.show({
@@ -216,6 +205,7 @@ export function useServiceForm(params: {
   };
 
   const handleFormSubmit = async (data: ServiceFormData) => {
+    setIsSubmitting(true);
     // Manual validation for at least one image before submitting
     const totalImages = (data.image_urls?.length || 0) + pendingFiles.length;
     if (totalImages === 0) {
@@ -224,6 +214,7 @@ export function useServiceForm(params: {
         title: t("validation.error"),
         message: t("validation.imageUrlsRequired"),
       });
+      setIsSubmitting(false);
       return; // Stop submission
     }
 
@@ -235,7 +226,7 @@ export function useServiceForm(params: {
           id: "upload-service-images",
         });
         const uploadPromises = pendingFiles.map((file) =>
-          uploadService.uploadImage(file, "services")
+          uploadService.uploadImage(file, UploadFolder.SERVICES)
         );
         const uploadedResults = await Promise.all(uploadPromises);
         const newImageUrls = uploadedResults.map((res) => res.url);
@@ -245,18 +236,10 @@ export function useServiceForm(params: {
         });
       }
 
-      // Process HTML content - if it contains list items, convert to array, otherwise send as HTML string
-      console.log("Raw form data:", {
-        features: data.features,
-        technologies: data.technologies,
-        benefits: data.benefits,
-      });
-
       const processHtmlField = (html: string | undefined): string => {
         if (!html || html.trim() === "" || html === "<p></p>") {
           return "";
         }
-        // Always return the raw HTML content from the editor
         return html;
       };
 
@@ -268,12 +251,6 @@ export function useServiceForm(params: {
         benefits: processHtmlField(data.benefits),
       };
 
-      console.log("Final data to send:", {
-        features: finalData.features,
-        technologies: finalData.technologies,
-        benefits: finalData.benefits,
-      });
-
       setPendingFiles([]);
       await onSubmit(finalData);
     } catch (e: any) {
@@ -281,6 +258,8 @@ export function useServiceForm(params: {
         id: "upload-service-images",
       });
       throw e;
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -294,6 +273,7 @@ export function useServiceForm(params: {
     handleRemoveImage,
     previewUrls,
     pendingFiles,
+    isSubmitting,
     onSubmitForm: handleSubmit(handleFormSubmit, onSubmitError),
   };
 }

@@ -7,6 +7,7 @@ import {
   Users,
   BarChart3,
   ChevronLeft,
+  Mail,
 } from "lucide-react";
 import { cn } from "@/components/ui/utils";
 import { useTranslation } from "react-i18next";
@@ -19,7 +20,7 @@ export function AdminSidebar() {
   const navigate = useNavigate();
   const routerState = useRouterState();
   const { theme } = useTheme();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   // Xác định trang hiện tại từ route path
   const currentPath = routerState.location.pathname;
@@ -62,6 +63,13 @@ export function AdminSidebar() {
       color: "from-orange-500 to-red-500",
     },
     {
+      id: "contact",
+      route: "/admin/contact",
+      name: t("admin.sidebar.contact"),
+      icon: Mail,
+      color: "from-orange-500 to-red-500",
+    },
+    {
       id: "users",
       route: "/admin/users",
       name: t("admin.sidebar.users"),
@@ -86,12 +94,12 @@ export function AdminSidebar() {
       className={cn(
         "relative flex flex-col border-r bg-card min-h-screen transition-all duration-300 ease-in-out",
         isCollapsed ? "w-20" : "w-64",
-        theme === "dark" ? "bg-white" : "bg-black"
+        theme === "dark" ? "bg-white text-black" : "bg-[#2a2931] text-white"
       )}
     >
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute rounded-full bg-white/10 backdrop-blur-sm hover:bg-opacity-50 cursor-pointer top-2 -right-12 shadow-2xl duration-1000 transition-all shadow-indigo-300 z-10 h-10 w-10 bg-card text-card-foreground flex items-center justify-center hover:bg-accent transition-colors"
+        className={`absolute rounded-full ${theme === "dark" ? "bg-white/10" : "bg-black/60"} backdrop-blur-sm hover:bg-opacity-50 cursor-pointer top-2 -right-12 shadow-2xl duration-1000 transition-all shadow-indigo-300 z-10 h-10 w-10 bg-card text-card-foreground flex items-center justify-center hover:bg-accent transition-colors`}
       >
         <ChevronLeft
           className={cn(
@@ -122,11 +130,9 @@ export function AdminSidebar() {
                 isCollapsed && "justify-center"
               )}
             >
-              <Icon className="h-5 w-5 flex-shrink-0 text-black/50" />
+              <Icon className="h-5 w-5 flex-shrink-0" />
               {!isCollapsed && (
-                <span className="text-sm text-black/60 !font-bold">
-                  {item.name}
-                </span>
+                <span className="text-sm !font-bold">{item.name}</span>
               )}
             </motion.button>
           );

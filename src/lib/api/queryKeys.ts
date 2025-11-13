@@ -19,6 +19,11 @@ export const QUERY_KEYS = {
   auth: {
     profile: ["auth", "profile"] as const,
   },
+  contacts: {
+    root: "contacts" as const,
+    byId: (id: string) => ["contact", id] as const,
+    paginated: (page: number, limit: number) => ["contacts", "paginated", page, limit] as const,
+  },
 } as const;
 
 export type QueryKey = ReadonlyArray<unknown>;

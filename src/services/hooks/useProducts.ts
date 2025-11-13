@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
 import {
   productsService,
   type CreateProductDto,
@@ -8,12 +13,22 @@ import {
 } from "../api/productsService";
 import { QUERY_KEYS } from "@/lib/api/queryKeys";
 
-export type ProductsPage = { data: Product[]; total: number; page: number; limit: number };
+export type ProductsPage = {
+  data: Product[];
+  total: number;
+  page: number;
+  limit: number;
+};
 
-export const useProducts = () => {
+export const useProducts = (params: {
+  page?: number;
+  limit?: number;
+  categoryId?: number;
+  search?: string;
+}) => {
   return useQuery({
     queryKey: [QUERY_KEYS.products.root],
-    queryFn: () => productsService.getAll(),
+    queryFn: () => productsService.findAll(params),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
@@ -29,15 +44,23 @@ export const useProduct = (id: number) => {
 export const useProductsByCategory = (category: string) => {
   return useQuery({
     queryKey: QUERY_KEYS.products.byCategory(category),
-    queryFn: () => productsService.getAll(),
+    queryFn: () => productsService.findAll({ search: category }),
     enabled: !!category,
   });
 };
 
-export const useProductsPaginated = (page: number, limit: number, search?: string) => {
+export const useProductsPaginated = (
+  page: number,
+  limit: number,
+  search?: string
+) => {
   return useQuery<ProductsPage>({
-    queryKey: [QUERY_KEYS.products.root, "paged", { page, limit, search: search || "" }],
-    queryFn: () => productsService.getPaginated({ page, limit, search }),
+    queryKey: [
+      QUERY_KEYS.products.root,
+      "paged",
+      { page, limit, search: search || "" },
+    ],
+    queryFn: () => productsService.findAll({ page, limit, search }),
     keepPreviousData: true,
   });
 };
@@ -81,6 +104,7 @@ export const useFeaturedProducts = (perpage: number = 10) => {
     queryKey: [QUERY_KEYS.products.root, "featured"],
     queryFn: ({ pageParam = 1 }) =>
       productsService.getFeatured({ page: pageParam as number, perpage }),
+    initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       const { page, perpage, total } = lastPage.pagination;
       const totalPages = Math.ceil(total / perpage);

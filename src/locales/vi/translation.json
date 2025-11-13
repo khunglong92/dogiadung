@@ -6,7 +6,7 @@
     "contact": "Liên hệ",
     "introduction": "Giới thiệu",
     "services": "Dịch vụ",
-    "quote": "Đề xuất",
+    "quote": "Báo giá",
     "project": "Dự án"
   },
   "hero": {
@@ -25,7 +25,45 @@
     "description": "Khám phá những công trình tiêu biểu mang dấu ấn Thiên Lộc – nơi kỹ thuật chính xác, chất lượng bền vững và thẩm mỹ tinh tế cùng hội tụ.",
     "all": "Tất cả",
     "new": "Mới",
-    "viewAll": "Xem tất cả sản phẩm"
+    "viewAll": "Xem tất cả sản phẩm",
+    "hero": {
+      "badge": "Chuyên nghiệp",
+      "tagline": "Gia công kim loại",
+      "title1": "Chính Xác",
+      "title2": "Chuyên Nghiệp",
+      "title3": "Hoàn Hảo",
+      "description": "Giải pháp gia công kim loại toàn diện với độ chính xác",
+      "description2": "đáp ứng mọi nhu cầu công nghiệp từ đơn giản đến phức tạp nhất.",
+      "cta": {
+        "quote": "Yêu cầu báo giá",
+        "contact": "Liên hệ ngay"
+      }
+    },
+    "features": {
+      "title": "Tại sao chọn chúng tôi",
+      "subtitle": "Cam kết chất lượng và dịch vụ xuất sắc"
+    },
+    "categories": {
+      "empty": "Chưa có danh mục sản phẩm"
+    },
+    "card": {
+      "badge": "Sản phẩm",
+      "status": "Trạng thái",
+      "available": "Có sẵn",
+      "unavailable": "Hết hàng",
+      "priceLabel": "Giá",
+      "noPrice": "Liên hệ"
+    },
+    "contact": {
+      "title": "Liên hệ với chúng tôi",
+      "subtitle": "Sẵn sàng hỗ trợ bạn với giải pháp tốt nhất",
+      "hotlineLabel": "Hotline",
+      "emailLabel": "Email",
+      "addressLabel": "Địa chỉ",
+      "addressFallback": "TP. Hồ Chí Minh",
+      "cta": "Gọi ngay",
+      "footer": "© 2024 Tất cả quyền được bảo lưu"
+    }
   },
   "footer": {
     "company": {
@@ -80,6 +118,7 @@
       "categories": "Danh mục",
       "services": "Quản lý dịch vụ",
       "projects": "Quản lý dự án",
+      "contact": "Quản lý liên hệ",
       "users": "Quản lý người dùng",
       "statistics": "Thống kê"
     },
@@ -157,7 +196,7 @@
     "icon": "Icon (ví dụ: tên icon Lucide)",
     "shortDescription": "Mô tả ngắn",
     "images": "Ảnh",
-    "uploadImages": "Tải ảnh lên (tối đa 5)",
+    "uploadImages": "Tải ảnh lên (tối đa 20)",
     "alt_text": "Văn bản thay thế cho ảnh (Alt Text)",
     "content": "Nội dung chính",
     "features": "Đặc điểm nổi bật",
@@ -202,6 +241,87 @@
     "imageTooLarge": "Ảnh vượt quá giới hạn 20MB. Vui lòng chọn ảnh nhỏ hơn.",
     "imageUrlsRequired": "Cần có ít nhất một ảnh đại diện."
   },
+  "contacts": {
+    "title": "Quản lý liên hệ",
+    "subtitle": "Quản lý các liên hệ phản hồi từ khách hàng",
+    "listTitle": "Danh sách liên hệ",
+    "totalContacts": "Tổng số: {{count}} liên hệ",
+    "name": "Họ tên",
+    "title": "Tiêu đề",
+    "email": "Email",
+    "phone": "Số điện thoại",
+    "address": "Địa chỉ",
+    "content": "Nội dung",
+    "status": "Trạng thái",
+    "confirmed": "Đã xác nhận",
+    "pending": "Chờ xác nhận",
+    "createdAt": "Ngày tạo",
+    "actions": "Thao tác",
+    "viewDetail": "Xem chi tiết",
+    "confirmContact": "Xác nhận",
+    "deleteContact": "Xóa",
+    "detailTitle": "Chi tiết liên hệ",
+    "noData": "Chưa có liên hệ nào",
+    "toast": {
+      "confirmSuccess": "Đã xác nhận liên hệ thành công",
+      "deleteSuccess": "Đã xóa liên hệ thành công"
+    }
+  },
+  "contact": {
+    "title": "LIÊN HỆ",
+    "subtitle": "Liên hệ với chúng tôi để được tư vấn và hỗ trợ tốt nhất",
+    "rating": "(39 bình chọn)",
+    "info": {
+      "title": "Địa chỉ:",
+      "hanoi": {
+        "label": "🏢 Văn phòng Hà Nội",
+        "address": "Số 08,09 - NV 27, Khu đô thị Lideco, Hoài Đức, Hà Nội.",
+        "hotline": "Hotline HN"
+      },
+      "hcm": {
+        "label": "🏢 Chi nhánh TP.HCM",
+        "address": "Số 15, Đường 27, Khu đô thị Vạn Phúc, TP Thủ Đức, TP Hồ Chí Minh.",
+        "hotline": "Hotline TP.HCM"
+      },
+      "factory1": {
+        "label": "🏭 Nhà máy 1",
+        "address": "Lô 3, ô 5, Cụm CN Lai Xá, Hoài Đức, Hà Nội."
+      },
+      "factory2": {
+        "label": "🏭 Nhà máy 2",
+        "address": "CN 04 - 02, Cụm CN Đồng Sóc, Vĩnh Tường, Phú Thọ."
+      }
+    },
+    "form": {
+      "title": "Gửi tin nhắn cho chúng tôi",
+      "description": "Vui lòng điền vào form dưới đây và để lại tin nhắn, góp ý giúp chúng tôi phục vụ bạn được tốt hơn.",
+      "name": "Họ tên",
+      "namePlaceholder": "Nhập họ tên của bạn",
+      "title": "Tiêu đề",
+      "titlePlaceholder": "Nhập tiêu đề",
+      "phone": "Điện thoại",
+      "phonePlaceholder": "+(84-24) 3566.8888",
+      "email": "Email",
+      "emailPlaceholder": "example@email.com",
+      "address": "Địa chỉ",
+      "addressPlaceholder": "Nhập địa chỉ của bạn",
+      "content": "Nội dung",
+      "contentPlaceholder": "Nhập nội dung tin nhắn của bạn...",
+      "submit": "GỬI",
+      "sending": "Đang gửi...",
+      "requiredFields": "Vui lòng điền đầy đủ thông tin bắt buộc",
+      "successMessage": "Gửi tin nhắn thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.",
+      "errorMessage": "Có lỗi xảy ra. Vui lòng thử lại sau."
+    }
+  },
+  "common": {
+    "addToCart": "Thêm vào giỏ",
+    "viewDetails": "Xem chi tiết",
+    "phone": "0123 456 789",
+    "email": "contact@woodhome.vn",
+    "address": "123 Đường ABC, Quận 1, TP.HCM",
+    "close": "Đóng"
+  },
   "about": {
     "title": "Gia Công Kim Loại Tấm Chất Lượng Cao",
     "description": "Khám phá giải pháp sản xuất và gia công kim loại tấm chuyên nghiệp tại Thiên Lộc.",
@@ -237,5 +357,194 @@
     "consultationDescription": "Để được tư vấn chi tiết về sản phẩm và nhận ưu đãi đặc biệt, hãy liên hệ với chúng tôi ngay hôm nay!",
     "callNow": "Gọi ngay",
     "sendEmail": "Gửi email"
+  },
+  "servicesPage": {
+    "hero": {
+      "badge": "Dịch Vụ Của Chúng Tôi",
+      "title": "Giải Pháp Gia Công Kim Loại Toàn Diện",
+      "subtitle": "Cung cấp đa dạng dịch vụ gia công kim loại chất lượng cao với công nghệ hiện đại và đội ngũ chuyên nghiệp"
+    },
+    "main": {
+      "title": "Dịch Vụ Chính",
+      "subtitle": "Thiên Lộc cung cấp đầy đủ các dịch vụ gia công kim loại tấm và thi công trần chuyên nghiệp"
+    },
+    "whyChooseUs": {
+      "title": "Tại Sao Chọn Thiên Lộc?",
+      "subtitle": "Chúng tôi cam kết mang đến dịch vụ tốt nhất với chất lượng vượt trội",
+      "quality": {
+        "title": "Chất Lượng Hàng Đầu",
+        "description": "Sản phẩm đạt tiêu chuẩn chất lượng cao, bền đẹp và chính xác đến từng chi tiết."
+      },
+      "technology": {
+        "title": "Công Nghệ Hiện Đại",
+        "description": "Áp dụng máy móc và công nghệ tiên tiến nhất vào quy trình sản xuất."
+      },
+      "experience": {
+        "title": "Đội Ngũ Kinh Nghiệm",
+        "description": "Kỹ thuật viên tay nghề cao, giàu kinh nghiệm và tận tâm với công việc."
+      },
+      "support": {
+        "title": "Hỗ Trợ Tận Tình",
+        "description": "Luôn sẵn sàng tư vấn và hỗ trợ khách hàng 24/7 để đưa ra giải pháp tối ưu nhất."
+      }
+    },
+    "cta": {
+      "title": "Bạn Cần Tư Vấn Dịch Vụ?",
+      "subtitle": "Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng hỗ trợ và tư vấn giải pháp tốt nhất cho dự án của bạn",
+      "contactButton": "Liên hệ ngay",
+      "quoteButton": "Xem báo giá"
+    }
+  },
+  "serviceListItems": {
+    "noServices": "Không có dịch vụ nào để hiển thị.",
+    "featuredBadge": "Dịch vụ nổi bật",
+    "viewDetails": "Xem chi tiết"
+  },
+  "serviceDetail": {
+    "toast": {
+      "loadError": "Không thể tải chi tiết dịch vụ."
+    },
+    "notFound": {
+      "title": "Không Tìm Thấy Dịch Vụ",
+      "description": "Dịch vụ bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
+      "backButton": "Quay lại danh sách dịch vụ"
+    },
+    "sidebar": {
+      "benefits": "Lợi ích",
+      "technologies": "Công nghệ",
+      "customers": "Đối tác & Khách hàng"
+    },
+    "features": {
+      "title": "Tính Năng Vượt Trội"
+    },
+    "gallery": {
+      "title": "Thư Viện Dự Án"
+    },
+    "cta": {
+      "defaultTitle": "Bắt Đầu Dự Án Của Bạn",
+      "description": "Liên hệ ngay để được tư vấn giải pháp tối ưu nhất.",
+      "contactButton": "Liên Hệ Ngay"
+    }
+  },
+  "userMenu": {
+    "account": "Tài khoản",
+    "settings": "Quản trị",
+    "logout": "Đăng xuất"
+  },
+  "productsPage": {
+    "hero": {
+      "badge": "Chất lượng cao • Giá tốt nhất",
+      "title": "Chất Lượng Hàng Đầu",
+      "subtitle": "Khám phá những công trình tiêu biểu mang dấu ấn Thiên Lộc – nơi kỹ thuật chính xác, chất lượng bền vững và thẩm mỹ tinh tế cùng hội tụ."
+    },
+    "cta": {
+      "title": "Bạn Cần Tư Vấn Sản Phẩm?",
+      "subtitle": "Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng hỗ trợ và tư vấn giải pháp tốt nhất cho dự án của bạn",
+      "contactButton": "Liên Hệ Ngay",
+      "quoteButton": "Xem Báo Giá"
+    },
+    "admin": {
+      "title": "Quản lý sản phẩm",
+      "subtitle": "Thêm/sửa/xóa sản phẩm, gắn danh mục",
+      "addProduct": "Thêm sản phẩm",
+      "createTitle": "Thêm sản phẩm",
+      "editTitle": "Chỉnh sửa sản phẩm",
+      "createSubtitle": "Nhập thông tin sản phẩm",
+      "editSubtitle": "Cập nhật thông tin sản phẩm",
+      "backToList": "Quay lại danh sách",
+      "table": {
+        "title": "Danh sách sản phẩm",
+        "searchPlaceholder": "Tìm kiếm...",
+        "columns": {
+          "id": "ID",
+          "name": "Tên",
+          "category": "Danh mục",
+          "price": "Giá",
+          "images": "Ảnh",
+          "description": "Mô tả",
+          "specs": "Thông số",
+          "warranty": "Bảo hành",
+          "createdAt": "Tạo lúc",
+          "updatedAt": "Cập nhật",
+          "actions": "Thao tác"
+        },
+        "noProducts": "Không có sản phẩm nào.",
+        "total": "Tổng",
+        "items": "mục",
+        "page": "Trang",
+        "display": "Hiển thị"
+      }
+    }
+  },
+  "productDetail": {
+    "header": {
+      "title": "Chi tiết sản phẩm",
+      "backButton": "Quay lại"
+    },
+    "loading": {
+      "message": "Đang tải..."
+    },
+    "error": {
+      "loadError": "Lỗi tải sản phẩm: {{message}}",
+      "notFound": "Không tìm thấy sản phẩm."
+    },
+    "badge": {
+      "featured": "Sản phẩm nổi bật"
+    },
+    "category": {
+      "label": "Danh mục:"
+    },
+    "price": {
+      "label": "Giá sản phẩm",
+      "contact": "Liên hệ"
+    },
+    "specs": {
+      "title": "Thông số nổi bật",
+      "dimensions": "Kích thước",
+      "weight": "Trọng lượng",
+      "loadCapacity": "Tải trọng",
+      "material": "Vật liệu",
+      "weldingType": "Phương pháp liên kết",
+      "surfaceFinish": "Hoàn thiện bề mặt"
+    },
+    "customizable": {
+      "message": "Sản phẩm có thể tùy chỉnh theo yêu cầu của khách hàng",
+      "yes": "Có thể tùy chỉnh",
+      "no": "Không tùy chỉnh",
+      "label": "Tùy chỉnh"
+    },
+    "actions": {
+      "contact": "Liên hệ ngay",
+      "favorite": "Thêm vào yêu thích",
+      "share": "Chia sẻ"
+    },
+    "tabs": {
+      "overview": "Tổng quan",
+      "features": "Đặc điểm",
+      "materials": "Vật liệu",
+      "specs": "Thông số kỹ thuật"
+    },
+    "overview": {
+      "title": "Mô tả sản phẩm",
+      "noInfo": "Chưa có thông tin.",
+      "applications": "Ứng dụng"
+    },
+    "features": {
+      "title": "Đặc điểm nổi bật",
+      "noInfo": "Chưa có thông tin."
+    },
+    "materials": {
+      "title": "Vật liệu sản xuất",
+      "noInfo": "Chưa có thông tin."
+    },
+    "technicalSpecs": {
+      "title": "Thông số kỹ thuật chi tiết"
+    },
+    "warranty": {
+      "message": "Vui lòng liên hệ với chúng tôi để biết thêm thông tin về chính sách bảo hành."
+    },
+    "footer": {
+      "createdAt": "Sản phẩm được tạo ngày:"
+    }
   }
 }

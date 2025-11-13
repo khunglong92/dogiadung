@@ -71,7 +71,7 @@ export function Footer() {
             className="space-y-4"
           >
             <div className="flex items-center gap-2">
-              <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-lg bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center">
                 <span className="text-white">🪵</span>
               </div>
               <span className="text-xl">Wood & Home</span>

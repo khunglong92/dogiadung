@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { notifications } from "@mantine/notifications";
 import { toast } from "sonner";
-import { uploadService } from "@/services/api/uploadService";
+import { uploadService, UploadFolder } from "@/services/api/uploadService";
 
 export interface CategoryItem {
   id: number;
@@ -33,7 +33,7 @@ export interface ProductFormData {
     weldingType: string;
     customizable: boolean;
   };
-  price: number | null;
+  price: string | null;
   warrantyPolicy: string;
   images: string[];
   isFeatured: boolean;
@@ -45,7 +45,7 @@ export interface UseProductFormParams {
     name: string;
     description: string;
     technicalSpecs: string;
-    price: string;
+    price?: string;
     warrantyPolicy: string;
     images: string;
     categoryId: number | null;
@@ -56,7 +56,7 @@ export interface UseProductFormParams {
     name: string;
     description: string;
     technicalSpecs: string;
-    price: string;
+    price?: string;
     warrantyPolicy: string;
     images: string;
     categoryId: number | null;
@@ -197,7 +197,7 @@ export function useProductForm(
       categoryId: form.categoryId,
       description: parsedDescription,
       technicalSpecs: parsedTechnicalSpecs,
-      price: form.price ? Number(form.price) : null,
+      price: form.price || null,
       warrantyPolicy: form.warrantyPolicy || "",
       images: [],
       isFeatured: form.isFeatured ?? true,
@@ -224,8 +224,7 @@ export function useProductForm(
     name: "description.materials",
   });
 
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+  const handleImageSelect = (files: File[]) => {
     if (!files || files.length === 0) return;
     const MAX_FILES = 10;
     const MAX_SIZE_BYTES = 10 * 1024 * 1024;
@@ -235,10 +234,9 @@ export function useProductForm(
         color: "red",
         message: `Tối đa ${MAX_FILES} hình ảnh cho mỗi sản phẩm`,
       });
-      e.target.value = "";
       return;
     }
-    const selected = Array.from(files).slice(0, remainingSlots);
+    const selected = files.slice(0, remainingSlots);
     if (files.length > selected.length) {
       notifications.show({
         color: "red",
@@ -267,7 +265,6 @@ export function useProductForm(
       };
       reader.readAsDataURL(file);
     });
-    e.target.value = "";
   };
 
   const removeImageFile = (index: number) => {
@@ -275,62 +272,26 @@ export function useProductForm(
   };
 
   const onSubmitForm = async (data: ProductFormData) => {
-    // Validate tất cả các tab
-    const errors: string[] = [];
-    let firstErrorTab = currentTab;
+    // Validation is now handled by react-hook-form's `handleSubmit`.
+    // The `onSubmitError` function will be called if there are errors.
 
-    // Tab 1: Thông tin cơ bản
-    if (!data.name?.trim()) {
-      errors.push("Tên sản phẩm là bắt buộc");
-      firstErrorTab = "basic";
-    }
-    if (!data.categoryId) {
-      errors.push("Vui lòng chọn danh mục");
-      if (firstErrorTab === currentTab) firstErrorTab = "basic";
-    }
-    if (!data.price && data.price !== 0) {
-      errors.push("Vui lòng nhập giá sản phẩm");
-      if (firstErrorTab === currentTab) firstErrorTab = "basic";
-    }
-    if (!data.description?.overview?.trim()) {
-      errors.push("Vui lòng nhập mô tả tổng quan");
-      if (firstErrorTab === currentTab) firstErrorTab = "basic";
-    }
-
-    // Tab 2: Mô tả chi tiết - đã validate overview ở trên
-
-    // Tab 3: Thông số kỹ thuật - không bắt buộc nhưng có thể kiểm tra
-
-    // Tab 4: Hình ảnh - bắt buộc ít nhất 1 ảnh
-    const hasImages = imageFiles.length > 0;
-    if (!hasImages) {
-      errors.push("Vui lòng thêm ít nhất 1 hình ảnh cho sản phẩm");
-      if (firstErrorTab === currentTab) firstErrorTab = "images";
-    }
-
-    // Nếu có lỗi, hiển thị notification và chuyển đến tab có lỗi đầu tiên
-    if (errors.length > 0) {
-      setCurrentTab(firstErrorTab);
-      // Hiển thị tất cả lỗi
-      errors.forEach((error) => {
-        notifications.show({
-          color: "red",
-          message: error,
-        });
+    if (imageFiles.length === 0) {
+      notifications.show({
+        color: "red",
+        message: "Vui lòng thêm ít nhất 1 hình ảnh cho sản phẩm",
       });
-      // Return sớm để ngăn submit - KHÔNG gọi onSubmit()
+      setCurrentTab("images");
       return;
     }
 
-    // Nếu không có lỗi, tiếp tục xử lý upload và submit
     try {
       const filesToUpload = imageFiles.filter((i) => i.file);
+
       const uploadedUrls: string[] = [];
       if (filesToUpload.length > 0) {
-        toast.loading("Đang upload hình ảnh...", { id: "upload-images" });
         const results = await Promise.all(
           filesToUpload.map((i) =>
-            uploadService.uploadImage(i.file!, "products")
+            uploadService.uploadImage(i.file as File, "product" as any)
           )
         );
         uploadedUrls.push(...results.map((r) => r.url));

@@ -15,7 +15,7 @@ export default defineConfig({
   },
   build: {
     target: "esnext",
-    outDir: "build",
+    outDir: "dist",
     rollupOptions: {
       output: {
         manualChunks: (id) => {
@@ -63,7 +63,7 @@ export default defineConfig({
         },
       },
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 5000,
   },
   server: {
     port: 3000,

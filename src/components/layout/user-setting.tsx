@@ -31,10 +31,10 @@ export default function UserSetting() {
     <>
       {!user && (
         <AppButton
-          name={t("admin.login.login")}
+          label={t("admin.login.login")}
           size="sm"
           variant={theme === "dark" ? "outline" : "default"}
-          onClick={() => navigate({ to: "/auth/login" })}
+          to="/auth/login"
         />
       )}
 
@@ -43,11 +43,16 @@ export default function UserSetting() {
           <Menu.Target>
             <UnstyledButton>
               <Group>
-                <Avatar src={user?.avtUrl} color="blue" radius="xl">
+                <Avatar
+                  className="ring-1 ring-amber-50"
+                  src={user?.avtUrl}
+                  color="blue"
+                  radius="xl"
+                >
                   {getInitials(user?.name)}
                 </Avatar>
 
-                <div style={{ flex: 1 }}>
+                <div className="hidden md:block flex-1">
                   <Text size="sm" fw={500}>
                     {user.name}
                   </Text>
@@ -60,15 +65,15 @@ export default function UserSetting() {
           </Menu.Target>
 
           <Menu.Dropdown>
-            <Menu.Label>Account</Menu.Label>
+            <Menu.Label>{t("userMenu.account")}</Menu.Label>
             {user.role === UserRole.ADMIN && (
               <Menu.Item
                 leftSection={
                   <IconSettings style={{ width: rem(14), height: rem(14) }} />
                 }
-                onClick={() => navigate({ to: "/admin/dashboard" })} // Assuming you have a /settings route
+                onClick={() => navigate({ to: "/admin/dashboard" })}
               >
-                Settings
+                {t("userMenu.settings")}
               </Menu.Item>
             )}
             <Menu.Item
@@ -78,7 +83,7 @@ export default function UserSetting() {
               }
               onClick={handleLogout}
             >
-              Logout
+              {t("userMenu.logout")}
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>

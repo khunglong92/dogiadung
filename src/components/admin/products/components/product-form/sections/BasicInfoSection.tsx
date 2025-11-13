@@ -2,12 +2,13 @@ import {
   Text,
   TextInput,
   NumberInput,
-  Textarea as MantineTextarea,
-  Select as MantineSelect,
-  Switch as MantineSwitch,
+  Textarea,
+  Select,
+  Switch,
+  Stack,
+  Grid,
 } from "@mantine/core";
-import { AlertCircle } from "lucide-react";
-import type { Control, UseFormRegister } from "react-hook-form";
+import type { UseFormRegister } from "react-hook-form";
 import type { ProductFormData, CategoryItem } from "../hooks/use-product-form";
 
 interface Props {
@@ -30,117 +31,71 @@ export function BasicInfoSection({
   categories,
 }: Props) {
   return (
-    <div className="p-4 space-y-4">
-      <div className="space-y-2">
-        <Text size="sm" fw={500} component="label" htmlFor="name">
-          Tên sản phẩm <span className="text-red-500">*</span>
-        </Text>
-        <TextInput
-          id="name"
-          placeholder="VD: Bàn thao tác cơ khí Inox 304"
-          {...register("name", { required: "Tên sản phẩm là bắt buộc" })}
-        />
-        {errors.name && (
-          <p className="text-xs text-red-600 flex items-center gap-1">
-            <AlertCircle className="h-3 w-3" />
-            {errors.name.message}
-          </p>
-        )}
-      </div>
+    <Stack p="md">
+      <TextInput
+        label="Tên sản phẩm"
+        placeholder="VD: Bàn thao tác cơ khí Inox 304"
+        withAsterisk
+        {...register("name", { required: "Tên sản phẩm là bắt buộc" })}
+        error={errors.name?.message}
+      />
 
-      <div className="space-y-2">
-        <Text size="sm" fw={500} component="label" htmlFor="categoryId">
-          Danh mục <span className="text-red-500">*</span>
-        </Text>
-        <MantineSelect
-          id="categoryId"
-          placeholder="Chọn danh mục"
-          data={categories.map((c) => ({ value: String(c.id), label: c.name }))}
-          value={watchedCategoryId ? String(watchedCategoryId) : null}
-          onChange={(value) =>
-            setValue("categoryId", value ? Number(value) : (null as any))
-          }
-          searchable
-          nothingFoundMessage="Không tìm thấy"
-          comboboxProps={{ withinPortal: true, zIndex: 1000 }}
-        />
-        {!watchedCategoryId && (
-          <p className="text-xs text-red-600 flex items-center gap-1">
-            <AlertCircle className="h-3 w-3" />
-            Vui lòng chọn danh mục
-          </p>
-        )}
-      </div>
+      <Select
+        label="Danh mục"
+        placeholder="Chọn danh mục"
+        withAsterisk
+        data={categories.map((c) => ({ value: String(c.id), label: c.name }))}
+        value={watchedCategoryId ? String(watchedCategoryId) : null}
+        onChange={(value) =>
+          setValue("categoryId", value ? Number(value) : (null as any))
+        }
+        error={!watchedCategoryId ? "Vui lòng chọn danh mục" : undefined}
+        searchable
+        nothingFoundMessage="Không tìm thấy"
+      />
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Text size="sm" fw={500} component="label" htmlFor="price">
-            Giá (VNĐ) <span className="text-red-500">*</span>
-          </Text>
+      <Grid>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <NumberInput
-            id="price"
+            label="Giá (VNĐ)"
             placeholder="3200000"
+            withAsterisk
             hideControls
             value={watchedPrice ?? undefined}
             onChange={(val) =>
               setValue("price", typeof val === "number" ? val : null)
             }
+            error={errors.price?.message}
+            description={watchedPrice && watchedPrice > 0 ? `≈ ${formatPrice(watchedPrice)} VNĐ` : undefined}
           />
-          {errors.price && (
-            <p className="text-xs text-red-600 flex items-center gap-1">
-              <AlertCircle className="h-3 w-3" />
-              {errors.price.message}
-            </p>
-          )}
-          {watchedPrice && watchedPrice > 0 && (
-            <p className="text-xs text-muted-foreground">
-              ≈ {formatPrice(watchedPrice)} VNĐ
-            </p>
-          )}
-        </div>
+        </Grid.Col>
 
-        <div className="space-y-2">
-          <Text size="sm" fw={500} component="label" htmlFor="warrantyPolicy">
-            Chính sách bảo hành
-          </Text>
-          <MantineTextarea
-            id="warrantyPolicy"
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <Textarea
+            label="Chính sách bảo hành"
             rows={3}
             placeholder="VD: Bảo hành 12 tháng cho khung và mối hàn"
             {...register("warrantyPolicy")}
           />
-        </div>
-      </div>
+        </Grid.Col>
+      </Grid>
 
-      <div className="space-y-2">
-        <Text size="sm" fw={500} component="label" htmlFor="overview">
-          Tổng quan sản phẩm <span className="text-red-500">*</span>
-        </Text>
-        <MantineTextarea
-          id="overview"
-          rows={4}
-          placeholder="Mô tả ngắn gọn về sản phẩm..."
-          {...register("description.overview", {
-            required: "Mô tả tổng quan là bắt buộc",
-          })}
-        />
-        {errors.description?.overview && (
-          <p className="text-xs text-red-600 flex items-center gap-1">
-            <AlertCircle className="h-3 w-3" />
-            {errors.description.overview.message}
-          </p>
-        )}
-      </div>
+      <Textarea
+        label="Tổng quan sản phẩm"
+        rows={4}
+        placeholder="Mô tả ngắn gọn về sản phẩm..."
+        withAsterisk
+        {...register("description.overview", {
+          required: "Mô tả tổng quan là bắt buộc",
+        })}
+        error={errors.description?.overview?.message}
+      />
 
-      {/* Featured Toggle */}
-      <div className="space-y-2">
-        <MantineSwitch
-          label="Sản phẩm tiêu biểu"
-          description="Hiển thị trong danh sách tiêu biểu ngoài trang chủ"
-          defaultChecked
-          {...register("isFeatured")}
-        />
-      </div>
-    </div>
+      <Switch
+        label="Sản phẩm tiêu biểu"
+        description="Hiển thị trong danh sách tiêu biểu ngoài trang chủ"
+        {...register("isFeatured")}
+      />
+    </Stack>
   );
 }

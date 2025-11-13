@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useFeaturedProducts } from "@/services/hooks/useProducts";
 import type { FeaturedProductsResponse } from "@/services/api/productsService";
 import { Link } from "@tanstack/react-router";
-import { ProductCard } from "../product/components/product-card";
+import { ProductCard } from "../products/components/product-card";
 
 export function FeaturedProducts() {
   const { t } = useTranslation();
@@ -113,19 +113,20 @@ export function FeaturedProducts() {
               msOverflowStyle: "none",
             }}
           >
-            {allProducts.map((product, index) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                price={product.price}
-                images={product.images || []}
-                category={product.category}
-                description={product.description}
-                warrantyPolicy={product.warrantyPolicy}
-                index={index}
-                className="w-[240px] max-w-[240px]"
-              />
+            {allProducts?.map((product) => (
+              <div key={product.id} className="shrink-0 w-[240px]">
+                <ProductCard
+                  id={product.id}
+                  name={product.name}
+                  price={product.price ?? undefined}
+                  images={product.images ?? []}
+                  description={product.description}
+                  category={product.category}
+                  warrantyPolicy={product.warrantyPolicy}
+                  variant="compact"
+                  className="w-full"
+                />
+              </div>
             ))}
 
             {/* Loading indicator */}
@@ -176,7 +177,7 @@ export function FeaturedProducts() {
               }}
             />
             <Link
-              to="/product"
+              to="/products"
               className="relative z-10 inline-flex items-center font-semibold"
             >
               {t("products.viewAll")}

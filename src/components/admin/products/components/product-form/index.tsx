@@ -1,19 +1,29 @@
 import {
   Button,
-  Badge as MantineBadge,
-  Card as MantineCard,
-  Tabs as MantineTabs,
-  Title,
+  Badge,
+  Card,
+  Tabs,
   Text,
+  Group,
+  Stack,
+  Box,
 } from "@mantine/core";
-import { Save } from "lucide-react";
+import { IconDeviceFloppy } from "@tabler/icons-react";
 import { useProductForm } from "./hooks/use-product-form";
 import { BasicInfoSection } from "./sections/BasicInfoSection";
 import { DescriptionSection } from "./sections/DescriptionSection";
 import { TechnicalSpecsSection } from "./sections/TechnicalSpecsSection";
 import { ImagesSection } from "./sections/ImagesSection";
 
-interface ProductFormProps {
+export default function ProductForm({
+  isEditing,
+  form,
+  setForm,
+  onSubmit,
+  onCancel,
+  isSaving,
+  categories,
+}: {
   isEditing: boolean;
   form: {
     name: string;
@@ -39,17 +49,7 @@ interface ProductFormProps {
   onCancel?: () => void;
   isSaving: boolean;
   categories: { id: number; name: string }[];
-}
-
-export default function ProductForm({
-  isEditing,
-  form,
-  setForm,
-  onSubmit,
-  onCancel,
-  isSaving,
-  categories,
-}: ProductFormProps) {
+}) {
   const {
     currentTab,
     setCurrentTab,
@@ -70,74 +70,48 @@ export default function ProductForm({
     watchedCategoryId,
   } = useProductForm({ isEditing, form, setForm, onSubmit }, categories);
 
+  const TABS = [
+    { value: "basic", label: "Thông tin cơ bản" },
+    { value: "description", label: "Mô tả chi tiết" },
+    { value: "technical", label: "Thông số kỹ thuật" },
+    { value: "images", label: "Hình ảnh" },
+  ];
+
+  const currentTabInfo = TABS.find((t) => t.value === currentTab);
+  const currentTabIndex = TABS.findIndex((t) => t.value === currentTab);
+
   return (
-    <div className="w-full">
-      <div className="bg-background rounded-lg shadow-lg w-full overflow-hidden">
-        {/* Header */}
-        <div className="p-6 border-b">
-          <div>
-            <h2 className="text-2xl">
-              {isEditing ? "Chỉnh sửa sản phẩm" : "Thêm sản phẩm mới"}
-            </h2>
-            <p className="text-sm text-muted-foreground mt-1">
-              {isEditing
-                ? "Cập nhật thông tin sản phẩm"
-                : "Điền đầy đủ thông tin sản phẩm mới"}
-            </p>
-          </div>
-        </div>
+    <Card withBorder radius="md" p={0}>
+      <form onSubmit={handleSubmit(onSubmitForm, onSubmitError)}>
+        <Stack p="md">
+          <Tabs
+            value={currentTab}
+            onChange={(v) => v && setCurrentTab(v)}
+            variant="pills"
+            radius="md"
+          >
+            <Tabs.List grow>
+              {TABS.map((tab) => (
+                <Tabs.Tab key={tab.value} value={tab.value}>
+                  {tab.label}
+                </Tabs.Tab>
+              ))}
+            </Tabs.List>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit(onSubmitForm, onSubmitError)}>
-          <div className="p-6">
-            <MantineTabs
-              value={currentTab}
-              onChange={(v) => v && setCurrentTab(v)}
-              variant="pills"
-              radius="md"
-              keepMounted={false}
-            >
-              <MantineTabs.List grow>
-                <MantineTabs.Tab value="basic">
-                  Thông tin cơ bản
-                </MantineTabs.Tab>
-                <MantineTabs.Tab value="description">
-                  Mô tả chi tiết
-                </MantineTabs.Tab>
-                <MantineTabs.Tab value="technical">
-                  Thông số kỹ thuật
-                </MantineTabs.Tab>
-                <MantineTabs.Tab value="images">Hình ảnh</MantineTabs.Tab>
-              </MantineTabs.List>
+            <Box pt="md">
+              <Tabs.Panel value="basic">
+                <BasicInfoSection
+                  register={register}
+                  watchedPrice={watchedPrice}
+                  formatPrice={formatPrice}
+                  watchedCategoryId={watchedCategoryId}
+                  setValue={setValue as any}
+                  errors={errors}
+                  categories={categories}
+                />
+              </Tabs.Panel>
 
-              {/* Tab 1: Basic Information */}
-              <MantineTabs.Panel value="basic">
-                <MantineCard
-                  withBorder
-                  shadow="sm"
-                  radius="md"
-                  className="mt-4"
-                >
-                  <div className="p-4">
-                    <Title order={4}>Thông tin cơ bản</Title>
-                    <Text size="sm" c="dimmed">
-                      Nhập thông tin cơ bản của sản phẩm
-                    </Text>
-                  </div>
-                  <BasicInfoSection
-                    register={register}
-                    watchedPrice={watchedPrice}
-                    formatPrice={formatPrice}
-                    watchedCategoryId={watchedCategoryId}
-                    setValue={setValue as any}
-                    errors={errors}
-                    categories={categories}
-                  />
-                </MantineCard>
-              </MantineTabs.Panel>
-
-              {/* Tab 2: Description */}
-              <MantineTabs.Panel value="description">
+              <Tabs.Panel value="description">
                 <DescriptionSection
                   register={register}
                   featureFields={featuresArray.fields}
@@ -150,69 +124,55 @@ export default function ProductForm({
                   appendMaterial={materialsArray.append as any}
                   removeMaterial={materialsArray.remove as any}
                 />
-              </MantineTabs.Panel>
+              </Tabs.Panel>
 
-              {/* Tab 3: Technical Specs */}
-              <MantineTabs.Panel value="technical">
+              <Tabs.Panel value="technical">
                 <TechnicalSpecsSection register={register} />
-              </MantineTabs.Panel>
+              </Tabs.Panel>
 
-              {/* Tab 4: Images */}
-              <MantineTabs.Panel value="images">
+              <Tabs.Panel value="images">
                 <ImagesSection
                   imageFiles={imageFiles}
-                  handleImageSelect={handleImageSelect}
+                  handleImageSelect={handleImageSelect as any}
                   removeImageFile={removeImageFile}
                 />
-              </MantineTabs.Panel>
-            </MantineTabs>
-          </div>
+              </Tabs.Panel>
+            </Box>
+          </Tabs>
+        </Stack>
 
-          {/* Footer */}
-          <div className="flex items-center justify-between p-6 border-t bg-muted/30">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <MantineBadge variant="outline">
-                Tab{" "}
-                {currentTab === "basic"
-                  ? "1"
-                  : currentTab === "description"
-                    ? "2"
-                    : currentTab === "technical"
-                      ? "3"
-                      : "4"}
-                /4
-              </MantineBadge>
-              <span>
-                {currentTab === "basic"
-                  ? "Thông tin cơ bản"
-                  : currentTab === "description"
-                    ? "Mô tả chi tiết"
-                    : currentTab === "technical"
-                      ? "Thông số kỹ thuật"
-                      : "Hình ảnh"}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onCancel}
-                disabled={isSaving}
-              >
-                Hủy
-              </Button>
-              <Button type="submit" variant="filled" disabled={isSaving}>
-                <Save className="mr-2 h-4 w-4" />
-                {isSaving
-                  ? "Đang lưu..."
-                  : isEditing
-                    ? "Cập nhật"
-                    : "Lưu sản phẩm"}
-              </Button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+        <Group
+          justify="space-between"
+          p="md"
+          style={{ borderTop: "1px solid var(--mantine-color-default-border)" }}
+        >
+          <Group gap="xs">
+            <Badge variant="outline" color="gray">
+              Tab {currentTabIndex + 1}/{TABS.length}
+            </Badge>
+            <Text size="sm" c="dimmed">
+              {currentTabInfo?.label}
+            </Text>
+          </Group>
+          <Group>
+            <Button
+              type="button"
+              variant="default"
+              onClick={onCancel}
+              disabled={isSaving}
+            >
+              Hủy
+            </Button>
+            <Button
+              type="submit"
+              loading={isSaving}
+              leftSection={<IconDeviceFloppy size={16} />}
+            >
+              {isEditing ? "Cập nhật" : "Lưu sản phẩm"}
+            </Button>
+          </Group>
+        </Group>
+      </form>
+    </Card>
   );
 }
