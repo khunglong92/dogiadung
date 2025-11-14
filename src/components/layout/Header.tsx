@@ -1,6 +1,6 @@
 import { Moon, Sun, Menu, X, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import companyLogo from "@/images/common/company-logo.png";

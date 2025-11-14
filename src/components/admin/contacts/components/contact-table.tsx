@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { Card, Title, Pagination } from "@mantine/core";
 import {
   Table,
@@ -59,13 +59,18 @@ export function ContactTable({
             <TableHead>{t("contacts.phone")}</TableHead>
             <TableHead>{t("contacts.status")}</TableHead>
             <TableHead>{t("contacts.createdAt")}</TableHead>
-            <TableHead className="text-right">{t("contacts.actions")}</TableHead>
+            <TableHead className="text-right">
+              {t("contacts.actions")}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {items.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+              <TableCell
+                colSpan={7}
+                className="text-center py-8 text-muted-foreground"
+              >
                 {t("contacts.noData")}
               </TableCell>
             </TableRow>
@@ -79,7 +84,9 @@ export function ContactTable({
                 className="group"
               >
                 <TableCell className="font-medium">{contact.name}</TableCell>
-                <TableCell className="max-w-[200px] truncate">{contact.title}</TableCell>
+                <TableCell className="max-w-[200px] truncate">
+                  {contact.title}
+                </TableCell>
                 <TableCell>{contact.email || "-"}</TableCell>
                 <TableCell>{contact.phone || "-"}</TableCell>
                 <TableCell>
@@ -145,4 +152,3 @@ export function ContactTable({
     </Card>
   );
 }
-

@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { ImageWithFallback } from "@/components/public/figma/ImageWithFallback";
 import {
   Building2,
