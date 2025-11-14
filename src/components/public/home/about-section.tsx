@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { Users, Package, Star, Award } from "lucide-react";
 import { AppThumbnailImage } from "@/components/public/common/app-thumbnail-image";
 

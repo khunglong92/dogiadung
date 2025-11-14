@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { Card, Title, Input } from "@mantine/core";
 import {
   Table,
@@ -60,7 +60,6 @@ export function CategoryTable({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="group"
             >
               <TableCell>{category.id}</TableCell>
               <TableCell>{category.name}</TableCell>

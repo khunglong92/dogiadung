@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { AutoScrollCarousel } from "./auto-scroll-carousel";
 import { AnimatedTitle } from "./animated-title";
 import {

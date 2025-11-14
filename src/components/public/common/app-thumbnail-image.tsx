@@ -2,7 +2,7 @@ import { useState, ImgHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 // Định nghĩa các giá trị cho object-fit
-type ObjectFit = "fill" | "contain" | "cover" | "none" | "scale-down" | "fit";
+type ObjectFit = "fill" | "contain" | "cover" | "none" | "scale-down";
 
 // Mở rộng ImgHTMLAttributes để component chấp nhận tất cả các props của thẻ <img>
 interface AppImageProps extends ImgHTMLAttributes<HTMLImageElement> {
@@ -41,7 +41,6 @@ export function AppThumbnailImage({
           "object-fill": fit === "fill",
           "object-none": fit === "none",
           "object-scale-down": fit === "scale-down",
-          "object-fit": fit === "fit",
         },
         isLoaded ? "opacity-100" : "opacity-0",
         className // Cho phép ghi đè hoặc thêm class từ bên ngoài

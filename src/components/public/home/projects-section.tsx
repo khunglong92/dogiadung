@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 import { Badge, Building2, Calendar } from "lucide-react";
 import { ImageWithFallback } from "../figma/ImageWithFallback";
