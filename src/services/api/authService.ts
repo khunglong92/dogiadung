@@ -1,4 +1,5 @@
 import { apiClient } from "./base";
+import { User } from "@/stores/types";
 // Types
 export interface LoginRequest {
   email: string;
@@ -34,6 +35,15 @@ export interface ApiResponse {
   message: string;
 }
 
+export interface RefreshTokenRequest {
+  refresh_token: string;
+}
+
+export interface RefreshTokenResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
 export const authService = {
   login: async (data: LoginRequest): Promise<AuthResponse> => {
     // Call real API endpoint
@@ -46,8 +56,15 @@ export const authService = {
     return res;
   },
 
-  getProfile: async (): Promise<import("@/stores/authStore").User> => {
+  getProfile: async (): Promise<User> => {
     return apiClient.get("/users/profile");
+  },
+
+  refresh: async (data: RefreshTokenRequest): Promise<RefreshTokenResponse> => {
+    return apiClient.post<RefreshTokenResponse, RefreshTokenRequest>(
+      "/auth/refresh",
+      data
+    );
   },
 
   register: async (data: RegisterRequest): Promise<AuthResponse> => {

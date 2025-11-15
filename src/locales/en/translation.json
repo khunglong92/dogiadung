@@ -1,4 +1,7 @@
 {
+  "common": {
+    "viewDetails": "View Details"
+  },
   "nav": {
     "home": "Home",
     "products": "Products",
@@ -67,7 +70,7 @@
   },
   "footer": {
     "company": {
-      "name": "Wood & Home",
+      "name": "Thiên Lộc",
       "description": "Specializing in providing premium wood and plastic household items and furniture for your home."
     },
     "links": "Links",
@@ -79,15 +82,12 @@
       "button": "Subscribe"
     },
     "follow": "Follow us:",
-    "copyright": "© 2025 Wood & Home. All rights reserved."
+    "copyright": "© 2025 Thiên Lộc. All rights reserved.",
+    "contactUs": "Liên hệ với chúng tôi",
+    "contactDescription": "Sẵn sàng hỗ trợ bạn với giải pháp tốt nhất",
+    "quickLinks": "Liên kết nhanh"
   },
-  "common": {
-    "addToCart": "Add to Cart",
-    "viewDetails": "View Details",
-    "phone": "0123 456 789",
-    "email": "contact@woodhome.vn",
-    "address": "123 ABC Street, District 1, Ho Chi Minh City"
-  },
+
   "admin": {
     "header": {
       "title": "Thien Loc Admin",
@@ -119,6 +119,7 @@
       "services": "Services",
       "projects": "Projects",
       "contact": "Contacts",
+      "contactUsManager": "Contact Us Manager",
       "users": "Users",
       "statistics": "Statistics"
     },
@@ -309,14 +310,7 @@
       "errorMessage": "An error occurred. Please try again later."
     }
   },
-  "common": {
-    "addToCart": "Add to Cart",
-    "viewDetails": "View Details",
-    "phone": "0123 456 789",
-    "email": "contact@woodhome.vn",
-    "address": "123 ABC Street, District 1, Ho Chi Minh City",
-    "close": "Close"
-  },
+
   "about": {
     "title": "High Quality Metal Sheet Processing",
     "description": "Discover professional metal sheet manufacturing and processing solutions at Thien Loc.",

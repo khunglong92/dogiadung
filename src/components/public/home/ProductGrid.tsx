@@ -1,7 +1,7 @@
-import { ProductCard } from "@/components/public/home/ProductCard";
 import { motion } from "framer-motion";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useTranslation } from "react-i18next";
+import { ProductCard } from "../products/components/product-card";
 
 const products = [
   {
@@ -133,7 +133,15 @@ export function ProductGrid() {
                       product.category === category
                   )
                   .map((product, index) => (
-                    <ProductCard key={product.id} {...product} index={index} />
+                    <ProductCard
+                      key={product.id}
+                      id={product.id}
+                      name={product.name}
+                      price={product.price}
+                      images={product.image}
+                      category={{ id: product.id, name: product.category }}
+                      index={index}
+                    />
                   ))}
               </div>
             </TabsContent>

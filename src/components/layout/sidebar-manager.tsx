@@ -8,12 +8,14 @@ import {
   BarChart3,
   ChevronLeft,
   Mail,
+  Contact,
 } from "lucide-react";
 import { cn } from "@/components/ui/utils";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { useTheme } from "@/hooks/useTheme";
 import { useState } from "react";
+import { Divider } from "@mantine/core";
 
 export function AdminSidebar() {
   const { t } = useTranslation();
@@ -70,6 +72,13 @@ export function AdminSidebar() {
       color: "from-orange-500 to-red-500",
     },
     {
+      id: "contact-us",
+      route: "/admin/contact-us",
+      name: t("admin.sidebar.contactUsManager"),
+      icon: Contact,
+      color: "from-orange-600 to-red-800",
+    },
+    {
       id: "users",
       route: "/admin/users",
       name: t("admin.sidebar.users"),
@@ -93,7 +102,7 @@ export function AdminSidebar() {
     <aside
       className={cn(
         "relative flex flex-col border-r bg-card min-h-screen transition-all duration-300 ease-in-out",
-        isCollapsed ? "w-20" : "w-64",
+        isCollapsed ? "w-20" : "w-72",
         theme === "dark" ? "bg-white text-black" : "bg-[#2a2931] text-white"
       )}
     >
@@ -115,26 +124,29 @@ export function AdminSidebar() {
           const isActive = currentPage === item.id;
 
           return (
-            <motion.button
-              key={item.id}
-              title={isCollapsed ? item.name : ""}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.05 }}
-              onClick={() => handleNavigate(item.route)}
-              className={cn(
-                "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200",
-                isActive
-                  ? "bg-gradient-to-r " + item.color + " text-white shadow-lg"
-                  : "hover:bg-accent",
-                isCollapsed && "justify-center"
-              )}
-            >
-              <Icon className="h-5 w-5 flex-shrink-0" />
-              {!isCollapsed && (
-                <span className="text-sm !font-bold">{item.name}</span>
-              )}
-            </motion.button>
+            <div className="hover:opacity-50">
+              <motion.button
+                key={item.id}
+                title={isCollapsed ? item.name : ""}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                onClick={() => handleNavigate(item.route)}
+                className={cn(
+                  "w-full flex items-center cursor-pointer hover:opacity-50 gap-3 px-4 py-3 rounded-lg transition-all duration-200",
+                  isActive
+                    ? "bg-linear-to-r " + item.color + " text-white shadow-lg"
+                    : "hover:bg-accent",
+                  isCollapsed && "justify-center"
+                )}
+              >
+                <Icon className="h-5 w-5 shrink-0" />
+                {!isCollapsed && (
+                  <span className="text-sm font-bold!">{item.name}</span>
+                )}
+              </motion.button>
+              {!isActive && <Divider />}
+            </div>
           );
         })}
       </nav>

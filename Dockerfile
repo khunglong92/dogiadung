@@ -1,25 +1,15 @@
-# Stage 1: Build the application
-FROM node:20-alpine AS build
+# Stage 1: Builder
+FROM node:20-alpine AS builder
 WORKDIR /app
-
-# Copy package configuration and install dependencies
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-
-# Copy the rest of the application source code
 COPY . .
+RUN yarn build  # build ra /dist
 
-# Build the application
-RUN yarn build
-
-# Stage 2: Serve the application using Nginx
+# Stage 2: Production - Nginx
 FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy the built assets from the 'build' stage to the Nginx web root directory
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 80 for the Nginx server
+# Optional: custom nginx.conf nếu cần
 EXPOSE 80
-
-# Start Nginx when the container launches
 CMD ["nginx", "-g", "daemon off;"]

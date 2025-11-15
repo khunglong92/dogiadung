@@ -4,7 +4,7 @@ export interface ProductCardProps {
   id: number;
   name: string;
   price: number | null | undefined;
-  images: string[];
+  images: string[] | string;
   category?: {
     id: number;
     name: string;

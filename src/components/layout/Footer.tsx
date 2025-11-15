@@ -1,68 +1,65 @@
 import { motion } from "framer-motion";
-import {
-  Facebook,
-  Instagram,
-  Youtube,
-  Mail,
-  Phone,
-  MapPin,
-  Twitter,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useLocation } from "@tanstack/react-router";
+import { Mail, Phone, MapPin } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Link, useLocation } from "@tanstack/react-router";
+import companyLogo from "@/images/common/company-logo.png";
+import { AppThumbnailImage } from "@/components/public/common/app-thumbnail-image";
+import zaloImage from "@/images/contacts/zalo.svg";
+import phoneImage from "@/images/contacts/phone.svg";
+import { useTheme } from "@/hooks/useTheme";
+
+// Custom Zalo Icon Component
+const ZaloIcon = () => (
+  <AppThumbnailImage className="w-8 h-8" src={zaloImage} alt="Zalo Icon" />
+);
+const PhoneIcon = () => (
+  <AppThumbnailImage className="w-8 h-8" src={phoneImage} alt="Phone Icon" />
+);
 
 export function Footer() {
+  const { t } = useTranslation();
   const location = useLocation();
-  const socialLinks = [
-    {
-      name: "Facebook",
-      icon: Facebook,
-      url: "https://facebook.com",
-      color: "hover:text-blue-600",
-    },
-    {
-      name: "Instagram",
-      icon: Instagram,
-      url: "https://instagram.com",
-      color: "hover:text-pink-600",
-    },
-    {
-      name: "Twitter",
-      icon: Twitter,
-      url: "https://twitter.com",
-      color: "hover:text-blue-400",
-    },
-    {
-      name: "Youtube",
-      icon: Youtube,
-      url: "https://youtube.com",
-      color: "hover:text-red-600",
-    },
+  const { theme } = useTheme();
+  const companyPhone = import.meta.env.VITE_COMPANY_PHONE || "0967853833";
+  const companyEmail =
+    import.meta.env.VITE_EMAIL_CONTACT || "kimloaitamthienloc@gmail.com";
+
+  const navItems = [
+    { name: t("nav.home"), href: "/" },
+    { name: t("nav.introduction"), href: "/introduction" },
+    { name: t("nav.products"), href: "/products" },
+    { name: t("nav.services"), href: "/services" },
+    { name: t("nav.quote"), href: "/quote" },
+    { name: t("nav.contact"), href: "/contact" },
   ];
 
-  const quickLinks = [
-    { name: "Giới thiệu", href: "/introduction" },
-    { name: "Sản phẩm", href: "#products" },
-    { name: "Dịch vụ", href: "#services" },
-    { name: "Dự án", href: "#project" },
-    { name: "Liên hệ", href: "#contact" },
-  ];
-
-  const categories = [
-    { name: "Bàn ăn", href: "#" },
-    { name: "Ghế sofa", href: "#" },
-    { name: "Tủ quần áo", href: "#" },
-    { name: "Kệ sách", href: "#" },
-    { name: "Đồ trang trí", href: "#" },
+  const contactMethods = [
+    {
+      name: "Zalo",
+      icon: ZaloIcon,
+      href: `https://zalo.me/${companyPhone}`,
+    },
+    {
+      name: "Phone",
+      icon: PhoneIcon,
+      href: `tel:${companyPhone}`,
+    },
+    {
+      name: "Email",
+      icon: Mail,
+      href: `mailto:${companyEmail}`,
+    },
   ];
 
   if (location.pathname.includes("/admin")) return null;
 
   return (
-    <footer id="contact" className="bg-card border-t">
+    <footer
+      id="contact"
+      className="bg-muted/50 text-gray-800 dark:text-white border-t border-gray-200 dark:border-white/10"
+    >
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8 justify-between gap-x-32 items-center">
           {/* Company Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -71,27 +68,47 @@ export function Footer() {
             className="space-y-4"
           >
             <div className="flex items-center gap-2">
-              <div className="h-10 w-10 rounded-lg bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-                <span className="text-white">🪵</span>
+              <div className="h-14 w-14 rounded-xl flex items-center justify-center">
+                <AppThumbnailImage src={companyLogo} alt="Company Logo" />
               </div>
-              <span className="text-xl">Wood & Home</span>
+              <div
+                className={`flex flex-col leading-tight ${theme === "dark" ? "text-white" : "text-black"}`}
+              >
+                <span className="text-lg font-semibold">THIÊN LỘC</span>
+                <span className="text-xs">SX & GIA CÔNG KIM LOẠI TẤM</span>
+              </div>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Chuyên cung cấp đồ gia dụng và nội thất gỗ, nhựa cao cấp cho ngôi
-              nhà của bạn.
+            <p
+              className={`text-sm ${theme === "dark" ? "text-white/60" : "text-gray-600"}`}
+            >
+              {t("about.description")}
             </p>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm">
-                <Phone className="h-4 w-4 text-amber-600" />
-                <span>0123 456 789</span>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 text-amber-500 mt-1 shrink-0" />
+                <span
+                  className={`${theme === "dark" ? "text-white/80" : "text-gray-700"}`}
+                >
+                  {t("location.addressValue")}
+                </span>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Mail className="h-4 w-4 text-amber-600" />
-                <span>contact@woodhome.vn</span>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-amber-500" />
+                <a
+                  href={`tel:${companyPhone}`}
+                  className={`${theme === "dark" ? "text-white/80" : "text-gray-700"} hover:text-amber-500 dark:hover:text-amber-400 transition-colors`}
+                >
+                  {companyPhone}
+                </a>
               </div>
-              <div className="flex items-center gap-2 text-sm">
-                <MapPin className="h-4 w-4 text-amber-600" />
-                <span>123 Đường ABC, Quận 1, TP.HCM</span>
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-amber-500" />
+                <a
+                  href={`mailto:${companyEmail}`}
+                  className={`${theme === "dark" ? "text-white/80" : "text-gray-700"} hover:text-amber-500 dark:hover:text-amber-400 transition-colors`}
+                >
+                  {companyEmail}
+                </a>
               </div>
             </div>
           </motion.div>
@@ -103,104 +120,83 @@ export function Footer() {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            <h3 className="mb-4">Liên Kết</h3>
-            <ul className="space-y-2">
-              {quickLinks.map((link) => (
+            <h3
+              className={`mb-4 font-semibol text-center ${theme === "dark" ? "text-white" : "text-gray-900"}`}
+            >
+              {t("footer.quickLinks")}
+            </h3>
+            <ul
+              className={`space-y-2 grid grid-cols-3 gap-2 text-center font-bold underline ${theme === "dark" ? "text-white/70" : "text-gray-600"}`}
+            >
+              {navItems.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-amber-600 transition-colors"
+                  <Link
+                    to={link.href}
+                    className={`text-sm ${theme === "dark" ? "text-white/70" : "text-gray-600"} hover:text-amber-500 dark:hover:text-amber-400 transition-colors`}
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </motion.div>
 
-          {/* Categories */}
+          {/* Contact Us */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-          >
-            <h3 className="mb-4">Danh Mục</h3>
-            <ul className="space-y-2">
-              {categories.map((category) => (
-                <li key={category.name}>
-                  <a
-                    href={category.href}
-                    className="text-sm text-muted-foreground hover:text-amber-600 transition-colors"
-                  >
-                    {category.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Newsletter */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
             className="space-y-4"
           >
-            <h3 className="mb-4">Nhận Tin Mới</h3>
-            <p className="text-sm text-muted-foreground">
-              Đăng ký để nhận thông tin về sản phẩm mới và ưu đãi đặc biệt
+            <h3
+              className={`mb-4 font-semibold ${theme === "dark" ? "text-white" : "text-gray-900"}`}
+            >
+              {t("footer.contactUs")}
+            </h3>
+            <p
+              className={`text-sm ${theme === "dark" ? "text-white/60" : "text-gray-600"}`}
+            >
+              {t("footer.contactDescription")}
             </p>
-            <div className="flex gap-2">
-              <Input
-                type="email"
-                placeholder="Email của bạn"
-                className="flex-1"
-              />
-              <Button className="bg-amber-600 hover:bg-amber-700">
-                Đăng ký
-              </Button>
+            <div className="flex items-center gap-4 pt-2">
+              {contactMethods.map((method) => {
+                const Icon = method.icon;
+                const isLucideIcon = method.name === "Email";
+                return (
+                  <Link
+                    key={method.name}
+                    to={method.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`group p-3 rounded-full ${theme === "dark" ? "bg-white/10 hover:bg-white/20" : "bg-gray-200 hover:bg-gray-300"} transition-all duration-300`}
+                    aria-label={method.name}
+                  >
+                    {isLucideIcon ? (
+                      <Icon className="h-8 w-8 text-gray-700 dark:text-white group-hover:scale-110 transition-transform" />
+                    ) : (
+                      <Icon />
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           </motion.div>
         </div>
 
-        {/* Social Links */}
+        {/* Bottom Bar */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="border-t pt-8"
+          className={`border-t ${theme === "dark" ? "border-white/10" : "border-gray-200"} pt-6 mt-8`}
         >
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground">
-              © 2025 Wood & Home. Tất cả quyền được bảo lưu.
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-center w-full">
+            <p
+              className={`text-sm ${theme === "dark" ? "text-white/50" : "text-gray-500"}`}
+            >
+              © {new Date().getFullYear()} THIÊN LỘC. {t("footer.copyright")}
             </p>
-
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">
-                Theo dõi chúng tôi:
-              </span>
-              <div className="flex gap-2">
-                {socialLinks.map((social) => {
-                  const Icon = social.icon;
-                  return (
-                    <motion.a
-                      key={social.name}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.1, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={`p-2 rounded-full bg-muted hover:bg-muted-foreground/10 transition-colors ${social.color}`}
-                      aria-label={social.name}
-                    >
-                      <Icon className="h-5 w-5" />
-                    </motion.a>
-                  );
-                })}
-              </div>
-            </div>
           </div>
         </motion.div>
       </div>

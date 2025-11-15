@@ -1,4 +1,7 @@
 {
+  "common": {
+    "viewDetails": "Xem chi tiết"
+  },
   "nav": {
     "home": "Trang chủ",
     "products": "Sản phẩm",
@@ -67,7 +70,7 @@
   },
   "footer": {
     "company": {
-      "name": "Wood & Home",
+      "name": "Thiên Lộc",
       "description": "Chuyên cung cấp đồ gia dụng và nội thất gỗ, nhựa cao cấp cho ngôi nhà của bạn."
     },
     "links": "Liên Kết",
@@ -79,14 +82,10 @@
       "button": "Đăng ký"
     },
     "follow": "Theo dõi chúng tôi:",
-    "copyright": "© 2025 Wood & Home. Tất cả quyền được bảo lưu."
-  },
-  "common": {
-    "addToCart": "Thêm vào giỏ",
-    "viewDetails": "Xem chi tiết",
-    "phone": "0123 456 789",
-    "email": "contact@woodhome.vn",
-    "address": "123 Đường ABC, Quận 1, TP.HCM"
+    "copyright": "© 2025 Thiên Lộc. Tất cả quyền được bảo lưu.",
+    "contactUs": "Liên hệ với chúng tôi",
+    "contactDescription": "Sẵn sàng hỗ trợ bạn với giải pháp tốt nhất",
+    "quickLinks": "Liên kết nhanh"
   },
   "admin": {
     "header": {
@@ -119,6 +118,7 @@
       "services": "Quản lý dịch vụ",
       "projects": "Quản lý dự án",
       "contact": "Quản lý liên hệ",
+      "contactUsManager": "Quản lý thông tin liên hệ",
       "users": "Quản lý người dùng",
       "statistics": "Thống kê"
     },
@@ -314,14 +314,7 @@
       "errorMessage": "Có lỗi xảy ra. Vui lòng thử lại sau."
     }
   },
-  "common": {
-    "addToCart": "Thêm vào giỏ",
-    "viewDetails": "Xem chi tiết",
-    "phone": "0123 456 789",
-    "email": "contact@woodhome.vn",
-    "address": "123 Đường ABC, Quận 1, TP.HCM",
-    "close": "Đóng"
-  },
+
   "about": {
     "title": "Gia Công Kim Loại Tấm Chất Lượng Cao",
     "description": "Khám phá giải pháp sản xuất và gia công kim loại tấm chuyên nghiệp tại Thiên Lộc.",

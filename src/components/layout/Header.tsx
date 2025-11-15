@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import companyLogo from "@/images/common/company-logo.png";
 
-import { useLocation, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { AppThumbnailImage } from "@/components/public/common/app-thumbnail-image";
 import UserSetting from "./user-setting";
 
@@ -43,7 +43,7 @@ export function Header({
     { name: t("nav.products"), href: "/products" },
     { name: t("nav.services"), href: "/services" },
     { name: t("nav.quote"), href: "/quote" },
-    { name: t("nav.project"), href: "/projects" },
+    // { name: t("nav.project"), href: "/projects" },
     { name: t("nav.contact"), href: "/contact" },
   ] as const;
 
@@ -108,8 +108,8 @@ export function Header({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.08 }}
                 >
-                  <a
-                    href={item.href}
+                  <Link
+                    to={item.href}
                     aria-current={isActive ? "page" : undefined}
                     data-active={isActive}
                     className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 ${
@@ -129,7 +129,7 @@ export function Header({
                     >
                       {item.name}
                     </motion.span>
-                  </a>
+                  </Link>
                 </motion.div>
               );
             })}
@@ -229,12 +229,12 @@ export function Header({
                 {navItems.map((item) => {
                   const isActive = isNavItemActive(item.href);
                   return (
-                    <motion.a
+                    <Link
                       key={item.name}
-                      href={item.href}
+                      to={item.href}
                       aria-current={isActive ? "page" : undefined}
                       data-active={isActive}
-                      whileHover={{ x: 10 }}
+                      // whileHover={{ x: 10 }}
                       onClick={() => setMobileMenuOpen(false)}
                       className={`rounded-lg px-4 py-3 transition-all font-medium ${
                         isActive
@@ -243,7 +243,7 @@ export function Header({
                       }`}
                     >
                       {item.name}
-                    </motion.a>
+                    </Link>
                   );
                 })}
               </div>

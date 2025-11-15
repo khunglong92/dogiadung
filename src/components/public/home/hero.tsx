@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
-import { ImageWithFallback } from "../figma/ImageWithFallback";
 import { useTranslation } from "react-i18next";
 import AppButton from "@/components/atoms/app-button";
 import { ArrowRight } from "lucide-react";
-
+import { AppThumbnailImage } from "../common/app-thumbnail-image";
+import heroBg from "@/images/common/hero-section-bg.jpg";
 export function Hero() {
   const { t } = useTranslation();
 
@@ -14,8 +14,8 @@ export function Hero() {
     >
       {/* Background Image */}
       <div className="absolute inset-0">
-        <ImageWithFallback
-          src="https://images.unsplash.com/photo-1747999060057-89b7a533f347?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZXRhbCUyMGZhYnJpY2F0aW9uJTIwZmFjdG9yeXxlbnwxfHx8fDE3NjIwNjk1MTh8MA&ixlib=rb-4.1.0&q=80&w=1080"
+        <AppThumbnailImage
+          src={heroBg}
           alt="Thiên Lộc Metal Processing"
           className="w-full h-full object-cover"
         />

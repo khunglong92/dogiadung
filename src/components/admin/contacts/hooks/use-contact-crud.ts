@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { useContacts, useUpdateContactStatus, useDeleteContact } from "@/services/hooks/useContacts";
+import {
+  useContacts,
+  useUpdateContactStatus,
+  useDeleteContact,
+} from "@/services/hooks/useContacts";
 import type { Contact } from "@/services/api/contactsService";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -64,4 +68,3 @@ export function useContactCrud() {
     isSaving: updateConfirmationMutation.isPending || deleteMutation.isPending,
   };
 }
-

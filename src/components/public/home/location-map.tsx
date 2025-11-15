@@ -1,57 +1,78 @@
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, AlertCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
+import AppButton from "@/components/atoms/app-button";
+import { useGetContactInfo } from "@/services/hooks/useContactInfo";
+import { Skeleton } from "@/components/ui/skeleton";
+import contactBg from "@/images/common/contact-bg.jpg";
+
+const extractSrcFromIframe = (iframeString?: string): string | undefined => {
+  if (!iframeString) return undefined;
+  const match = iframeString.match(/src="([^"]*)"/);
+  return match ? match[1] : undefined;
+};
 
 export function LocationMap() {
   const { t } = useTranslation();
-  const companyPhone = import.meta.env.VITE_COMPANY_PHONE || "0967853383";
-  const companyEmail = "kimloaitamthienloc@gmail.com";
+  const { data: contactInfo, isLoading, error } = useGetContactInfo();
 
-  const contactInfo = [
+  const contactDetails = [
     {
       icon: MapPin,
       titleKey: "location.address",
-      contentKey: "location.addressValue",
+      value: contactInfo?.address,
       color: "from-red-500 to-pink-600",
     },
     {
       icon: Phone,
       titleKey: "location.phone",
-      contentKey: "location.phoneValue",
+      value: contactInfo?.phone,
       color: "from-blue-500 to-cyan-500",
     },
     {
       icon: Mail,
       titleKey: "location.email",
-      contentKey: "location.emailValue",
+      value: contactInfo?.email,
       color: "from-amber-500 to-orange-600",
     },
     {
       icon: Clock,
       titleKey: "location.workingHours",
-      contentKey: "location.workingHoursValue",
+      value: contactInfo?.workingHours,
       color: "from-green-500 to-emerald-600",
     },
   ];
 
+  const mapSrc = extractSrcFromIframe(contactInfo?.googleMapUrl);
+
   return (
-    <section id="location" className="py-16 md:py-24 bg-muted/30">
-      <div className="container mx-auto px-4">
+    <section
+      id="location"
+      className="relative py-16 md:py-24 bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white"
+      style={{
+        backgroundImage: `url(${contactBg})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="container mx-auto px-4 relative">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="mb-4 text-3xl md:text-4xl font-bold">
-            {t("location.title")}
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
-            {t("location.description")}
-          </p>
-        </motion.div>
+        <div className="flex justify-center items-center font-bold">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12 backdrop-blur-md w-fit px-10 py-5"
+          >
+            <h2 className="mb-4 text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+              {t("location.title")}
+            </h2>
+            <p className="text-gray-600 dark:text-white/80 max-w-2xl mx-auto text-base md:text-lg">
+              {t("location.description")}
+            </p>
+          </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Contact Information */}
@@ -60,44 +81,46 @@ export function LocationMap() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="space-y-6"
+            className="flex flex-col gap-8"
           >
-            <div className="bg-card rounded-2xl p-8 shadow-lg border">
-              <h3 className="mb-6 text-2xl font-bold">
-                {t("location.contactInfo")}
-              </h3>
-              <div className="space-y-4">
-                {contactInfo.map((info, index) => {
+            {/* Contact Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 font-bold">
+              {isLoading && <ContactGridSkeleton />}
+              {error && (
+                <div className="sm:col-span-2 flex items-center gap-4 text-red-600 bg-red-100 dark:bg-red-900/30 p-4 rounded-lg">
+                  <AlertCircle className="h-6 w-6 shrink-0" />
+                  <span>Không thể tải thông tin liên hệ.</span>
+                </div>
+              )}
+              {!isLoading &&
+                !error &&
+                contactDetails.map((info, index) => {
                   const Icon = info.icon;
                   return (
                     <motion.div
                       key={info.titleKey}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1 }}
-                      whileHover={{ scale: 1.02, x: 5 }}
-                      className="flex items-start gap-4 p-4 rounded-xl hover:bg-muted/50 transition-all duration-300 cursor-pointer border border-transparent hover:border-border"
+                      className="bg-white dark:bg-white/5 dark:backdrop-blur-md hover:ring-1 hover:ring-primary/50 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-white/10 flex items-start gap-4 justify-center"
                     >
-                      <motion.div
-                        className={`p-3 rounded-lg bg-linear-to-br ${info.color} shrink-0 shadow-md`}
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        transition={{ type: "spring", stiffness: 300 }}
+                      <div
+                        className={`relative p-3 rounded-lg bg-linear-to-br ${info.color} shrink-0 shadow-lg`}
                       >
-                        <Icon className="h-5 w-5 text-white" />
-                      </motion.div>
+                        <Icon className="relative h-6 w-6 text-white" />
+                      </div>
                       <div className="flex-1">
-                        <h4 className="text-sm font-semibold mb-1">
+                        <h4 className="text-md font-semibold mb-1 text-gray-800 dark:text-white/90">
                           {t(info.titleKey)}
                         </h4>
-                        <p className="text-muted-foreground text-sm">
-                          {t(info.contentKey)}
+                        <p className="text-gray-600 dark:text-white/70 text-sm">
+                          {info.value || "Đang cập nhật..."}
                         </p>
                       </div>
                     </motion.div>
                   );
                 })}
-              </div>
             </div>
 
             {/* Consultation Card */}
@@ -106,39 +129,34 @@ export function LocationMap() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="bg-linear-to-br from-amber-500 to-orange-600 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden"
+              className="bg-white dark:bg-white/5 dark:backdrop-blur-md  rounded-2xl p-8 shadow-xl hover:ring-1 hover:ring-primary/50"
             >
-              {/* Decorative gradient overlay */}
-              <div className="absolute inset-0 bg-linear-to-br from-amber-600/50 to-orange-700/50 opacity-50" />
               <div className="relative z-10">
-                <h3 className="mb-4 text-2xl font-bold text-white">
+                <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
                   {t("location.consultationTitle")}
                 </h3>
-                <p className="mb-6 text-white/90 leading-relaxed">
+                <p className="mb-6 text-gray-600 dark:text-white/80 leading-relaxed">
                   {t("location.consultationDescription")}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button
-                    asChild
+                  <AppButton
+                    to={`tel:${contactInfo?.phone}`}
+                    label={t("location.callNow")}
                     size="lg"
-                    className="bg-white text-amber-600 hover:bg-white/90 font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    <a href={`tel:${companyPhone}`}>
-                      <Phone className="h-5 w-5 mr-2" />
-                      {t("location.callNow")}
-                    </a>
-                  </Button>
-                  <Button
-                    asChild
+                    variant="default"
+                    leftSection={<Phone className="h-5 w-5" />}
+                    showArrow={false}
+                    disabled={!contactInfo?.phone}
+                  />
+                  <AppButton
+                    to={`mailto:${contactInfo?.email}`}
+                    label={t("location.sendEmail")}
                     size="lg"
                     variant="outline"
-                    className="bg-white/10 backdrop-blur-md border-2 border-white text-white hover:bg-white/20 font-semibold transition-all duration-300"
-                  >
-                    <a href={`mailto:${companyEmail}`}>
-                      <Mail className="h-5 w-5 mr-2" />
-                      {t("location.sendEmail")}
-                    </a>
-                  </Button>
+                    leftSection={<Mail className="h-5 w-5" />}
+                    showArrow={false}
+                    disabled={!contactInfo?.email}
+                  />
                 </div>
               </div>
             </motion.div>
@@ -152,31 +170,49 @@ export function LocationMap() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="bg-card rounded-2xl overflow-hidden shadow-lg border h-full min-h-[500px]">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4949653591754!2d106.70291897570754!3d10.775017889375406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f4b3330bcc9%3A0xb26520701e572a5d!2zTMOqIEzhu5tpLCBCw6puIE5naOG6uSwgUXXhuq1uIDEsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaCwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1699999999999!5m2!1svi!2s"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full min-h-[500px]"
-                title="Thiên Lộc Location"
-              />
+            <div className="rounded-2xl overflow-hidden shadow-lg h-full min-h-[500px]">
+              {mapSrc ? (
+                <iframe
+                  src={mapSrc}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full min-h-[500px]"
+                  title="Thiên Lộc Location"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-800">
+                  <p className="text-gray-500 dark:text-white/50">
+                    Bản đồ đang được cập nhật.
+                  </p>
+                </div>
+              )}
             </div>
-
-            {/* Decorative overlay */}
-            <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5, type: "spring" }}
-              className="absolute -top-6 -left-6 w-32 h-32 bg-linear-to-br from-blue-500 to-cyan-500 rounded-full opacity-20 blur-2xl pointer-events-none"
-            />
           </motion.div>
         </div>
       </div>
     </section>
+  );
+}
+
+function ContactGridSkeleton() {
+  return (
+    <>
+      {[...Array(4)].map((_, i) => (
+        <div
+          key={i}
+          className="bg-gray-200 dark:bg-white/5 rounded-2xl p-6 space-y-4"
+        >
+          <Skeleton className="h-12 w-12 rounded-lg" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-1/3" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
+        </div>
+      ))}
+    </>
   );
 }

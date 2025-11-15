@@ -6,7 +6,7 @@ import {
   useDeleteProduct,
 } from "@/services/hooks/useProducts";
 import { useCategories } from "@/services/hooks/useCategories";
-import type { Product } from "@/services/api/productsService";
+import type { Product, UpdateProductDto } from "@/services/api/productsService";
 import { toast } from "sonner";
 import type { ProductsPage } from "@/services/hooks/useProducts";
 
@@ -222,7 +222,10 @@ export function useProductCrud() {
 
     try {
       if (editing) {
-        await updateMutation.mutateAsync({ id: editing.id, body: payload });
+        await updateMutation.mutateAsync({
+          id: editing.id,
+          body: payload as UpdateProductDto,
+        });
         toast.success("Cập nhật sản phẩm thành công");
       } else {
         await createMutation.mutateAsync(payload);

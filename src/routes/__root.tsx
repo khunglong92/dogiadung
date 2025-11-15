@@ -12,6 +12,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useAuthStore } from "@/stores/authStore";
 import { UserRole } from "@/stores/types";
 import { useEffect } from "react";
+import { ScrollToTop } from "@/components/atoms/scroll-to-top";
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -40,6 +41,7 @@ function RootLayout() {
       <Header theme={theme} toggleTheme={toggleTheme} />
 
       <main className="min-h-screen">
+        <ScrollToTop />
         <Outlet />
       </main>
 

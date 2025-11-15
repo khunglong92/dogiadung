@@ -15,6 +15,7 @@ export default function AppButton({
   leftSection,
   disabled = false,
   showArrow = true,
+  htmlType = "button",
 }: {
   label?: string;
   size?: "default" | "sm" | "lg" | "icon";
@@ -26,6 +27,7 @@ export default function AppButton({
   leftSection?: React.ReactNode;
   disabled?: boolean;
   showArrow?: boolean;
+  htmlType?: "button" | "submit" | "reset";
 }) {
   const { theme } = useTheme();
   const getTextSize = () => {
@@ -71,6 +73,7 @@ export default function AppButton({
   if (variant === "outline")
     return (
       <Button
+        type={htmlType}
         onClick={handleClick}
         size={size}
         variant="outline"
@@ -120,6 +123,7 @@ export default function AppButton({
   if (variant === "outline-primary")
     return (
       <Button
+        type={htmlType}
         onClick={handleClick}
         size={size}
         variant="outline"
